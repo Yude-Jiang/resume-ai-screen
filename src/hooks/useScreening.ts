@@ -132,14 +132,16 @@ export function useScreening() {
     return () => unsubscribe();
   }, [isShareMode]);
 
-  // System Stats
+  // System Stats (scoped to current client)
   useEffect(() => {
-    const unsubJobs = onSnapshot(collection(db, 'jobs'), (snap) => {
+    const qJobs = query(collection(db, 'jobs'), where('ownerId', '==', clientId));
+    const unsubJobs = onSnapshot(qJobs, (snap) => {
        setTotalSystemStats(prev => ({ ...prev, jobs: snap.size }));
-    });
-    const unsubResults = onSnapshot(collection(db, 'analysisResults'), (snap) => {
+    }, () => {});
+    const qResults = query(collection(db, 'analysisResults'), where('ownerId', '==', clientId));
+    const unsubResults = onSnapshot(qResults, (snap) => {
        setTotalSystemStats(prev => ({ ...prev, results: snap.size }));
-    });
+    }, () => {});
     return () => { unsubJobs(); unsubResults(); };
   }, []);
 

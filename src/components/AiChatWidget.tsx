@@ -58,11 +58,18 @@ const AiChatWidget: React.FC<AiChatWidgetProps> = ({
     setIsLoading(true);
 
     try {
+      // Build context from last 6 conversation turns
+      const contextMessages = chatHistory.slice(-6);
+      const contextStr = contextMessages.length > 1
+        ? `Previous conversation:\n${contextMessages.map(m => `${m.role}: ${m.content}`).join('\n')}\n---\n`
+        : '';
+
       let response: string;
       if (activeResult) {
-        response = await evaluateCandidateByText(activeJobJd, JSON.stringify(activeResult));
+        const prompt = `${contextStr}Continue evaluating this candidate data. Answer: ${input}\n\n[Candidate]: ${JSON.stringify(activeResult)}\n[JD]: ${activeJobJd}`;
+        response = await analyzeText(prompt);
       } else {
-        response = await analyzeText(`Context: job=${activeJobId}, lang=${language}. Question: ${input}`);
+        response = await analyzeText(`${contextStr}Job=${activeJobId}, lang=${language}. Question: ${input}`);
       }
 
       setChatHistory(prev => [...prev, {

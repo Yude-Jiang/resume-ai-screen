@@ -1,6 +1,6 @@
 {
-  "name": "ST Resume AI Screener",
-  "description": "Professional AI-powered resume screening system for STMicroelectronics with Gemini 1.5 Pro.",
+  "name": "AI Resume Screening",
+  "description": "AI-powered resume screening system for STMicroelectronics with Gemini AI + DeepSeek fallback.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }
