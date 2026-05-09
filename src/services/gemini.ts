@@ -41,11 +41,7 @@ async function aiFetch(endpoint: string, body: unknown): Promise<Response> {
 }
 
 export async function parseJdFile(file: File): Promise<string> {
-  const text = await getFileText(file);
-  const { text: cleanText } = await (await aiFetch('/api/ai/generate', {
-    prompt: `Extract the full text of the Job Description from the following content. Return JUST the JD text, no other commentary.\n\n[CONTENT]:\n${text}`,
-  })).json();
-  return cleanText;
+  return await getFileText(file);
 }
 
 export async function analyzeJd(jdText: string): Promise<JdAnalysis> {

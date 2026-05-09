@@ -352,12 +352,11 @@ export function useScreening() {
       for (const r of batchResults) {
         if (r.status === 'fulfilled') {
           successCount++;
-          toast.success(`${t.candidate || 'Candidate'} ${r.value} processed`, { duration: 1500 });
         } else {
           failCount++;
           const reason = r.reason instanceof Error ? r.reason.message : String(r.reason);
           console.error(`Analysis error:`, r.reason);
-          toast.error(`Analysis failed: ${reason}`);
+          toast.error(`Failed: ${reason}`, { duration: 3000 });
         }
       }
 
