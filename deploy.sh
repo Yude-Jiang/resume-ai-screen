@@ -1,23 +1,20 @@
 #!/bin/bash
-# Deploy to Google Cloud Run
-# Run this in Google Cloud Shell after cloning the repo
-# Prerequisites: secrets must exist in Secret Manager (VITE_GEMINI_API_KEY, VITE_DEEPSEEK_API_KEY)
+# Deploy to Google Cloud Run using Buildpacks (source deploy)
+# Run in Google Cloud Shell from the project root
+# Prerequisites: secrets in Secret Manager (VITE_GEMINI_API_KEY, VITE_DEEPSEEK_API_KEY)
 
 set -e
 
-PROJECT_ID="trendradar-485407"
-REGION="us-central1"
+PROJECT_ID="st-china-ai-force"
+REGION="asia-east1"
 SERVICE_NAME="resume-ai-screen"
 
 echo "=== Setting project ==="
 gcloud config set project $PROJECT_ID
 
-echo "=== Building container ==="
-gcloud builds submit --tag gcr.io/$PROJECT_ID/$SERVICE_NAME
-
-echo "=== Deploying to Cloud Run ==="
+echo "=== Deploying to Cloud Run (Buildpacks) ==="
 gcloud run deploy $SERVICE_NAME \
-  --image gcr.io/$PROJECT_ID/$SERVICE_NAME \
+  --source . \
   --platform managed \
   --region $REGION \
   --allow-unauthenticated \

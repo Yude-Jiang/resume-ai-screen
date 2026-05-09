@@ -1,0 +1,13 @@
+.git
+.gitignore
+node_modules
+dist
+.env
+.env.local
+*.log
+.claude
+OPTIMIZATION_PLAN.md
+security_spec.md
+README.md
+Dockerfile
+.gcloudignore
