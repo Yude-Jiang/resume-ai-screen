@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+.gitignore
+.env
+.env.local
+*.log
+.claude
+OPTIMIZATION_PLAN.md
+security_spec.md
+README.md
+metadata.json

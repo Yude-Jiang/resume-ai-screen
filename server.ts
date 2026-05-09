@@ -114,7 +114,7 @@ function recomputeOverallScore(detailedScores: Record<string, number>, weights: 
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = parseInt(process.env.PORT || '3000', 10);
   const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
   app.use(express.json({ limit: '5mb' }));
