@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Arial", "Helvetica", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-st-dark: #03234b;
+  --color-st-light: #3cb4e6;
+  --color-st-yellow: #ffd200;
+  --color-st-success: #28a745;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased font-sans m-0 h-full overflow-hidden leading-relaxed text-lg;
+  }
+}
+
+.st-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.st-scrollbar::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+.st-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 rounded-full;
+}

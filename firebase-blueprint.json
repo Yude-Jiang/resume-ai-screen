@@ -1,0 +1,67 @@
+{
+  "entities": {
+    "Job": {
+      "title": "Job",
+      "description": "Recruitment job vacancy",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "dept": { "type": "string" },
+        "jd": { "type": "string" },
+        "weights": { "$ref": "ScoringWeights" },
+        "thresholds": { "$ref": "HardThresholds" },
+        "status": { "type": "string", "enum": ["running", "paused"] },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "jd", "weights", "thresholds", "status", "updatedAt"]
+    },
+    "AnalysisResult": {
+      "title": "AnalysisResult",
+      "description": "Individual resume screening result",
+      "type": "object",
+      "properties": {
+        "jobId": { "type": "string" },
+        "overall_score": { "type": "number" },
+        "hr_override_score": { "type": "number" },
+        "hr_feedback_tags": { "type": "array", "items": { "type": "string" } },
+        "candidate_name": { "type": "string" },
+        "ai_recommendation": { "type": "string" },
+        "match_reasons": { "type": "string" },
+        "file_name": { "type": "string" },
+        "file_data": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["jobId", "overall_score", "candidate_name", "createdAt"]
+    },
+    "ScoringWeights": {
+      "title": "ScoringWeights",
+      "type": "object",
+      "properties": {
+        "edu": { "type": "number" },
+        "exp": { "type": "number" },
+        "skill": { "type": "number" },
+        "lang": { "type": "number" },
+        "cert": { "type": "number" }
+      }
+    },
+    "HardThresholds": {
+      "title": "HardThresholds",
+      "type": "object",
+      "properties": {
+        "minEdu": { "type": "string" },
+        "minExp": { "type": "number" },
+        "requiredSkills": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "firestore": {
+    "jobs": {
+      "schema": "Job",
+      "description": "Collection of all recruitment jobs"
+    },
+    "analysisResults": {
+      "schema": "AnalysisResult",
+      "description": "Collection of all analysis results linked to jobs"
+    }
+  }
+}

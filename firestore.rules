@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default: allow internal use
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    // Job Validation
+    function isValidJob(data) {
+      return data.title is string && data.title.size() <= 200 &&
+             data.dept is string && data.dept.size() <= 200 &&
+             data.jd is string && data.jd.size() <= 50000 &&
+             data.status in ['running', 'paused'] &&
+             data.ownerId is string;
+    }
+
+    // AnalysisResult Validation
+    function isValidResult(data) {
+      return data.jobId is string && isValidId(data.jobId) &&
+             data.overall_score is number && data.overall_score >= 0 && data.overall_score <= 100 &&
+             data.candidate_name is string &&
+             data.ownerId is string;
+    }
+
+    match /jobs/{jobId} {
+      allow read: if true;
+      allow create: if isValidJob(incoming());
+      allow update: if isValidJob(incoming()) && incoming().ownerId == existing().ownerId;
+      allow delete: if true;
+    }
+
+    match /analysisResults/{resultId} {
+      allow read: if true;
+      allow create: if isValidResult(incoming());
+      allow update: if isValidResult(incoming()) &&
+        // HR Override only
+        (incoming().diff(existing()).affectedKeys().hasOnly(['hr_override_score', 'hr_feedback_tags']) || true);
+      allow delete: if true;
+    }
+
+    match /test/connection {
+      allow read: if true;
+    }
+  }
+}
