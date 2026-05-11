@@ -290,7 +290,7 @@ ${safeResume}
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), "dist");
+    const distPath = path.join(__dirname, "dist");
     app.use(express.static(distPath));
     // API 404 — must come before SPA fallback
     app.use('/api/*', (_req, res) => {

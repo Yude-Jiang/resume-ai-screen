@@ -15,7 +15,6 @@
     "moduleDetection": "force",
     "allowJs": true,
     "resolveJsonModule": true,
-    "resolveJsonModule": true,
     "jsx": "react-jsx",
     "paths": {
       "@/*": [
@@ -23,7 +22,6 @@
       ]
     },
     "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
     "noEmit": true
   }
 }
