@@ -4,6 +4,7 @@ import multer from "multer";
 import mammoth from "mammoth";
 import { createRequire } from "module";
 import path from "path";
+import fs from "fs";
 
 const require = createRequire(import.meta.url);
 const { PDFParse } = require("pdf-parse");
@@ -15,6 +16,12 @@ dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Startup diagnostics
+console.log('[Server] __dirname:', __dirname);
+console.log('[Server] cwd:', process.cwd());
+console.log('[Server] NODE_ENV:', process.env.NODE_ENV);
+console.log('[Server] PORT env:', process.env.PORT);
 
 // ---- AI Service ----
 import { GoogleGenAI } from "@google/genai";
@@ -282,6 +289,32 @@ ${safeResume}
     res.status(500).json({ error: "Internal server error" });
   });
 
+  // ---- Health Check ----
+  const distPath = path.join(__dirname, "dist");
+  const distExists = fs.existsSync(distPath);
+  console.log(`[Server] distPath: ${distPath}`);
+  console.log(`[Server] dist exists: ${distExists}`);
+  if (distExists) {
+    const files = fs.readdirSync(distPath);
+    console.log(`[Server] dist contents: ${files.join(', ')}`);
+    const assetsDir = path.join(distPath, 'assets');
+    if (fs.existsSync(assetsDir)) {
+      console.log(`[Server] assets: ${fs.readdirSync(assetsDir).join(', ')}`);
+    }
+  }
+
+  app.get('/health', (_req, res) => {
+    res.json({
+      status: 'ok',
+      nodeEnv: process.env.NODE_ENV || 'not set',
+      port: PORT,
+      distPath,
+      distExists,
+      cwd: process.cwd(),
+      dirname: __dirname,
+    });
+  });
+
   // ---- Vite Integration ----
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
@@ -290,7 +323,6 @@ ${safeResume}
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(__dirname, "dist");
     app.use(express.static(distPath));
     // API 404 — must come before SPA fallback
     app.use('/api/*', (_req, res) => {
@@ -306,4 +338,7 @@ ${safeResume}
   });
 }
 
-startServer();
+startServer().catch(err => {
+  console.error('[Server] FATAL startup error:', err);
+  process.exit(1);
+});
