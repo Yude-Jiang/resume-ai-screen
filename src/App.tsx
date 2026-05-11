@@ -16,6 +16,40 @@ import { useScreening } from './hooks/useScreening';
 import AiChatWidget from './components/AiChatWidget';
 import { LanguageProvider } from './components/LanguageContext';
 
+// Error Boundary: functional fallback wrapper
+function ErrorFallback({ error }: { error: Error }) {
+  return (
+    <div className="min-h-screen bg-st-dark flex items-center justify-center p-8">
+      <div className="max-w-lg bg-red-50 border border-red-200 rounded-2xl p-8 text-left">
+        <h2 className="text-red-600 font-black text-lg mb-2">App Crashed</h2>
+        <pre className="text-red-800 text-sm whitespace-pre-wrap break-all font-mono bg-red-100 p-4 rounded-xl max-h-80 overflow-auto">
+          {error.message}
+          {'\n\n'}
+          {error.stack}
+        </pre>
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-4 px-6 py-3 bg-st-yellow text-st-dark font-bold rounded-xl hover:bg-yellow-400 transition-colors"
+        >
+          Reload Page
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Use React.Component with any to bypass TS strictness
+class ErrorBoundary extends (React.Component as any) {
+  constructor(props: any) { super(props); this.state = { hasError: false, error: null }; }
+  static getDerivedStateFromError(error: Error) { return { hasError: true, error }; }
+  render() {
+    if ((this.state as any).hasError) {
+      return <ErrorFallback error={(this.state as any).error} />;
+    }
+    return (this.props as any).children;
+  }
+}
+
 export default function App() {
   const {
     authReady, jobs, activeJobId, activeTab, jd, files, isAnalyzing, progress, results,
@@ -39,6 +73,7 @@ export default function App() {
   }
 
   return (
+    <ErrorBoundary>
     <LanguageProvider lang={language}>
       <div className="min-h-screen flex flex-col md:flex-row bg-slate-50 overflow-hidden font-sans">
         <Toaster position="top-right" richColors />
@@ -166,5 +201,6 @@ export default function App() {
         </div>
       </div>
     </LanguageProvider>
+    </ErrorBoundary>
   );
 }
