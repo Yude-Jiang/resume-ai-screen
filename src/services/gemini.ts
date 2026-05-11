@@ -75,17 +75,8 @@ export async function analyzeResume(
   return {
     ...analysis,
     file_name: file.name,
-    file_data: await getFileBase64(file),
+    // file_data is provided by the server (already encoded from req.file.buffer)
   };
-}
-
-async function getFileBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
 }
 
 export async function analyzeText(prompt: string): Promise<string> {

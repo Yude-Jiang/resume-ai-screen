@@ -229,12 +229,16 @@ ${safeResume}
       // Recompute overall_score from weighted detailed_scores (M3)
       const computedScore = recomputeOverallScore(analysis.detailed_scores || {}, weights);
 
+      // Encode file as base64 on server side (avoids client re-reading the file)
+      const fileData = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+
       const result: Partial<AnalysisResult> = {
         ...analysis,
         overall_score: computedScore,
         ai_score_initial: analysis.overall_score || computedScore,
         candidate_name: analysis.summary?.personal_info?.name || req.file.originalname.split('.')[0],
         file_name: req.file.originalname,
+        file_data: fileData,
       };
 
       res.json(result);

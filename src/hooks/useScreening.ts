@@ -333,38 +333,48 @@ export function useScreening() {
     let successCount = 0;
     let failCount = 0;
     let completedCount = 0;
+    let nextIndex = 0;
 
-    for (let i = 0; i < newFiles.length; i += CONCURRENCY_LIMIT) {
-      const batch = newFiles.slice(i, i + CONCURRENCY_LIMIT);
-
-      const batchResults = await Promise.allSettled(
-        batch.map(async (file) => {
-          setCurrentFile(file.name);
-          const result = await analyzeResume(jd, file, weights, language);
-          await addDoc(collection(db, 'analysisResults'), {
-            ...result,
-            jobId: targetJobId,
-            createdAt: serverTimestamp(),
-            ownerId: clientId,
-          });
-          return file.name;
-        })
-      );
-
-      for (const r of batchResults) {
-        if (r.status === 'fulfilled') {
-          successCount++;
-        } else {
-          failCount++;
-          const reason = r.reason instanceof Error ? r.reason.message : String(r.reason);
-          console.error(`Analysis error:`, r.reason);
-          toast.error(`Failed: ${reason}`, { duration: 3000 });
+    // Worker pool: keeps CONCURRENCY_LIMIT active at all times
+    // When one worker finishes, it immediately picks up the next file
+    const runWorker = async (file: File): Promise<void> => {
+      try {
+        setCurrentFile(file.name);
+        const result = await analyzeResume(jd, file, weights, language);
+        // Firestore 1MB doc limit guard: strip file_data if too large
+        const fileData = result.file_data;
+        const safeResult = { ...result };
+        if (fileData && fileData.length > 800_000) {
+          console.warn(`[Firestore] file_data too large for ${file.name} (${(fileData.length / 1024).toFixed(0)}KB), stripping`);
+          safeResult.file_data = null as any;
+        }
+        await addDoc(collection(db, 'analysisResults'), {
+          ...safeResult,
+          jobId: targetJobId,
+          createdAt: serverTimestamp(),
+          ownerId: clientId,
+        });
+        successCount++;
+      } catch (err) {
+        failCount++;
+        const reason = err instanceof Error ? err.message : String(err);
+        console.error(`Analysis error:`, err);
+        toast.error(`Failed: ${reason}`, { duration: 3000 });
+      } finally {
+        completedCount++;
+        setProgress(Math.round((completedCount / newFiles.length) * 100));
+        // Start next file if any remain
+        if (nextIndex < newFiles.length) {
+          const nextFile = newFiles[nextIndex++];
+          await runWorker(nextFile);
         }
       }
+    };
 
-      completedCount += batch.length;
-      setProgress((completedCount / newFiles.length) * 100);
-    }
+    // Launch initial pool
+    const initialBatch = newFiles.slice(0, CONCURRENCY_LIMIT);
+    nextIndex = CONCURRENCY_LIMIT;
+    await Promise.all(initialBatch.map(runWorker));
 
     setIsAnalyzing(false);
     setCurrentFile(null);
