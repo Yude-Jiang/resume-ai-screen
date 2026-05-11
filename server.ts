@@ -24,26 +24,50 @@ console.log('[Server] NODE_ENV:', process.env.NODE_ENV);
 console.log('[Server] PORT env:', process.env.PORT);
 
 // ---- AI Service ----
-import { GoogleGenAI } from "@google/genai";
 import type { ScoringWeights, JdAnalysis, AnalysisResult } from "./src/types";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY || process.env.VITE_DEEPSEEK_API_KEY || "";
+const GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/";
+const GEMINI_MODEL = "gemini-2.0-flash";
 const DEEPSEEK_BASE_URL = "https://api.deepseek.com/chat/completions";
 const DEEPSEEK_MODEL = "deepseek-chat";
-const GEMINI_MODEL = "gemini-2.0-flash";
-
-const ai = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;
 
 const AI_TIMEOUT_MS = 45_000; // 45s timeout per AI call
 
-function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<T>((_, reject) =>
-      setTimeout(() => reject(new Error(`${label} timed out after ${ms / 1000}s`)), ms)
-    ),
-  ]);
+async function callGemini(prompt: string, expectJson: boolean): Promise<string> {
+  const t0 = Date.now();
+  const url = `${GEMINI_BASE_URL}${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+  const body: any = {
+    contents: [{ parts: [{ text: prompt }] }],
+  };
+  if (expectJson) {
+    body.generationConfig = { responseMimeType: "application/json" };
+  }
+  console.log(`[Server AI] Calling Gemini REST (${GEMINI_MODEL})...`);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), AI_TIMEOUT_MS);
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(`Gemini API Error (${response.status}): ${err.error?.message || response.statusText}`);
+    }
+    const data = await response.json() as any;
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    if (!text) throw new Error("Gemini returned empty response");
+    console.log(`[Server AI] Gemini responded in ${Date.now() - t0}ms`);
+    return text;
+  } catch (error) {
+    clearTimeout(timer);
+    throw error;
+  }
 }
 
 async function callAi(prompt: string, expectJson: boolean = false): Promise<string> {
@@ -51,25 +75,11 @@ async function callAi(prompt: string, expectJson: boolean = false): Promise<stri
     throw new Error("AI API Key is missing. Please configure GEMINI_API_KEY or DEEPSEEK_API_KEY in .env");
   }
 
-  if (ai && GEMINI_API_KEY) {
-    const t0 = Date.now();
-    console.log(`[Server AI] Calling Gemini (${GEMINI_MODEL})...`);
+  if (GEMINI_API_KEY) {
     try {
-      const response = await withTimeout(
-        ai.models.generateContent({
-          model: GEMINI_MODEL,
-          contents: prompt,
-          config: expectJson ? { responseMimeType: "application/json" } : undefined,
-        }),
-        AI_TIMEOUT_MS,
-        'Gemini'
-      );
-      const text = response.text;
-      if (!text) throw new Error("Gemini returned empty response");
-      console.log(`[Server AI] Gemini responded in ${Date.now() - t0}ms`);
-      return text;
+      return await callGemini(prompt, expectJson);
     } catch (error) {
-      console.error(`[Server AI] Gemini call failed (${Date.now() - t0}ms):`, error);
+      console.error("[Server AI] Gemini call failed:", error);
       if (!DEEPSEEK_API_KEY) throw error;
       console.log("[Server AI] Falling back to DeepSeek...");
     }
