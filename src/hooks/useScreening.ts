@@ -308,7 +308,7 @@ export function useScreening() {
       return;
     }
 
-    const CONCURRENCY_LIMIT = 5;
+    const CONCURRENCY_LIMIT = 8;
     setIsAnalyzing(true);
     setProgress(0);
 
