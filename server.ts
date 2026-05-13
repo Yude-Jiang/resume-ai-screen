@@ -125,8 +125,8 @@ async function callAi(prompt: string, expectJson: boolean = false): Promise<stri
 
 async function extractFileText(buffer: Buffer, mimetype: string, originalname: string): Promise<string> {
   if (mimetype === "application/pdf") {
-    const parser = new PDFParse();
-    await parser.load(buffer);
+    const parser = new PDFParse({ data: buffer });
+    await parser.load();
     const text = await parser.getText();
     return text;
   } else if (
