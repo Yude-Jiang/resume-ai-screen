@@ -1,6 +1,6 @@
 #!/bin/bash
 # Deploy to Google Cloud Run using Buildpacks (source deploy)
-# Forces clean build by deleting service first
+# Forces deploy by deleting service first
 set -e
 
 PROJECT_ID="st-china-ai-force"
@@ -13,9 +13,6 @@ echo ""
 
 echo "=== Setting project ==="
 gcloud config set project $PROJECT_ID
-
-echo "=== Deleting old service to force clean build ==="
-gcloud run services delete $SERVICE_NAME --region=$REGION --quiet 2>/dev/null || echo "(no existing service)"
 
 echo "=== Fetching Firebase config from Secret Manager ==="
 FIREBASE_JSON=$(gcloud secrets versions access latest --secret=FIREBASE_CONFIG --project=$PROJECT_ID 2>/dev/null || echo "")
@@ -32,7 +29,7 @@ else
   exit 1
 fi
 
-echo "=== Deploying to Cloud Run (Buildpacks - clean build) ==="
+echo "=== Deploying to Cloud Run (Buildpacks - deploy) ==="
 gcloud run deploy $SERVICE_NAME \
   --source . \
   --platform managed \
