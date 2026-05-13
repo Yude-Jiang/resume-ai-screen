@@ -187,16 +187,19 @@ async function startServer() {
 
   app.post("/api/ai/analyze-jd", aiLimiter, async (req, res) => {
     try {
-      const { jdText } = req.body;
+      const { jdText, language } = req.body;
       if (!jdText) {
         return res.status(400).json({ error: "jdText is required" });
       }
 
       const safeJd = sanitizeUserText(jdText);
+      const isZh = language === 'zh';
 
       const prompt = `Analyze this Job Description. Extract job title, weights, thresholds.
+${isZh ? 'ALL labels and jobTitle MUST be in Chinese (简体中文).' : ''}
 Rules: jobTitle=position name, minEdu in ['none','associate','bachelor','master','doctor'], minExp=int, requiredSkills=3-8 tags, suggestedWeights sum to 100%.
-Return ONLY JSON: {"jobTitle":"...","suggestedWeights":[{"id":"edu","label":"Education Match","value":20},...],"thresholds":{"minEdu":"...","minExp":0,"requiredSkills":[...]}}
+Weight labels: ${isZh ? 'edu=教育背景, exp=工作经验, skill=技能匹配, lang=语言能力, cert=认证资质' : 'edu=Education Match, exp=Experience Years, skill=Skill Overlap, lang=Language Ability, cert=Certifications'}
+Return ONLY JSON: {"jobTitle":"...","suggestedWeights":[{"id":"edu","label":"${isZh ? '教育背景' : 'Education Match'}","value":20},...],"thresholds":{"minEdu":"...","minExp":0,"requiredSkills":[...]}}
 
 <JD>
 ${safeJd}
@@ -239,7 +242,13 @@ ${safeJd}
       const safeResume = sanitizeUserText(resumeText);
 
       const langInstruction = language === 'zh'
-        ? 'ALL text output MUST be in Chinese (简体中文). highlights, gaps, key_skills, name, education_level, fit_status, logic — all Chinese. No English.'
+        ? `CRITICAL: ALL text output MUST be in Chinese (简体中文). This includes: highlights, gaps, key_skills, fit_status, logic, education_level, personal_info fields.
+Key rules:
+- education_level: use Chinese labels (高中/专科/本科/硕士/博士), NEVER English (Bachelor/Master/PhD)
+- fit_status: use Chinese (高度匹配/待评估/不推荐), NEVER English
+- logic, highlights, gaps: ALL Chinese
+- If the JD or resume contains English, TRANSLATE your output to Chinese
+- Any English in your response will be considered an error`
         : 'ALL text fields must be in English.';
 
       const prompt = `You are an expert HR recruiter. Analyze this resume against the JD.

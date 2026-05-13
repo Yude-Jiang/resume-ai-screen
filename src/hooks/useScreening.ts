@@ -203,7 +203,7 @@ export function useScreening() {
     const jdToUse = overrideJd || jd;
     if (!jdToUse) return;
     setIsConfiguring(true);
-    const promise = analyzeJd(jdToUse);
+    const promise = analyzeJd(jdToUse, language);
     toast.promise(promise, {
       loading: language === 'zh' ? '正在分析 JD 并配置权重...' : 'Analyzing JD and configuring weights...',
       success: (config) => {

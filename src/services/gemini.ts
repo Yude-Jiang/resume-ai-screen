@@ -44,8 +44,8 @@ export async function parseJdFile(file: File): Promise<string> {
   return await getFileText(file);
 }
 
-export async function analyzeJd(jdText: string): Promise<JdAnalysis> {
-  const response = await aiFetch('/api/ai/analyze-jd', { jdText });
+export async function analyzeJd(jdText: string, language: 'en' | 'zh' = 'en'): Promise<JdAnalysis> {
+  const response = await aiFetch('/api/ai/analyze-jd', { jdText, language });
   return response.json();
 }
 
