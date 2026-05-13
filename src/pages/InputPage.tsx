@@ -67,7 +67,7 @@ export const InputPage: React.FC<InputPageProps> = ({
                 className="hidden"
               />
               <div className="w-2 h-2 rounded-full bg-st-light animate-pulse ml-2" />
-              <span className="text-sm font-bold text-st-dark tracking-tight">AI READY</span>
+              <span className="text-sm font-bold text-st-dark tracking-widest">AI READY</span>
             </div>
           </div>
           <div className="relative group">
@@ -186,7 +186,7 @@ export const InputPage: React.FC<InputPageProps> = ({
       </div>
 
       {/* Upload Zone */}
-      <div className="w-full md:w-1/2 p-10 bg-slate-50/50 flex flex-col h-full st-scrollbar relative">
+      <div className="w-full md:w-1/2 p-10 pb-14 bg-slate-50/50 flex flex-col h-full st-scrollbar relative">
         <AnimatePresence>
           {isAnalyzing && (
             <motion.div 
@@ -198,7 +198,7 @@ export const InputPage: React.FC<InputPageProps> = ({
               <div className="w-24 h-24 bg-st-dark rounded-[2rem] flex items-center justify-center shadow-2xl mb-8 animate-pulse">
                 <Loader2 className="w-12 h-12 text-st-yellow animate-spin" />
               </div>
-              <h3 className="text-3xl font-black text-st-dark mb-2 tracking-tight uppercase">
+              <h3 className="text-xl font-black text-st-dark mb-2 tracking-tight uppercase">
                 {t.analyzingCandidates || 'Analyzing Candidates...'}
               </h3>
               <div className="text-base font-bold text-slate-400 mb-8 max-w-sm">
@@ -228,7 +228,7 @@ export const InputPage: React.FC<InputPageProps> = ({
 
         <div className="mb-10 flex items-center justify-between">
            <div>
-              <h2 className="text-3xl font-black text-st-dark tracking-tight">{t.resumeUpload}</h2>
+              <h2 className="text-xl font-black text-st-dark tracking-tight">{t.resumeUpload}</h2>
               <p className="text-slate-400 font-bold mt-1 uppercase tracking-widest text-sm">Batch parsing up to 50 files</p>
            </div>
            {files.length > 0 && (
@@ -258,7 +258,7 @@ export const InputPage: React.FC<InputPageProps> = ({
                   <Plus className="w-4 h-4 text-white font-bold" />
                </div>
             </div>
-            <div className="text-xl font-black text-st-dark mb-3 text-center">{t.clickToUpload}</div>
+            <div className="text-base font-black text-st-dark mb-3 text-center">{t.clickToUpload}</div>
             <div className="text-sm font-bold text-slate-400 uppercase tracking-widest text-center px-8 border-t border-slate-100 pt-4 mt-2">
                {t.supportedFormats}
             </div>
@@ -288,7 +288,7 @@ export const InputPage: React.FC<InputPageProps> = ({
 
                  <button 
                    onClick={runAnalysis}
-                   className="w-full bg-st-dark text-st-yellow py-8 rounded-[2.5rem] font-black text-2xl tracking-tight hover:bg-black transition-all shadow-[0_20px_50px_rgba(26,44,79,0.2)] active:scale-[0.98] flex items-center justify-center gap-4 group disabled:opacity-50"
+                   className="w-full bg-st-dark text-st-yellow py-5 rounded-[2rem] font-black text-lg tracking-tight hover:bg-black transition-all shadow-[0_20px_50px_rgba(26,44,79,0.2)] active:scale-[0.98] flex items-center justify-center gap-3 group disabled:opacity-50"
                    disabled={isAnalyzing}
                  >
                    {isAnalyzing ? (
