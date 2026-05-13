@@ -28,10 +28,10 @@ export const ResultCard: React.FC<ResultCardProps> = ({
   const score = res.hr_override_score ?? res.overall_score;
 
   return (
-    <div className={`bg-white rounded-[2.5rem] border border-slate-200 overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 ${expanded ? 'ring-4 ring-st-light/10 shadow-3xl' : 'shadow-sm'}`}>
+    <div className={`bg-white rounded-2xl border border-slate-200 overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 ${expanded ? 'ring-2 ring-st-light/10 shadow-xl' : 'shadow-sm'}`}>
       {/* Header row */}
-      <div className="p-6 flex items-center gap-6 cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => { setExpanded(!expanded); setSearchTerm(''); }}>
-        <div className={`w-20 h-20 rounded-2xl flex flex-col items-center justify-center shadow-lg relative overflow-hidden shrink-0 border-2 ${
+      <div className="p-4 flex items-center gap-4 cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => { setExpanded(!expanded); setSearchTerm(''); }}>
+        <div className={`w-16 h-16 rounded-xl flex flex-col items-center justify-center shadow-lg relative overflow-hidden shrink-0 border-2 ${
           score >= 80 ? 'bg-st-success/10 border-st-success text-st-success' : score >= 60 ? 'bg-st-yellow/10 border-st-yellow text-st-yellow' : 'bg-rose-50 border-rose-500 text-rose-500'
         }`}>
           <div className="absolute top-0 right-0 w-8 h-8 bg-current opacity-10 rounded-bl-full" />
@@ -64,8 +64,8 @@ export const ResultCard: React.FC<ResultCardProps> = ({
             <div className="text-xs font-medium text-slate-400 mb-1">{t.aiRecommendation}</div>
             <div className="text-xs font-medium text-slate-500 truncate max-w-[200px]">{res.overall_recommendation.fit_status.toUpperCase()}</div>
           </div>
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all ${expanded ? 'bg-st-dark text-white rotate-180' : 'bg-slate-100 text-slate-400'}`}>
-            <ChevronDown className="w-6 h-6" />
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${expanded ? 'bg-st-dark text-white rotate-180' : 'bg-slate-100 text-slate-400'}`}>
+            <ChevronDown className="w-5 h-5" />
           </div>
         </div>
       </div>
@@ -76,10 +76,10 @@ export const ResultCard: React.FC<ResultCardProps> = ({
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="border-t border-slate-100">
             <div className="flex flex-col">
               <div className="w-full flex flex-col bg-white st-scrollbar overflow-y-auto">
-                <div className="p-10 space-y-12">
+                <div className="p-6 space-y-6">
                   {/* Score breakdown */}
                   <section className="animate-in fade-in slide-in-from-left duration-500">
-                    <div className="flex items-center justify-between mb-8">
+                    <div className="flex items-center justify-between mb-4">
                       <h4 className="text-xs font-medium text-slate-400 tracking-wide">{t.scoreBreakdownVis}</h4>
                       <div className="px-3 py-1 bg-st-success/10 text-st-success text-xs font-medium rounded-full border border-st-success/20 tracking-wide shadow-sm">{t.highMatch}</div>
                     </div>
@@ -87,10 +87,10 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                   </section>
 
                   {/* Highlights & Gaps */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-8 border-t border-slate-50">
-                    <section className="space-y-6">
-                      <h4 className="text-xs font-medium text-slate-400 tracking-wide mb-4 inline-block">{t.keyHighlights}</h4>
-                      <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
+                    <section className="space-y-3">
+                      <h4 className="text-xs font-medium text-slate-400 tracking-wide mb-2 inline-block">{t.keyHighlights}</h4>
+                      <div className="space-y-2">
                         {res.summary.highlights.map((h, i) => (
                           <div key={i} className="flex gap-4 group cursor-pointer" onClick={() => setSearchTerm(h.split(' ').slice(0, 3).join(' '))}>
                             <div className="w-6 h-6 rounded-lg bg-st-success/10 flex items-center justify-center shrink-0 border border-st-success/20 transition-all group-hover:scale-110"><CheckCircle2 className="w-3.5 h-3.5 text-st-success" /></div>
@@ -99,9 +99,9 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                         ))}
                       </div>
                     </section>
-                    <section className="space-y-6">
-                      <h4 className="text-xs font-medium text-slate-400 tracking-wide mb-4 inline-block">{t.expGaps}</h4>
-                      <div className="space-y-4">
+                    <section className="space-y-3">
+                      <h4 className="text-xs font-medium text-slate-400 tracking-wide mb-2 inline-block">{t.expGaps}</h4>
+                      <div className="space-y-2">
                         {res.summary.gaps.map((g, i) => (
                           <div key={i} className="flex gap-4 group cursor-pointer" onClick={() => setSearchTerm(g.split(' ').slice(0, 3).join(' '))}>
                             <div className="w-6 h-6 rounded-lg bg-rose-50 flex items-center justify-center shrink-0 border border-rose-100 transition-all group-hover:scale-110"><XCircle className="w-3.5 h-3.5 text-rose-500" /></div>
@@ -113,11 +113,11 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                   </div>
 
                   {/* AI Recommendation */}
-                  <section className="bg-slate-50 rounded-[2.5rem] p-10 border border-slate-100 relative overflow-hidden group hover:border-st-light/30 transition-all">
-                    <div className="absolute -top-12 -right-12 w-48 h-48 bg-st-light/5 rounded-full blur-3xl" />
-                    <div className="flex items-start gap-8 relative z-10">
-                      <div className="w-16 h-16 rounded-2xl bg-st-dark flex items-center justify-center shrink-0 shadow-2xl group-hover:scale-110 transition-transform"><Zap className="w-8 h-8 text-st-yellow fill-st-yellow" /></div>
-                      <div className="space-y-4">
+                  <section className="bg-slate-50 rounded-2xl p-6 border border-slate-100 relative overflow-hidden group hover:border-st-light/30 transition-all">
+                    <div className="absolute -top-6 -right-6 w-32 h-32 bg-st-light/5 rounded-full blur-3xl" />
+                    <div className="flex items-start gap-4 relative z-10">
+                      <div className="w-12 h-12 rounded-xl bg-st-dark flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform"><Zap className="w-6 h-6 text-st-yellow fill-st-yellow" /></div>
+                      <div className="space-y-2">
                         <h4 className="text-xs font-medium text-st-light tracking-wide">{t.recommLetter}</h4>
                         <div className="text-sm font-normal text-st-dark leading-relaxed pr-12">{res.overall_recommendation.logic}</div>
                         <div className="flex gap-2 pt-2">
@@ -129,9 +129,9 @@ export const ResultCard: React.FC<ResultCardProps> = ({
 
                   {/* HR Override */}
                   {!isShareMode && (
-                    <section className="pt-8 border-t border-slate-100">
-                      <h4 className="text-xs font-medium text-slate-400 tracking-wide mb-6">{t.hrOverride}</h4>
-                      <div className="bg-slate-100/50 rounded-2xl p-6 flex flex-col md:flex-row gap-6 items-end">
+                    <section className="pt-4 border-t border-slate-100">
+                      <h4 className="text-xs font-medium text-slate-400 tracking-wide mb-3">{t.hrOverride}</h4>
+                      <div className="bg-slate-100/50 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-end">
                         <div className="flex-1 space-y-2">
                           <label className="text-xs font-medium text-slate-500">{t.feedback}</label>
                           <input type="text" className="w-full bg-white border border-slate-200 rounded-xl p-3 text-sm font-normal text-st-dark focus:outline-none focus:ring-2 focus:ring-st-light/20 transition-all"
@@ -158,8 +158,8 @@ export const ResultCard: React.FC<ResultCardProps> = ({
               </div>
 
               {/* PDF Preview — full-width bottom panel */}
-              <div className="border-t border-slate-200 bg-slate-100 p-6">
-                <div className="flex items-center gap-3 mb-4">
+              <div className="border-t border-slate-200 bg-slate-100 p-4">
+                <div className="flex items-center gap-3 mb-3">
                   <div className="text-xs font-medium text-st-dark bg-st-yellow px-3 py-1 rounded-full">Document Preview</div>
                 </div>
                 <div className="w-full h-[500px] bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-200">
