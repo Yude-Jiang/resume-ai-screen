@@ -370,26 +370,30 @@ ${safeResume}
     });
     app.use(vite.middlewares);
   } else {
+    // Disable automatic index.html serving from express.static
+    // — root path MUST go through explicit no-cache route below
     app.use(express.static(distPath, {
+      index: false,
       setHeaders: (res, filePath) => {
-        // Prevent CDN/browser caching of index.html (avoids stale JS references)
-        if (filePath.endsWith('index.html')) {
-          res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
-          res.set('Pragma', 'no-cache');
-          res.set('Expires', '0');
-        }
         // Hashed assets can be cached aggressively
         if (filePath.includes('/assets/')) {
           res.set('Cache-Control', 'public, max-age=31536000, immutable');
         }
       },
     }));
+    // Explicit root route — no-cache to prevent stale JS references
+    app.get('/', (_req, res) => {
+      res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      res.set('Pragma', 'no-cache');
+      res.set('Expires', '0');
+      res.sendFile(path.join(distPath, "index.html"));
+    });
     // API 404 — must come before SPA fallback
     app.use('/api/*', (_req, res) => {
       res.status(404).json({ error: "API endpoint not found" });
     });
     app.get("*", (_req, res) => {
-      res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+      res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
       res.set('Pragma', 'no-cache');
       res.sendFile(path.join(distPath, "index.html"));
     });
