@@ -376,6 +376,8 @@ ${safeResume}
       res.status(404).json({ error: "API endpoint not found" });
     });
     app.get("*", (_req, res) => {
+      res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+      res.set('Pragma', 'no-cache');
       res.sendFile(path.join(distPath, "index.html"));
     });
   }
