@@ -88,7 +88,7 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
               {t('cancel')}
             </button>
             <div className="space-y-1">
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-st-warning">{job.title}</span>
+              <span className="text-xs font-black uppercase tracking-[0.3em] text-st-warning">{job.title}</span>
               <h2 className="text-4xl font-black tracking-tight">{candidate.candidate_name}</h2>
               <div className="flex flex-wrap gap-4 pt-2">
                 <div className="flex items-center gap-2 text-white/50 text-xs font-bold">
@@ -109,18 +109,18 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
 
           <div className="flex items-center gap-8 bg-black/20 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/5 shadow-2xl">
             <div className="text-center space-y-1">
-              <div className={`text-[10px] font-black uppercase tracking-widest ${
+              <div className={`text-xs font-black uppercase tracking-widest ${
                 recommendationLevel === 'high' ? 'text-st-success' : recommendationLevel === 'medium' ? 'text-st-warning' : 'text-st-error'
               }`}>AI {t('score')}</div>
               <div className="text-5xl font-black tabular-nums">{effectiveScore}</div>
             </div>
             <div className="w-[1px] h-12 bg-white/10" />
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/50">
+              <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-white/50">
                 <ShieldCheck className="w-3 h-3 text-st-success" />
                 Fit Status
               </div>
-              <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest inline-block ${
+              <div className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest inline-block ${
                 recommendationLevel === 'high' ? 'bg-st-success/10 text-st-success border border-st-success/20' : 
                 recommendationLevel === 'medium' ? 'bg-st-warning/10 text-st-warning border border-st-warning/20' : 
                 'bg-st-error/10 text-st-error border border-st-error/20'
@@ -171,7 +171,7 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                       <div className="w-10 h-10 bg-st-dark rounded-xl flex items-center justify-center text-white font-black italic">AI</div>
                       <h3 className="text-2xl font-black text-st-dark tracking-tight">{t('matchReason')}</h3>
                     </div>
-                    <p className="text-slate-600 font-medium leading-relaxed text-lg italic">
+                    <p className="text-slate-600 font-bold leading-relaxed text-base italic">
                       "{candidate.overall_recommendation.logic}"
                     </p>
                     <div className="flex flex-wrap gap-2 pt-2">
@@ -281,7 +281,7 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
             <div className="space-y-6">
               {Object.entries(candidate.detailed_scores).map(([id, val]) => (
                 <div key={id} className="space-y-2">
-                  <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
+                  <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest">
                     <span className="text-slate-400">{t(id) || id}</span>
                     <span className="text-st-dark tabular-nums">{val}/100</span>
                   </div>
@@ -301,12 +301,12 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
 
             <div className="pt-8 border-t border-slate-100 flex flex-col gap-3">
               <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-3">
-                 <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                 <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400">
                    <Target className="w-3 h-3" /> Risk Assessment
                  </div>
                  <div className="flex items-center justify-between">
                     <span className="text-sm font-black text-st-dark uppercase tracking-widest">Profile Risk</span>
-                    <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                    <div className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest ${
                       riskLevel === 'low' ? 'bg-st-success/10 text-st-success' : 
                       riskLevel === 'medium' ? 'bg-st-warning/10 text-st-warning' : 'bg-st-error/10 text-st-error'
                     }`}>
@@ -350,12 +350,12 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                     <Tag className="w-8 h-8 text-st-warning" />
                   </div>
                   <h3 className="text-3xl font-black text-st-dark tracking-tight">{t('hrOverride')}</h3>
-                  <p className="text-slate-400 font-medium">{t('feedback')}</p>
+                  <p className="text-slate-400 font-bold text-sm">{t('feedback')}</p>
                 </div>
 
                 <div className="space-y-8">
                   <div className="space-y-4">
-                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-st-light ml-4">
+                    <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest text-st-light ml-4">
                       <span>Adjust Score</span>
                       <span className="text-st-dark text-xl">{overrideScore}</span>
                     </div>
@@ -368,7 +368,7 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                   </div>
 
                   <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-st-light ml-4">Reason for Adjustment</label>
+                    <label className="text-xs font-black uppercase tracking-widest text-st-light ml-4">Reason for Adjustment</label>
                     <div className="grid grid-cols-2 gap-2">
                       {['skillGap', 'expInconsistent', 'tooSenior', 'tooJunior', 'other'].map(tag => (
                         <button

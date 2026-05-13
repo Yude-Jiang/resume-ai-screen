@@ -214,7 +214,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     className={`w-full text-left p-3 rounded-lg text-sm font-bold transition-all border ${activeJobId === job.id ? 'bg-st-light/20 border-st-light text-white shadow-inner' : 'border-transparent text-white/40 hover:bg-white/5 hover:text-white'}`}
                   >
                     <div className="truncate">{job.title}</div>
-                    <div className="text-sm opacity-40 font-medium">{job.dept}</div>
+                    <div className="text-sm opacity-40 font-bold">{job.dept}</div>
                   </button>
                 ))}
               </div>

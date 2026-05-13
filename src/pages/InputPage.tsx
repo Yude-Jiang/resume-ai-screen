@@ -288,7 +288,7 @@ export const InputPage: React.FC<InputPageProps> = ({
 
                  <button 
                    onClick={runAnalysis}
-                   className="w-full bg-st-dark text-st-yellow py-8 rounded-[2.5rem] font-black text-2xl tracking-tighter hover:bg-black transition-all shadow-[0_20px_50px_rgba(26,44,79,0.2)] active:scale-[0.98] flex items-center justify-center gap-4 group disabled:opacity-50"
+                   className="w-full bg-st-dark text-st-yellow py-8 rounded-[2.5rem] font-black text-2xl tracking-tight hover:bg-black transition-all shadow-[0_20px_50px_rgba(26,44,79,0.2)] active:scale-[0.98] flex items-center justify-center gap-4 group disabled:opacity-50"
                    disabled={isAnalyzing}
                  >
                    {isAnalyzing ? (
