@@ -21,15 +21,22 @@ function toBlobUrl(dataUrl: string): string | null {
 }
 
 export const PdfViewer: React.FC<PdfViewerProps> = ({ url, blindMode }) => {
-  const blobUrl = useMemo(() => (url.startsWith('data:') ? toBlobUrl(url) : url), [url]);
+  const isPdf = url.includes('application/pdf') || url.endsWith('.pdf');
+  const blobUrl = useMemo(() => (isPdf && url.startsWith('data:') ? toBlobUrl(url) : null), [url, isPdf]);
 
   // Cleanup blob URL on unmount
   React.useEffect(() => {
     return () => { if (blobUrl && blobUrl.startsWith('blob:')) URL.revokeObjectURL(blobUrl); };
   }, [blobUrl]);
 
+  // Only preview PDFs inline — DOCX etc would trigger browser download in iframe
   if (!blobUrl) {
-    return <div className="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400 text-sm font-medium">Preview unavailable</div>;
+    return (
+      <div className="w-full h-full flex flex-col items-center justify-center gap-3 bg-slate-50 text-slate-400">
+        <span className="text-sm font-medium">Preview not available</span>
+        <a href={url} download="resume.docx" className="text-xs font-medium text-st-light hover:underline">Click to download file</a>
+      </div>
+    );
   }
 
   return (
