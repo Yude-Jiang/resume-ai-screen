@@ -52,7 +52,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
           </div>
           <div className="flex flex-wrap gap-2 items-center">
             <span className="px-3 py-1 bg-slate-100 rounded-full text-sm font-bold text-slate-500 border border-slate-200">{res.summary.personal_info?.experience_years ?? 'N/A'} {t.years} {t.exp}</span>
-            <span className="px-3 py-1 bg-slate-100 rounded-full text-sm font-bold text-slate-500 border border-slate-200 uppercase tracking-tighter">{res.summary.personal_info?.education_level || 'N/A'}</span>
+            <span className="px-3 py-1 bg-slate-100 rounded-full text-sm font-bold text-slate-500 border border-slate-200 uppercase tracking-widest">{res.summary.personal_info?.education_level || 'N/A'}</span>
             {res.summary.key_skills.slice(0, 3).map((skill, si) => (
               <span key={si} className="text-sm font-bold text-st-light border border-st-light/20 bg-st-light/5 px-2 py-1 rounded-full">{skill}</span>
             ))}
@@ -81,7 +81,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                   <section className="animate-in fade-in slide-in-from-left duration-500">
                     <div className="flex items-center justify-between mb-8">
                       <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest">{t.scoreBreakdownVis}</h4>
-                      <div className="px-3 py-1 bg-st-success/10 text-st-success text-sm font-black rounded-full border border-st-success/20 tracking-tighter shadow-sm">{t.highMatch}</div>
+                      <div className="px-3 py-1 bg-st-success/10 text-st-success text-sm font-black rounded-full border border-st-success/20 tracking-widest shadow-sm">{t.highMatch}</div>
                     </div>
                     <ScoreChart weights={weights} detailedScores={res.detailed_scores} t={t} />
                   </section>
@@ -171,7 +171,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                       {blindMode && (
                         <div className="absolute inset-0 bg-st-dark/80 backdrop-blur-2xl flex flex-col items-center justify-center p-12 text-center z-20">
                           <div className="w-20 h-20 bg-st-yellow rounded-3xl flex items-center justify-center shadow-2xl mb-8 border-4 border-white/20"><Target className="w-8 h-8 text-st-dark" /></div>
-                          <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter">{t.blindMode} ACTIVE</h3>
+                          <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-tight">{t.blindMode} ACTIVE</h3>
                           <p className="text-st-light text-sm font-bold leading-relaxed max-w-xs">{t.blindModeDesc}</p>
                         </div>
                       )}

@@ -108,7 +108,7 @@ const AiChatWidget: React.FC<AiChatWidgetProps> = ({
                   <h3 className="text-white font-black text-sm tracking-tight">ST AI Assistant</h3>
                   <div className="flex items-center gap-1.5">
                     <div className="w-1.5 h-1.5 bg-st-success rounded-full animate-pulse" />
-                    <span className="text-white/60 text-[10px] font-bold uppercase tracking-widest">Online</span>
+                    <span className="text-white/60 text-xs font-bold uppercase tracking-widest">Online</span>
                   </div>
                 </div>
               </div>
@@ -135,7 +135,7 @@ const AiChatWidget: React.FC<AiChatWidgetProps> = ({
                   }`}>
                     {msg.role === 'assistant' ? <Bot className="w-5 h-5" /> : <User className="w-5 h-5" />}
                   </div>
-                  <div className={`max-w-[80%] p-3.5 rounded-2xl text-sm font-medium leading-relaxed ${
+                  <div className={`max-w-[80%] p-3.5 rounded-2xl text-sm font-bold leading-relaxed ${
                     msg.role === 'assistant' 
                     ? 'bg-white border border-slate-200 text-slate-700 shadow-sm' 
                     : 'bg-st-dark text-white shadow-lg'

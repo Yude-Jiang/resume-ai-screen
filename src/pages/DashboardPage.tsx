@@ -62,10 +62,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               <div>
                 <div className="flex justify-between items-start mb-6">
                   <div className="space-y-1">
-                    <span className="text-st-light text-[10px] font-black uppercase tracking-widest">{job.dept}</span>
+                    <span className="text-st-light text-xs font-black uppercase tracking-widest">{job.dept}</span>
                     <h4 className="text-lg font-black text-st-dark leading-tight">{job.title}</h4>
                   </div>
-                  <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                  <div className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest ${
                     job.status === 'running' ? 'bg-st-success/10 text-st-success' :
                     job.status === 'closed' ? 'bg-slate-100 text-slate-400' :
                     'bg-slate-100 text-slate-400'
@@ -77,15 +77,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 <div className="grid grid-cols-3 gap-4 border-y border-slate-50 py-6 mb-6">
                    <div className="text-center">
                      <div className="text-2xl font-black text-st-dark tabular-nums">{job.stats?.total || 0}</div>
-                     <div className="text-[10px] font-bold text-slate-400 uppercase">{t.totalHandled.split(' ')[1] || 'Resumes'}</div>
+                     <div className="text-xs font-bold text-slate-400 uppercase">{t.totalHandled.split(' ')[1] || 'Resumes'}</div>
                    </div>
                    <div className="text-center border-x border-slate-50">
                      <div className="text-2xl font-black text-st-dark tabular-nums">{job.stats?.evaluating || 0}</div>
-                     <div className="text-[10px] font-bold text-slate-400 uppercase">{t.evaluating}</div>
+                     <div className="text-xs font-bold text-slate-400 uppercase">{t.evaluating}</div>
                    </div>
                    <div className="text-center">
                      <div className="text-2xl font-black text-st-success tabular-nums">{job.stats?.highMatch || 0}</div>
-                     <div className="text-[10px] font-bold text-slate-400 uppercase">{t.highMatch}</div>
+                     <div className="text-xs font-bold text-slate-400 uppercase">{t.highMatch}</div>
                    </div>
                 </div>
               </div>

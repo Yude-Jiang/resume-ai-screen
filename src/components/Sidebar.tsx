@@ -116,7 +116,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="flex-1 px-6 space-y-6 overflow-y-auto st-scrollbar pb-6">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-white/60 text-sm font-bold uppercase tracking-wider">{t.scoringWeights}</h3>
+            <h3 className="text-white/60 text-sm font-bold uppercase tracking-widest">{t.scoringWeights}</h3>
             <div className="flex gap-2">
               <button 
                 onClick={() => {
@@ -149,7 +149,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="space-y-5">
             {weights.map(w => (
               <div key={w.id} className="group relative">
-                <div className="flex justify-between text-sm mb-2 font-bold uppercase tracking-wider text-white/40 group-hover:text-white/70 transition-colors items-center">
+                <div className="flex justify-between text-sm mb-2 font-bold uppercase tracking-widest text-white/40 group-hover:text-white/70 transition-colors items-center">
                   {editingWeightId === w.id ? (
                     <input 
                       autoFocus

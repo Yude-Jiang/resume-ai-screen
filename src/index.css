@@ -11,7 +11,7 @@
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 antialiased font-sans m-0 h-full overflow-hidden leading-relaxed text-lg;
+    @apply bg-slate-50 text-slate-900 antialiased font-sans m-0 h-full overflow-hidden leading-relaxed text-sm;
   }
 }
 

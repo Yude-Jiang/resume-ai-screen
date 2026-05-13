@@ -198,7 +198,7 @@ export const InputPage: React.FC<InputPageProps> = ({
               <div className="w-24 h-24 bg-st-dark rounded-[2rem] flex items-center justify-center shadow-2xl mb-8 animate-pulse">
                 <Loader2 className="w-12 h-12 text-st-yellow animate-spin" />
               </div>
-              <h3 className="text-3xl font-black text-st-dark mb-2 tracking-tighter uppercase">
+              <h3 className="text-3xl font-black text-st-dark mb-2 tracking-tight uppercase">
                 {t.analyzingCandidates || 'Analyzing Candidates...'}
               </h3>
               <div className="text-base font-bold text-slate-400 mb-8 max-w-sm">
