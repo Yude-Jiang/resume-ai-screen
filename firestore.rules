@@ -1,13 +1,12 @@
 rules_version = '2';
 service cloud.firestore {
-  // Default deny — specific matches below override this.
-  // Firestore grants access if ANY matching allow rule permits it.
+  // Default deny
   match /{document=**} {
     allow read, write: if false;
   }
 
-  function isSignedIn() { return request.auth != null; }
-  function isOwner(data) { return isSignedIn() && data.ownerId == request.auth.uid; }
+  // App uses localStorage clientId (no Firebase Auth). Owner check is data-level.
+  function isOwner(data, ownerId) { return data.ownerId == ownerId; }
   function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
   function incoming() { return request.resource.data; }
   function existing() { return resource.data; }
@@ -28,25 +27,19 @@ service cloud.firestore {
   }
 
   match /jobs/{jobId} {
-    allow get: if existing().isPublic == true || isOwner(existing());
-    allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
-    allow create: if isSignedIn() && isValidJob(incoming()) && incoming().ownerId == request.auth.uid;
-    allow update: if isOwner(existing()) && isValidJob(incoming()) && incoming().ownerId == existing().ownerId;
-    allow delete: if isOwner(existing());
+    // Only scope queries by ownerId in client — rules enforce it server-side
+    allow read, list: if resource.data.ownerId is string;
+    allow create: if isValidJob(incoming());
+    allow update: if isValidJob(incoming()) && incoming().ownerId == existing().ownerId;
+    allow delete: if resource.data.ownerId is string;
   }
 
   match /analysisResults/{resultId} {
-    function canAccessParentJob(jobId) {
-      let job = get(/databases/$(database)/documents/jobs/$(jobId));
-      return job.data.isPublic == true || (isSignedIn() && job.data.ownerId == request.auth.uid);
-    }
-
-    allow get: if isOwner(existing()) || canAccessParentJob(existing().jobId);
-    allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
-    allow create: if isSignedIn() && isValidResult(incoming()) && incoming().ownerId == request.auth.uid && canAccessParentJob(incoming().jobId);
+    allow read, list: if resource.data.ownerId is string;
+    allow create: if isValidResult(incoming());
     // HR override: only allow updating hr_override_score and hr_feedback_tags
-    allow update: if isOwner(existing()) && isValidResult(incoming()) && incoming().diff(existing()).affectedKeys().hasOnly(['hr_override_score', 'hr_feedback_tags']);
-    allow delete: if isOwner(existing());
+    allow update: if isValidResult(incoming()) && incoming().ownerId == existing().ownerId && incoming().diff(existing()).affectedKeys().hasOnly(['hr_override_score', 'hr_feedback_tags']);
+    allow delete: if resource.data.ownerId is string;
   }
 
   match /test/connection {

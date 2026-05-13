@@ -37,7 +37,7 @@ const AI_TIMEOUT_MS = 45_000; // 45s timeout per AI call
 
 async function callGemini(prompt: string, expectJson: boolean): Promise<string> {
   const t0 = Date.now();
-  const url = `${GEMINI_BASE_URL}${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+  const url = `${GEMINI_BASE_URL}${GEMINI_MODEL}:generateContent`;
   const body: any = {
     contents: [{ parts: [{ text: prompt }] }],
   };
@@ -50,7 +50,10 @@ async function callGemini(prompt: string, expectJson: boolean): Promise<string> 
   try {
     const response = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": GEMINI_API_KEY,
+      },
       body: JSON.stringify(body),
       signal: controller.signal,
     });
@@ -167,7 +170,7 @@ async function startServer() {
   // ---- Rate Limiting ----
   const aiLimiter = rateLimit({
     windowMs: 60 * 1000,
-    max: 300,  // was 20 — batch screening with 5 concurrent needs ~100/min
+    max: 40,  // 8 concurrent × 5 requests/min each = 40/min max (prevents abuse)
     standardHeaders: true,
     legacyHeaders: false,
     message: { error: "Too many AI requests. Please wait a moment." },
