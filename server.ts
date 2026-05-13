@@ -130,8 +130,8 @@ async function extractFileText(buffer: Buffer, mimetype: string, originalname: s
   if (mimetype === "application/pdf") {
     const parser = new PDFParse({ data: buffer });
     await parser.load();
-    const text = await parser.getText();
-    return text;
+    const result = await parser.getText();
+    return result.text || "";
   } else if (
     mimetype === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
     mimetype === "application/msword" ||
