@@ -74,8 +74,8 @@ export const ResultCard: React.FC<ResultCardProps> = ({
       <AnimatePresence>
         {expanded && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="border-t border-slate-100">
-            <div className="flex flex-col xl:flex-row h-[800px]">
-              <div className="w-full xl:w-[680px] flex flex-col border-r border-slate-100 bg-white st-scrollbar overflow-y-auto">
+            <div className="flex flex-col">
+              <div className="w-full flex flex-col bg-white st-scrollbar overflow-y-auto">
                 <div className="p-10 space-y-12">
                   {/* Score breakdown */}
                   <section className="animate-in fade-in slide-in-from-left duration-500">
@@ -157,14 +157,12 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                 </div>
               </div>
 
-              {/* PDF Preview Sidebar */}
-              <div className="flex-1 bg-slate-100 p-10 flex flex-col relative min-h-[500px] xl:min-h-0">
-                <div className="absolute top-0 right-0 p-8 z-10 pointer-events-none">
-                  <div className="flex items-center gap-4 animate-in slide-in-from-right duration-1000">
-                    <div className="text-xs font-black text-st-dark uppercase tracking-widest bg-st-yellow px-3 py-1 rounded-full shadow-lg border border-white/50">DOCUMENT PREVIEW</div>
-                  </div>
+              {/* PDF Preview — full-width bottom panel */}
+              <div className="border-t border-slate-200 bg-slate-100 p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="text-xs font-black text-st-dark uppercase tracking-widest bg-st-yellow px-3 py-1 rounded-full">Document Preview</div>
                 </div>
-                <div className="w-full h-full bg-white rounded-2xl shadow-3xl overflow-hidden border border-slate-200 relative group">
+                <div className="w-full h-[500px] bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-200">
                   {res.file_data ? (
                     <>
                       <PdfViewer url={res.file_data} searchTerm={searchTerm} blindMode={blindMode} />

@@ -36,6 +36,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   weights, handleWeightChange, createNewJob, addWeightItem, removeWeightItem, isShareMode, t
 }) => {
   const [showJobMenu, setShowJobMenu] = useState(false);
+  const [showWeights, setShowWeights] = useState(false);
   const [newJobTitle, setNewJobTitle] = useState('');
   const [editingWeightId, setEditingWeightId] = useState<string | null>(null);
 
@@ -114,79 +115,89 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </nav>
 
       <div className="flex-1 px-6 space-y-6 overflow-y-auto st-scrollbar pb-6">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-white/60 text-sm font-bold uppercase tracking-widest">{t.scoringWeights}</h3>
-            <div className="flex gap-2">
-              <button 
-                onClick={() => {
-                  const equal = Math.floor(100 / weights.length);
-                  const newWeights = weights.map((w, i) => ({ 
-                    ...w, 
-                    value: i === weights.length - 1 ? 100 - (equal * (weights.length - 1)) : equal 
-                  }));
-                  handleWeightChange(newWeights);
-                }}
-                className="text-sm bg-white/10 hover:bg-white/20 text-white/60 px-2 py-0.5 rounded transition-colors font-bold"
-              >
-                {t.equalize}
-              </button>
-              <button 
-                onClick={addWeightItem}
-                className="text-sm bg-st-light/20 hover:bg-st-light/30 text-st-light px-2 py-0.5 rounded transition-colors font-bold"
-              >
-                <Plus className="w-3 h-3" />
-              </button>
+        {/* Weights — collapsible */}
+        <div className="space-y-1">
+          <button
+            onClick={() => setShowWeights(!showWeights)}
+            className="w-full flex items-center justify-between text-white/60 hover:text-white transition-colors group"
+          >
+            <h3 className="text-sm font-bold tracking-widest uppercase">{t.scoringWeights}</h3>
+            <div className="flex items-center gap-2">
+              <span className={`text-xs font-bold ${totalWeight === 100 ? 'text-st-success' : 'text-rose-400'}`}>{totalWeight}%</span>
+              <ChevronDown className={`w-3 h-3 transition-transform ${showWeights ? 'rotate-180' : ''}`} />
             </div>
-          </div>
+          </button>
 
-          {totalWeight !== 100 && (
-            <div className="bg-rose-500/20 border border-rose-500/30 p-2 rounded text-sm text-rose-300 font-bold animate-pulse text-center">
-              Total: {totalWeight}% (Must be 100%)
+          {showWeights && (
+            <div className="pt-4 space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="flex gap-1">
+                <button
+                  onClick={() => {
+                    const equal = Math.floor(100 / weights.length);
+                    const newWeights = weights.map((w, i) => ({
+                      ...w,
+                      value: i === weights.length - 1 ? 100 - (equal * (weights.length - 1)) : equal
+                    }));
+                    handleWeightChange(newWeights);
+                  }}
+                  className="flex-1 text-xs bg-white/10 hover:bg-white/20 text-white/60 py-1 rounded transition-colors font-bold"
+                >
+                  {t.equalize}
+                </button>
+                <button
+                  onClick={addWeightItem}
+                  className="text-xs bg-st-light/20 hover:bg-st-light/30 text-st-light px-2 py-1 rounded transition-colors font-bold"
+                >
+                  <Plus className="w-3 h-3" />
+                </button>
+              </div>
+
+              {totalWeight !== 100 && (
+                <div className="bg-rose-500/20 border border-rose-500/30 p-2 rounded text-xs text-rose-300 font-bold text-center">
+                  Must sum to 100%
+                </div>
+              )}
+
+              <div className="space-y-4">
+                {weights.map(w => (
+                  <div key={w.id} className="group">
+                    <div className="flex justify-between items-center mb-1.5">
+                      {editingWeightId === w.id ? (
+                        <input
+                          autoFocus type="text"
+                          className="bg-white/10 border-none p-0 text-sm text-white focus:ring-0 w-28"
+                          value={w.label}
+                          onChange={(e) => updateWeightLabel(w.id, e.target.value)}
+                          onBlur={() => setEditingWeightId(null)}
+                          onKeyDown={(e) => e.key === 'Enter' && setEditingWeightId(null)}
+                        />
+                      ) : (
+                        <span
+                          className="cursor-pointer hover:text-st-light text-sm font-bold text-white/70 truncate max-w-[120px]"
+                          onClick={() => setEditingWeightId(w.id)}
+                        >{getWeightLabel(w)}</span>
+                      )}
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-st-yellow text-sm font-bold tabular-nums">{w.value}%</span>
+                        <button
+                          onClick={() => removeWeightItem(w.id)}
+                          className="opacity-0 group-hover:opacity-100 text-rose-400 hover:text-rose-500 transition-all"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    </div>
+                    <input
+                      type="range" min="0" max="100"
+                      value={w.value}
+                      onChange={(e) => updateWeightValue(w.id, parseInt(e.target.value))}
+                      className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-st-yellow"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
-          
-          <div className="space-y-5">
-            {weights.map(w => (
-              <div key={w.id} className="group relative">
-                <div className="flex justify-between text-sm mb-2 font-bold uppercase tracking-widest text-white/40 group-hover:text-white/70 transition-colors items-center">
-                  {editingWeightId === w.id ? (
-                    <input 
-                      autoFocus
-                      type="text"
-                      className="bg-white/10 border-none p-0 text-sm text-white focus:ring-0 w-32"
-                      value={w.label}
-                      onChange={(e) => updateWeightLabel(w.id, e.target.value)}
-                      onBlur={() => setEditingWeightId(null)}
-                      onKeyDown={(e) => e.key === 'Enter' && setEditingWeightId(null)}
-                    />
-                  ) : (
-                    <span 
-                      className="cursor-pointer hover:text-st-light truncate max-w-[140px]"
-                      onClick={() => setEditingWeightId(w.id)}
-                    >{getWeightLabel(w)}</span>
-                  )}
-                  <div className="flex items-center gap-2">
-                    <span className="text-st-yellow shrink-0">{w.value}%</span>
-                    <button 
-                      onClick={() => removeWeightItem(w.id)}
-                      className="opacity-0 group-hover:opacity-100 text-rose-400 hover:text-rose-500 transition-all scale-75"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </div>
-                </div>
-                <input 
-                  type="range" 
-                  min="0" 
-                  max="100" 
-                  value={w.value} 
-                  onChange={(e) => updateWeightValue(w.id, parseInt(e.target.value))}
-                  className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-st-yellow hover:bg-white/20 transition-all"
-                />
-              </div>
-            ))}
-          </div>
         </div>
 
         <div className="pt-6 border-t border-white/5">

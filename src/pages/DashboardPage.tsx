@@ -76,16 +76,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
                 <div className="grid grid-cols-3 gap-4 border-y border-slate-50 py-6 mb-6">
                    <div className="text-center">
-                     <div className="text-2xl font-black text-st-dark tabular-nums">{job.stats?.total || 0}</div>
-                     <div className="text-xs font-bold text-slate-400 uppercase">{t.totalHandled.split(' ')[1] || 'Resumes'}</div>
+                     <div className="text-xl font-bold text-st-dark tabular-nums">{job.stats?.total || 0}</div>
+                     <div className="text-xs font-bold text-slate-400">{t.totalHandled.split(' ')[1] || 'Resumes'}</div>
                    </div>
                    <div className="text-center border-x border-slate-50">
-                     <div className="text-2xl font-black text-st-dark tabular-nums">{job.stats?.evaluating || 0}</div>
-                     <div className="text-xs font-bold text-slate-400 uppercase">{t.evaluating}</div>
+                     <div className="text-xl font-bold text-st-dark tabular-nums">{job.stats?.evaluating || 0}</div>
+                     <div className="text-xs font-bold text-slate-400">{t.evaluating}</div>
                    </div>
                    <div className="text-center">
-                     <div className="text-2xl font-black text-st-success tabular-nums">{job.stats?.highMatch || 0}</div>
-                     <div className="text-xs font-bold text-slate-400 uppercase">{t.highMatch}</div>
+                     <div className="text-xl font-bold text-st-success tabular-nums">{job.stats?.highMatch || 0}</div>
+                     <div className="text-xs font-bold text-slate-400">{t.highMatch}</div>
                    </div>
                 </div>
               </div>
@@ -129,11 +129,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             <div className="absolute -top-10 -right-10 p-4 opacity-[0.03] group-hover:opacity-10 transition-all scale-150 rotate-12">
               <FileSearch className="w-64 h-64 text-st-dark" />
             </div>
-            <div className="text-sm font-black text-slate-400 uppercase tracking-widest mb-6">{t.totalHandled}</div>
+            <div className="text-sm font-bold text-slate-500 mb-3">{t.totalHandled}</div>
             <div className="flex items-end gap-5">
-              <span className="text-7xl font-black text-st-dark tabular-nums">{totalSystemStats.results}</span>
-              <div className="flex items-center gap-2 text-st-success text-sm font-bold mb-3 px-3 py-1 bg-st-success/10 rounded-full">
-                <Plus className="w-3 h-3" /> REAL-TIME
+              <span className="text-2xl font-bold text-st-dark tabular-nums">{totalSystemStats.results}</span>
+              <div className="flex items-center gap-1.5 text-st-success text-xs font-bold mb-1 px-2 py-0.5 bg-st-success/10 rounded-full">
+                <Plus className="w-3 h-3" /> LIVE
               </div>
             </div>
           </div>
@@ -143,31 +143,27 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             <div className="absolute -right-12 -bottom-12 opacity-10 group-hover:opacity-20 transition-all rotate-12">
               <Clock className="w-64 h-64 text-white" />
             </div>
-            <div className="text-sm font-bold text-white/40 mb-6">{t.hoursSaved}</div>
-            <div className="flex items-end gap-4">
-              <span className="text-7xl font-bold text-st-light tabular-nums">{(totalSystemStats.results * 0.2).toFixed(1)}</span>
-              <span className="text-3xl font-bold text-st-light/40 mb-3">h</span>
+            <div className="text-sm font-bold text-white/50 mb-3">{t.hoursSaved}</div>
+            <div className="flex items-end gap-2">
+              <span className="text-2xl font-bold text-st-light tabular-nums">{(totalSystemStats.results * 0.2).toFixed(1)}</span>
+              <span className="text-base font-bold text-st-light/40 mb-0.5">h</span>
             </div>
-            <div className="text-sm font-black text-white/40 uppercase tracking-widest mt-4 border-t border-white/5 pt-4">LABOR OPTIMIZATION</div>
           </div>
 
           {/* Average Match score */}
           <div className="bg-white p-10 rounded-[2.5rem] border border-slate-200 shadow-sm group hover:border-st-light/50 transition-all">
-            <div className="text-sm font-black text-slate-400 uppercase tracking-widest mb-6">{t.avgScore}</div>
-            <div className="flex items-end gap-3">
-              <span className="text-7xl font-black text-st-dark tabular-nums">
+            <div className="text-sm font-bold text-slate-500 mb-3">{t.avgScore}</div>
+            <div className="flex items-end gap-2">
+              <span className="text-2xl font-bold text-st-dark tabular-nums">
                 {results.length > 0 ? (results.reduce((a: any, c: any) => a + (c.hr_override_score ?? c.overall_score), 0) / results.length).toFixed(1) : '0.0'}
               </span>
-              <span className="text-3xl font-black text-slate-200 mb-3">%</span>
-            </div>
-            <div className="text-sm font-black text-st-success uppercase tracking-widest mt-4 flex items-center gap-2">
-              <Target className="w-4 h-4" /> CURRENT JOB ACCURACY
+              <span className="text-base font-bold text-slate-300 mb-0.5">%</span>
             </div>
           </div>
 
           {/* System Load Activity */}
           <div className="bg-white p-10 rounded-[2.5rem] border border-slate-200 shadow-sm relative overflow-hidden">
-            <div className="text-sm font-black text-slate-400 uppercase tracking-widest mb-6">Active Job Pipeline</div>
+            <div className="text-sm font-bold text-slate-500 mb-3">Active Job Pipeline</div>
             <div className="h-28 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={[
@@ -178,9 +174,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               </ResponsiveContainer>
             </div>
             <div className="flex justify-between items-center mt-6">
-              <span className="text-4xl font-black text-st-dark tabular-nums">{totalSystemStats.jobs}</span>
-              <span className="text-sm font-black text-st-light bg-st-light/10 px-3 py-1 rounded-full uppercase tracking-widest">
-                PROCESSED JOBS
+              <span className="text-2xl font-bold text-st-dark tabular-nums">{totalSystemStats.jobs}</span>
+              <span className="text-xs font-bold text-st-light bg-st-light/10 px-2.5 py-1 rounded-full">
+                Active jobs
               </span>
             </div>
           </div>
