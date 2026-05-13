@@ -82,14 +82,14 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
           <div className="space-y-6">
             <button 
               onClick={onBack}
-              className="flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs font-black uppercase tracking-widest"
+              className="flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs font-medium uppercase tracking-widest"
             >
               <ArrowLeft className="w-4 h-4" />
               {t('cancel')}
             </button>
             <div className="space-y-1">
-              <span className="text-xs font-black uppercase tracking-[0.3em] text-st-warning">{job.title}</span>
-              <h2 className="text-4xl font-black tracking-tight">{candidate.candidate_name}</h2>
+              <span className="text-xs font-medium uppercase tracking-[0.3em] text-st-warning">{job.title}</span>
+              <h2 className="text-lg font-semibold">{candidate.candidate_name}</h2>
               <div className="flex flex-wrap gap-4 pt-2">
                 <div className="flex items-center gap-2 text-white/50 text-xs font-bold">
                   <Mail className="w-3 h-3" /> {candidate.summary.personal_info.email || 'N/A'}
@@ -109,18 +109,18 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
 
           <div className="flex items-center gap-8 bg-black/20 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/5 shadow-2xl">
             <div className="text-center space-y-1">
-              <div className={`text-xs font-black uppercase tracking-widest ${
+              <div className={`text-xs font-medium uppercase tracking-widest ${
                 recommendationLevel === 'high' ? 'text-st-success' : recommendationLevel === 'medium' ? 'text-st-warning' : 'text-st-error'
               }`}>AI {t('score')}</div>
-              <div className="text-5xl font-black tabular-nums">{effectiveScore}</div>
+              <div className="text-5xl font-medium tabular-nums">{effectiveScore}</div>
             </div>
             <div className="w-[1px] h-12 bg-white/10" />
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-white/50">
+              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-white/50">
                 <ShieldCheck className="w-3 h-3 text-st-success" />
                 Fit Status
               </div>
-              <div className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest inline-block ${
+              <div className={`px-4 py-1.5 rounded-full text-xs font-medium uppercase tracking-widest inline-block ${
                 recommendationLevel === 'high' ? 'bg-st-success/10 text-st-success border border-st-success/20' : 
                 recommendationLevel === 'medium' ? 'bg-st-warning/10 text-st-warning border border-st-warning/20' : 
                 'bg-st-error/10 text-st-error border border-st-error/20'
@@ -143,7 +143,7 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
               <button
                 key={tab}
                 onClick={() => setActiveSubTab(tab)}
-                className={`px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+                className={`px-8 py-3 rounded-xl text-xs font-medium uppercase tracking-widest transition-all ${
                   activeSubTab === tab ? 'bg-st-dark text-white shadow-lg' : 'text-slate-400 hover:text-st-dark'
                 }`}
               >
@@ -168,15 +168,15 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                   </div>
                   <div className="space-y-6 relative z-10">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-st-dark rounded-xl flex items-center justify-center text-white font-black italic">AI</div>
-                      <h3 className="text-2xl font-black text-st-dark tracking-tight">{t('matchReason')}</h3>
+                      <div className="w-10 h-10 bg-st-dark rounded-xl flex items-center justify-center text-white font-medium italic">AI</div>
+                      <h3 className="text-2xl font-medium text-st-dark tracking-tight">{t('matchReason')}</h3>
                     </div>
                     <p className="text-slate-600 font-bold leading-relaxed text-base italic">
                       "{candidate.overall_recommendation.logic}"
                     </p>
                     <div className="flex flex-wrap gap-2 pt-2">
                        {candidate.summary.key_skills.map((skill, i) => (
-                         <span key={i} className="px-4 py-2 bg-slate-100 text-slate-500 rounded-xl text-xs font-black uppercase tracking-widest border border-slate-200/50">
+                         <span key={i} className="px-4 py-2 bg-slate-100 text-slate-500 rounded-xl text-xs font-medium uppercase tracking-widest border border-slate-200/50">
                            {skill}
                          </span>
                        ))}
@@ -187,7 +187,7 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                 {/* Highlights & Gaps Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="bg-white rounded-[2rem] p-8 border border-slate-200 shadow-sm space-y-6 border-b-4 border-b-st-success">
-                    <h4 className="flex items-center gap-3 text-sm font-black text-st-dark uppercase tracking-widest">
+                    <h4 className="flex items-center gap-3 text-sm font-medium text-st-dark uppercase tracking-widest">
                       <TrendingUp className="w-5 h-5 text-st-success" />
                       {t('keyHighlights')}
                     </h4>
@@ -202,7 +202,7 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                   </div>
 
                   <div className="bg-white rounded-[2rem] p-8 border border-slate-200 shadow-sm space-y-6 border-b-4 border-b-st-error">
-                    <h4 className="flex items-center gap-3 text-sm font-black text-st-dark uppercase tracking-widest">
+                    <h4 className="flex items-center gap-3 text-sm font-medium text-st-dark uppercase tracking-widest">
                       <AlertCircle className="w-5 h-5 text-st-error" />
                       {t('expGaps')}
                     </h4>
@@ -234,8 +234,8 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                 ) : (
                   <>
                     <Briefcase className="w-16 h-16 opacity-20" />
-                    <p className="font-black uppercase tracking-widest text-sm">Resume Preview Coming Soon</p>
-                    <button className="flex items-center gap-2 px-6 py-3 bg-st-dark text-white rounded-xl text-xs font-black uppercase tracking-widest mt-4">
+                    <p className="font-medium uppercase tracking-widest text-sm">Resume Preview Coming Soon</p>
+                    <button className="flex items-center gap-2 px-6 py-3 bg-st-dark text-white rounded-xl text-xs font-medium uppercase tracking-widest mt-4">
                        <Download className="w-4 h-4" /> Download Original File
                     </button>
                   </>
@@ -252,7 +252,7 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
               >
                  <div className="flex items-center gap-3">
                    <MessageSquare className="w-6 h-6 text-st-light" />
-                   <h3 className="text-2xl font-black text-st-dark tracking-tight">Collaboration & Notes</h3>
+                   <h3 className="text-2xl font-medium text-st-dark tracking-tight">Collaboration & Notes</h3>
                  </div>
                  <div className="space-y-4">
                    <textarea 
@@ -260,7 +260,7 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                      className="w-full h-40 px-8 py-6 bg-slate-50 border-none rounded-[2rem] focus:ring-4 focus:ring-st-light/10 font-bold text-st-dark placeholder:text-slate-300 resize-none"
                    />
                    <div className="flex justify-end pt-4">
-                     <button className="px-10 py-4 bg-st-dark text-white rounded-2xl font-black uppercase text-xs tracking-widest hover:scale-105 transition-all">
+                     <button className="px-10 py-4 bg-st-dark text-white rounded-2xl font-medium uppercase text-xs tracking-widest hover:scale-105 transition-all">
                        Save Note
                      </button>
                    </div>
@@ -275,13 +275,13 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
           <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm p-8 space-y-8">
             <div className="flex items-center gap-3">
               <Settings2 className="w-6 h-6 text-st-light" />
-              <h4 className="text-sm font-black text-st-dark uppercase tracking-widest">{t('scoreBreakdownVis')}</h4>
+              <h4 className="text-sm font-medium text-st-dark uppercase tracking-widest">{t('scoreBreakdownVis')}</h4>
             </div>
 
             <div className="space-y-6">
               {Object.entries(candidate.detailed_scores).map(([id, val]) => (
                 <div key={id} className="space-y-2">
-                  <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest">
+                  <div className="flex justify-between items-center text-xs font-medium uppercase tracking-widest">
                     <span className="text-slate-400">{t(id) || id}</span>
                     <span className="text-st-dark tabular-nums">{val}/100</span>
                   </div>
@@ -301,12 +301,12 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
 
             <div className="pt-8 border-t border-slate-100 flex flex-col gap-3">
               <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-3">
-                 <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400">
+                 <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-slate-400">
                    <Target className="w-3 h-3" /> Risk Assessment
                  </div>
                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-black text-st-dark uppercase tracking-widest">Profile Risk</span>
-                    <div className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest ${
+                    <span className="text-sm font-medium text-st-dark uppercase tracking-widest">Profile Risk</span>
+                    <div className={`px-4 py-1.5 rounded-full text-xs font-medium uppercase tracking-widest ${
                       riskLevel === 'low' ? 'bg-st-success/10 text-st-success' : 
                       riskLevel === 'medium' ? 'bg-st-warning/10 text-st-warning' : 'bg-st-error/10 text-st-error'
                     }`}>
@@ -317,7 +317,7 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
 
               <button 
                 onClick={() => setShowOverrideModal(true)}
-                className="w-full py-5 bg-st-dark text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-st-dark/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-3"
+                className="w-full py-5 bg-st-dark text-white rounded-2xl font-medium text-xs uppercase tracking-widest shadow-xl shadow-st-dark/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-3"
               >
                 <Tag className="w-4 h-4" />
                 {t('hrOverride')}
@@ -349,13 +349,13 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                   <div className="w-16 h-16 bg-st-dark rounded-[1.5rem] flex items-center justify-center mx-auto mb-6 shadow-xl shadow-st-dark/20">
                     <Tag className="w-8 h-8 text-st-warning" />
                   </div>
-                  <h3 className="text-3xl font-black text-st-dark tracking-tight">{t('hrOverride')}</h3>
+                  <h3 className="text-3xl font-medium text-st-dark tracking-tight">{t('hrOverride')}</h3>
                   <p className="text-slate-400 font-bold text-sm">{t('feedback')}</p>
                 </div>
 
                 <div className="space-y-8">
                   <div className="space-y-4">
-                    <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest text-st-light ml-4">
+                    <div className="flex justify-between items-center text-xs font-medium uppercase tracking-widest text-st-light ml-4">
                       <span>Adjust Score</span>
                       <span className="text-st-dark text-xl">{overrideScore}</span>
                     </div>
@@ -368,13 +368,13 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                   </div>
 
                   <div className="space-y-4">
-                    <label className="text-xs font-black uppercase tracking-widest text-st-light ml-4">Reason for Adjustment</label>
+                    <label className="text-xs font-medium uppercase tracking-widest text-st-light ml-4">Reason for Adjustment</label>
                     <div className="grid grid-cols-2 gap-2">
                       {['skillGap', 'expInconsistent', 'tooSenior', 'tooJunior', 'other'].map(tag => (
                         <button
                           key={tag}
                           onClick={() => setOverrideReason(tag)}
-                          className={`px-4 py-3 rounded-xl text-xs font-black transition-all ${
+                          className={`px-4 py-3 rounded-xl text-xs font-medium transition-all ${
                             overrideReason === tag 
                             ? 'bg-st-dark text-white shadow-lg' 
                             : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
@@ -390,13 +390,13 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                 <div className="flex gap-4 p-2 bg-slate-50 rounded-[2rem] border border-slate-100">
                   <button 
                     onClick={() => setShowOverrideModal(false)}
-                    className="flex-1 py-5 bg-white text-slate-400 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-slate-100 transition-colors"
+                    className="flex-1 py-5 bg-white text-slate-400 rounded-2xl text-xs font-medium uppercase tracking-widest hover:bg-slate-100 transition-colors"
                   >
                     {t('cancel')}
                   </button>
                   <button 
                     onClick={handleUpdateStatus}
-                    className="flex-1 py-5 bg-st-dark text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg shadow-st-dark/20 hover:scale-105 transition-all"
+                    className="flex-1 py-5 bg-st-dark text-white rounded-2xl text-xs font-medium uppercase tracking-widest shadow-lg shadow-st-dark/20 hover:scale-105 transition-all"
                   >
                     {t('saveChanges')}
                   </button>

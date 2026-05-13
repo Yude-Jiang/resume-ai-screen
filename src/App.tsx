@@ -195,7 +195,7 @@ export default function App() {
         />
 
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-st-dark/90 backdrop-blur-md border-t border-white/5 px-6 py-2 flex items-center justify-center">
-          <span className="text-xs font-bold text-white/40 uppercase tracking-widest">
+          <span className="text-[11px] font-medium text-white/40">
             {new Date().toISOString().split('T')[0]} | {language === 'zh' ? 'ST 内部使用' : 'ST Internal Use'} | {language === 'zh' ? '创建人' : 'Created by'}: Yude.jiang@st.com &nbsp;ST
           </span>
         </div>

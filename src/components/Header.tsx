@@ -35,17 +35,17 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="w-8 h-8 bg-st-dark rounded-lg flex items-center justify-center">
             <Zap className="w-5 h-5 text-st-yellow fill-st-yellow" />
           </div>
-          <span className="text-sm font-bold text-slate-400">Shared Results</span>
+          <span className="text-sm font-medium text-slate-400">Shared Results</span>
         </div>
       ) : (
         <div className="flex items-center gap-3">
-          <span className="text-sm font-bold text-st-dark">
+          <span className="text-sm font-semibold text-st-dark">
             {PAGE_TITLES[activeTab] || activeTab}
           </span>
           {activeJob && (
             <>
               <span className="text-slate-300 text-sm">/</span>
-              <span className="text-sm font-bold text-slate-400 truncate max-w-[240px]">{activeJob.title}</span>
+              <span className="text-sm font-normal text-slate-500 truncate max-w-[240px]">{activeJob.title}</span>
             </>
           )}
         </div>
@@ -56,7 +56,7 @@ export const Header: React.FC<HeaderProps> = ({
         {!isShareMode && (
           <button
             onClick={() => setBlindMode(!blindMode)}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
               blindMode
                 ? 'bg-st-dark text-white'
                 : 'bg-slate-100 text-slate-400 hover:text-slate-600'

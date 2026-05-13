@@ -75,39 +75,39 @@ export const Sidebar: React.FC<SidebarProps> = ({
           />
           <button
             onClick={() => setLanguage(l => l === 'en' ? 'zh' : 'en')}
-            className="text-sm font-bold border border-white/20 px-1.5 py-0.5 rounded hover:bg-white/10 transition-colors"
+            className="text-sm font-medium border border-white/20 px-1.5 py-0.5 rounded hover:bg-white/10 transition-colors"
           >
             {language === 'en' ? '中文' : 'EN'}
           </button>
         </div>
-        <div className="text-st-light font-black text-lg mt-3 tracking-tight">{t.aiScreening}</div>
+        <div className="text-st-light font-semibold text-lg mt-3 tracking-tight">{t.aiScreening}</div>
       </div>
 
       <nav className="px-3 space-y-1 mb-6">
         <button 
           onClick={() => setActiveTab('input')}
-          className={`w-full flex items-center gap-3 px-4 py-2.5 rounded transition-all text-base font-bold ${activeTab === 'input' ? 'bg-st-light text-white shadow-lg' : 'hover:bg-white/5 text-slate-400'}`}
+          className={`w-full flex items-center gap-3 px-4 py-2.5 rounded transition-all text-sm font-medium ${activeTab === 'input' ? 'bg-st-light text-white shadow-lg' : 'hover:bg-white/5 text-slate-400'}`}
         >
           <Upload className="w-4 h-4" />
           <span>{t.inputData}</span>
         </button>
         <button 
           onClick={() => setActiveTab('results')}
-          className={`w-full flex items-center gap-3 px-4 py-2.5 rounded transition-all text-base font-bold ${activeTab === 'results' ? 'bg-st-light text-white shadow-lg' : 'hover:bg-white/5 text-slate-400'}`}
+          className={`w-full flex items-center gap-3 px-4 py-2.5 rounded transition-all text-sm font-medium ${activeTab === 'results' ? 'bg-st-light text-white shadow-lg' : 'hover:bg-white/5 text-slate-400'}`}
         >
           <BarChart3 className="w-4 h-4" />
           <span>{t.screeningResults}</span>
         </button>
         <button 
           onClick={() => setActiveTab('dashboard')}
-          className={`w-full flex items-center gap-3 px-4 py-2.5 rounded transition-all text-base font-bold ${activeTab === 'dashboard' ? 'bg-st-light text-white shadow-lg' : 'hover:bg-white/5 text-slate-400'}`}
+          className={`w-full flex items-center gap-3 px-4 py-2.5 rounded transition-all text-sm font-medium ${activeTab === 'dashboard' ? 'bg-st-light text-white shadow-lg' : 'hover:bg-white/5 text-slate-400'}`}
         >
           <LayoutDashboard className="w-4 h-4" />
           <span>{t.dashboard}</span>
         </button>
         <button
           onClick={() => setActiveTab('talent-library')}
-          className={`w-full flex items-center gap-3 px-4 py-2.5 rounded transition-all text-base font-bold ${activeTab === 'talent-library' ? 'bg-st-light text-white shadow-lg' : 'hover:bg-white/5 text-slate-400'}`}
+          className={`w-full flex items-center gap-3 px-4 py-2.5 rounded transition-all text-sm font-medium ${activeTab === 'talent-library' ? 'bg-st-light text-white shadow-lg' : 'hover:bg-white/5 text-slate-400'}`}
         >
           <Users className="w-4 h-4" />
           <span>{t.talentLibrary}</span>
@@ -121,9 +121,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onClick={() => setShowWeights(!showWeights)}
             className="w-full flex items-center justify-between text-white/60 hover:text-white transition-colors group"
           >
-            <h3 className="text-sm font-bold tracking-widest uppercase">{t.scoringWeights}</h3>
+            <h3 className="text-sm font-medium tracking-wide">{t.scoringWeights}</h3>
             <div className="flex items-center gap-2">
-              <span className={`text-xs font-bold ${totalWeight === 100 ? 'text-st-success' : 'text-rose-400'}`}>{totalWeight}%</span>
+              <span className={`text-xs font-medium ${totalWeight === 100 ? 'text-st-success' : 'text-rose-400'}`}>{totalWeight}%</span>
               <ChevronDown className={`w-3 h-3 transition-transform ${showWeights ? 'rotate-180' : ''}`} />
             </div>
           </button>
@@ -140,20 +140,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     }));
                     handleWeightChange(newWeights);
                   }}
-                  className="flex-1 text-xs bg-white/10 hover:bg-white/20 text-white/60 py-1 rounded transition-colors font-bold"
+                  className="flex-1 text-xs bg-white/10 hover:bg-white/20 text-white/60 py-1 rounded transition-colors font-medium"
                 >
                   {t.equalize}
                 </button>
                 <button
                   onClick={addWeightItem}
-                  className="text-xs bg-st-light/20 hover:bg-st-light/30 text-st-light px-2 py-1 rounded transition-colors font-bold"
+                  className="text-xs bg-st-light/20 hover:bg-st-light/30 text-st-light px-2 py-1 rounded transition-colors font-medium"
                 >
                   <Plus className="w-3 h-3" />
                 </button>
               </div>
 
               {totalWeight !== 100 && (
-                <div className="bg-rose-500/20 border border-rose-500/30 p-2 rounded text-xs text-rose-300 font-bold text-center">
+                <div className="bg-rose-500/20 border border-rose-500/30 p-2 rounded text-xs text-rose-300 font-medium text-center">
                   Must sum to 100%
                 </div>
               )}
@@ -173,12 +173,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         />
                       ) : (
                         <span
-                          className="cursor-pointer hover:text-st-light text-sm font-bold text-white/70 truncate max-w-[120px]"
+                          className="cursor-pointer hover:text-st-light text-sm font-medium text-white/70 truncate max-w-[120px]"
                           onClick={() => setEditingWeightId(w.id)}
                         >{getWeightLabel(w)}</span>
                       )}
                       <div className="flex items-center gap-1.5">
-                        <span className="text-st-yellow text-sm font-bold tabular-nums">{w.value}%</span>
+                        <span className="text-st-yellow text-sm font-semibold tabular-nums">{w.value}%</span>
                         <button
                           onClick={() => removeWeightItem(w.id)}
                           className="opacity-0 group-hover:opacity-100 text-rose-400 hover:text-rose-500 transition-all"
@@ -207,7 +207,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           >
             <div className="flex items-center gap-2">
               <Settings className="w-4 h-4" />
-              <span className="text-sm font-bold uppercase tracking-widest">{t.activeJobs}</span>
+              <span className="text-sm font-medium uppercase tracking-widest">{t.activeJobs}</span>
             </div>
             <ChevronDown className={`w-3 h-3 transition-transform ${showJobMenu ? 'rotate-180' : ''}`} />
           </button>
@@ -222,10 +222,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       setActiveJobId(job.id);
                       setActiveTab('input');
                     }}
-                    className={`w-full text-left p-3 rounded-lg text-sm font-bold transition-all border ${activeJobId === job.id ? 'bg-st-light/20 border-st-light text-white shadow-inner' : 'border-transparent text-white/40 hover:bg-white/5 hover:text-white'}`}
+                    className={`w-full text-left p-3 rounded-lg text-sm font-medium transition-all border ${activeJobId === job.id ? 'bg-st-light/20 border-st-light text-white shadow-inner' : 'border-transparent text-white/40 hover:bg-white/5 hover:text-white'}`}
                   >
                     <div className="truncate">{job.title}</div>
-                    <div className="text-sm opacity-40 font-bold">{job.dept}</div>
+                    <div className="text-sm opacity-40 font-medium">{job.dept}</div>
                   </button>
                 ))}
               </div>
@@ -236,7 +236,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   placeholder="Job Title" 
                   value={newJobTitle}
                   onChange={e => setNewJobTitle(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-st-light transition-all mb-2 font-bold"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-st-light transition-all mb-2 font-medium"
                 />
                 <button 
                   onClick={async () => {
@@ -245,7 +245,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       setNewJobTitle('');
                     }
                   }}
-                  className="w-full bg-st-yellow text-st-dark py-2.5 rounded-lg text-sm font-black hover:bg-white transition-all shadow-lg active:scale-95"
+                  className="w-full bg-st-yellow text-st-dark py-2.5 rounded-lg text-sm font-semibold hover:bg-white transition-all shadow-lg active:scale-95"
                 >
                   <Plus className="w-3.5 h-3.5 inline mr-1" />
                   NEW PROJECT
@@ -262,8 +262,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <AlertCircle className="w-4 h-4 text-st-success animate-pulse" />
           </div>
           <div>
-            <div className="text-sm font-black text-st-success uppercase tracking-widest">{t.systemStatus}</div>
-            <div className="text-sm text-white/40 font-bold leading-none mt-1">{t.active}</div>
+            <div className="text-sm font-semibold text-st-success uppercase tracking-widest">{t.systemStatus}</div>
+            <div className="text-sm text-white/40 font-medium leading-none mt-1">{t.active}</div>
           </div>
         </div>
       </div>
