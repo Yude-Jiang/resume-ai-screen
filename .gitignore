@@ -7,6 +7,7 @@ coverage/
 .env*
 !.env.example
 firebase-applet-config.json
+.claude/
 npm
 tsc
 react-example@0.0.0
