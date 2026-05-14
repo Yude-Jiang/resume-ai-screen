@@ -1,16 +1,5 @@
-import { useState, useMemo, useEffect } from 'react';
-import {
-  collection,
-  onSnapshot,
-  addDoc,
-  updateDoc,
-  doc,
-  getDocFromServer,
-  query,
-  where,
-  serverTimestamp,
-} from 'firebase/firestore';
-import { db, handleFirestoreError, OperationType, clientId } from '../lib/firebase';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { api, handleFirestoreError, OperationType, clientId } from '../lib/firebase';
 import { ScoringWeights, AnalysisResult, HardThresholds, Job } from '../types';
 import { analyzeResume, analyzeJd, parseJdFile } from '../services/gemini';
 import { translations, Language } from '../translations';
@@ -69,81 +58,55 @@ export function useScreening() {
     setAuthReady(true);
   }, []);
 
-  // Connection Test
-  useEffect(() => {
-    async function testConnection() {
-      try {
-        await getDocFromServer(doc(db, 'test', 'connection'));
-      } catch (error) {
-        if(error instanceof Error && error.message.includes('the client is offline')) {
-          console.error("Please check your Firebase configuration.");
-        }
-      }
-    }
-    if (authReady) testConnection();
-  }, [authReady]);
+  // ── Polling-based data fetching (replaces Firestore onSnapshot) ──
 
-  // Fetch Jobs
+  // Fetch Jobs (poll every 3s)
   useEffect(() => {
-    if (!isShareMode || !authReady) {
-      const q = query(collection(db, 'jobs'), where('ownerId', '==', clientId));
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        const jobList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Job));
-        setJobs(jobList);
-      }, (error) => {
-         if (!isShareMode) handleFirestoreError(error, OperationType.LIST, 'jobs');
-      });
-      return () => unsubscribe();
-    }
+    if (isShareMode || !authReady) return;
+    const fetchJobs = () => {
+      api.getJobs().then(setJobs).catch(e => handleFirestoreError(e, OperationType.LIST, 'jobs'));
+    };
+    fetchJobs();
+    const interval = setInterval(fetchJobs, 3000);
+    return () => clearInterval(interval);
   }, [isShareMode, authReady]);
 
-  // Fetch Results
+  // Fetch Results for active job (poll every 3s)
   useEffect(() => {
-    if (!activeJobId) {
-      setResults([]);
-      return;
-    }
-    const constraints = [where('jobId', '==', activeJobId)];
-    if (!isShareMode) {
-      constraints.push(where('ownerId', '==', clientId));
-    }
-
-    const q = query(collection(db, 'analysisResults'), ...constraints);
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const docs = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as AnalysisResult));
-      docs.sort((a, b) => b.overall_score - a.overall_score);
-      setResults(docs);
-    }, (error) => {
-      if (!isShareMode) handleFirestoreError(error, OperationType.LIST, 'analysisResults');
-    });
-    return () => unsubscribe();
+    if (!activeJobId) { setResults([]); return; }
+    const fetchResults = () => {
+      api.getResults(activeJobId).then((docs: AnalysisResult[]) => {
+        docs.sort((a, b) => b.overall_score - a.overall_score);
+        setResults(docs);
+      }).catch(e => { if (!isShareMode) handleFirestoreError(e, OperationType.LIST, 'analysisResults'); });
+    };
+    fetchResults();
+    const interval = setInterval(fetchResults, 3000);
+    return () => clearInterval(interval);
   }, [activeJobId, isShareMode]);
 
-  // Fetch ALL Results for Dashboard
+  // Fetch ALL Results for Dashboard + Talent Library (poll every 5s)
   useEffect(() => {
     if (isShareMode) return;
-
-    const q = query(collection(db, 'analysisResults'), where('ownerId', '==', clientId));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      setAllResults(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as AnalysisResult)));
-    }, (error) => {
-      handleFirestoreError(error, OperationType.LIST, 'analysisResults_all');
-    });
-    return () => unsubscribe();
+    const fetchAll = () => {
+      api.getResults().then((docs: AnalysisResult[]) => setAllResults(docs)).catch(() => {});
+    };
+    fetchAll();
+    const interval = setInterval(fetchAll, 5000);
+    return () => clearInterval(interval);
   }, [isShareMode]);
 
-  // System Stats (scoped to current client)
+  // System Stats (poll every 5s, derived from existing data)
   useEffect(() => {
-    const qJobs = query(collection(db, 'jobs'), where('ownerId', '==', clientId));
-    const unsubJobs = onSnapshot(qJobs, (snap) => {
-       setTotalSystemStats(prev => ({ ...prev, jobs: snap.size }));
-    }, () => {});
-    const qResults = query(collection(db, 'analysisResults'), where('ownerId', '==', clientId));
-    const unsubResults = onSnapshot(qResults, (snap) => {
-       setTotalSystemStats(prev => ({ ...prev, results: snap.size }));
-    }, () => {});
-    return () => { unsubJobs(); unsubResults(); };
-  }, []);
+    if (isShareMode) return;
+    const fetchStats = () => {
+      api.getJobs().then((jobs: Job[]) => setTotalSystemStats(prev => ({ ...prev, jobs: jobs.length }))).catch(() => {});
+      api.getResults().then((docs: AnalysisResult[]) => setTotalSystemStats(prev => ({ ...prev, results: docs.length }))).catch(() => {});
+    };
+    fetchStats();
+    const interval = setInterval(fetchStats, 5000);
+    return () => clearInterval(interval);
+  }, [isShareMode]);
 
   // Sync JD/Weights/Thresholds when active job changes
   useEffect(() => {
@@ -171,7 +134,7 @@ export function useScreening() {
     setWeights(newWeights);
     if (activeJobId) {
       try {
-        await updateDoc(doc(db, 'jobs', activeJobId), { weights: newWeights, updatedAt: serverTimestamp() });
+        await api.updateJob(activeJobId!, { weights: newWeights });
       } catch (e) { handleFirestoreError(e, OperationType.WRITE, `jobs/${activeJobId}`); }
     }
   };
@@ -190,7 +153,7 @@ export function useScreening() {
     const result = results.find(r => r.file_name === fileName);
     if (result && (result as any).id) {
        try {
-         await updateDoc(doc(db, 'analysisResults', (result as any).id), {
+         await api.updateResult((result as any).id, {
            hr_override_score: score,
            hr_feedback_tags: tags
          });
@@ -211,12 +174,11 @@ export function useScreening() {
         setWeights(config.suggestedWeights);
         setThresholds(config.thresholds);
         if (activeJobId) {
-          updateDoc(doc(db, 'jobs', activeJobId), {
+          api.updateJob(activeJobId, {
             jd: jdToUse,
             title: config.jobTitle || jobTitle || undefined,
             weights: config.suggestedWeights,
             thresholds: config.thresholds,
-            updatedAt: serverTimestamp()
           }).catch(e => handleFirestoreError(e, OperationType.WRITE, `jobs/${activeJobId}`));
         }
         return language === 'zh' ? '权重和阈值已根据 JD 自动优化！' : 'Weights and thresholds optimized!';
@@ -235,7 +197,7 @@ export function useScreening() {
 
   const createNewJob = async (title: string, dept: string) => {
     try {
-      const docRef = await addDoc(collection(db, 'jobs'), {
+      const newJob = await api.createJob({
         title,
         dept,
         jd: '',
@@ -248,10 +210,8 @@ export function useScreening() {
         ],
         thresholds: { minEdu: 'bachelor', minExp: 3, requiredSkills: [] },
         status: 'running',
-        updatedAt: serverTimestamp(),
-        ownerId: clientId
       });
-      setActiveJobId(docRef.id);
+      setActiveJobId(newJob.id);
       setActiveTab('input');
     } catch (e) { handleFirestoreError(e, OperationType.WRITE, 'jobs'); }
   };
@@ -287,17 +247,15 @@ export function useScreening() {
       }
 
       try {
-        const docRef = await addDoc(collection(db, 'jobs'), {
+        const newJob = await api.createJob({
           title: jobTitle || (language === 'zh' ? '新职位' : 'New Position'),
           dept: language === 'zh' ? '待定' : 'TBD',
           jd: jd,
           weights,
           thresholds,
           status: 'running',
-          updatedAt: serverTimestamp(),
-          ownerId: clientId
         });
-        targetJobId = docRef.id;
+        targetJobId = newJob.id;
         setActiveJobId(targetJobId);
       } catch (e) {
         handleFirestoreError(e, OperationType.WRITE, 'jobs');
@@ -348,11 +306,9 @@ export function useScreening() {
           console.warn(`[Firestore] file_data too large for ${file.name} (${(fileData.length / 1024).toFixed(0)}KB), stripping`);
           safeResult.file_data = null as any;
         }
-        await addDoc(collection(db, 'analysisResults'), {
+        await api.createResult({
           ...safeResult,
           jobId: targetJobId,
-          createdAt: serverTimestamp(),
-          ownerId: clientId,
         });
         successCount++;
       } catch (err) {

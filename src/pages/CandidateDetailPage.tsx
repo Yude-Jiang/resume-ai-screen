@@ -20,8 +20,7 @@ import {
 } from 'lucide-react';
 import { useI18n } from '../components/LanguageContext';
 import { AnalysisResult, Job } from '../types';
-import { db } from '../lib/firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { api } from '../lib/firebase';
 import { toast } from 'sonner';
 
 interface CandidateDetailPageProps {
@@ -60,7 +59,7 @@ const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
 
   const handleUpdateStatus = async () => {
     try {
-      await updateDoc(doc(db, 'analysisResults', candidate.id), {
+      await api.updateResult(candidate.id, {
         hr_override_score: overrideScore,
         hr_feedback_tags: [overrideReason],
       });

@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { XCircle, ExternalLink, BarChart3 } from 'lucide-react';
+import { XCircle, BarChart3 } from 'lucide-react';
 import { AnalysisResult, Job } from '../types';
 import { ResultCard } from '../components/ResultCard';
-import { clientId } from '../lib/firebase';
+import { api } from '../lib/firebase';
 
 interface ResultsPageProps {
   results: AnalysisResult[];
@@ -20,22 +20,11 @@ interface ResultsPageProps {
   language: string;
   isShareMode: boolean;
   t: any;
-  handleFirestoreError?: any;
-  db?: any;
-  updateDoc?: any;
-  doc?: any;
-  query?: any;
-  collection?: any;
-  where?: any;
-  getDocs?: any;
-  writeBatch?: any;
-  OperationType?: any;
 }
 
 export const ResultsPage: React.FC<ResultsPageProps> = ({
   results, blindMode, searchTerm, setSearchTerm,
   editingScore, setEditingScore, handleScoreOverride, activeJobId, jobs, weights, language, isShareMode, t,
-  handleFirestoreError, db, updateDoc, doc, query, collection, where, getDocs, writeBatch, OperationType
 }) => {
   const [scoreFilter, setScoreFilter] = useState<'all' | 'high' | 'medium' | 'low'>('all');
   const [fitFilter, setFitFilter] = useState<string>('all');
@@ -102,26 +91,22 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
                   const job = jobs.find(j => j.id === activeJobId);
                   if (job) {
                     try {
-                      await updateDoc(doc(db, 'jobs', activeJobId), { isPublic: !job.isPublic });
-                      if (!job.isPublic) {
+                      await api.updateJob(activeJobId, { isPublic: !(job as any).isPublic });
+                      if (!(job as any).isPublic) {
                         navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}?jobId=${activeJobId}&mode=share`);
                       }
-                    } catch (e) { handleFirestoreError(e, OperationType.WRITE, `jobs/${activeJobId}`); }
+                    } catch (e) { /* ignore */ }
                   }
-                }} className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-sm font-bold transition-all shadow-sm ${jobs.find(j => j.id === activeJobId)?.isPublic ? 'bg-st-yellow text-st-dark' : 'bg-white text-slate-400 border border-slate-200'}`}>
-                  <ExternalLink className="w-3 h-3" />{jobs.find(j => j.id === activeJobId)?.isPublic ? 'SHARED' : 'SHARE TO INTERVIEWER'}
+                }} className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-sm font-bold transition-all shadow-sm ${(jobs.find(j => j.id === activeJobId) as any)?.isPublic ? 'bg-st-yellow text-st-dark' : 'bg-white text-slate-400 border border-slate-200'}`}>
+                  {(jobs.find(j => j.id === activeJobId) as any)?.isPublic ? 'SHARED' : 'SHARE TO INTERVIEWER'}
                 </button>
               )}
               {!isShareMode && (
                 <button onClick={async () => {
                   if (activeJobId && confirm(t.clearAll + "?")) {
                     try {
-                      const q = query(collection(db, 'analysisResults'), where('jobId', '==', activeJobId), where('ownerId', '==', clientId));
-                      const snap = await getDocs(q);
-                      const batch = writeBatch(db);
-                      snap.forEach((d: any) => batch.delete(d.ref));
-                      await batch.commit();
-                    } catch (e) { handleFirestoreError(e, OperationType.DELETE, 'analysisResults (batch)'); }
+                      await api.deleteResultsByJob(activeJobId);
+                    } catch (e) { /* ignore */ }
                   }
                 }} className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-rose-500 bg-rose-50 hover:bg-rose-100 transition-all border border-rose-100 shadow-sm">
                   <XCircle className="w-3 h-3" /> {t.clearAll}

@@ -14,6 +14,39 @@ import rateLimit from "express-rate-limit";
 
 dotenv.config();
 
+// ---- Firestore Admin (server-side, GCP internal network) ----
+import admin from "firebase-admin";
+
+let db: admin.firestore.Firestore | null = null;
+try {
+  if (!admin.apps.length) {
+    admin.initializeApp({
+      credential: admin.credential.applicationDefault(),
+      projectId: process.env.FIREBASE_PROJECT_ID || "trendradar-485407",
+    });
+  }
+  db = admin.firestore();
+  console.log("[Server] Firestore admin initialized");
+} catch (e: any) {
+  console.warn("[Server] Firestore admin NOT available:", e.message);
+  console.warn("[Server] Falling back to in-memory storage (data will not persist)");
+  // In-memory fallback for local dev without ADC
+  const memDb: Record<string, Record<string, any>[]> = { jobs: [], analysisResults: [] };
+  const makeMemCollection = (name: string) => ({
+    where: () => ({ get: async () => ({ docs: memDb[name].map((d: any) => ({ id: d._id, data: () => d })) }) }),
+    add: async (data: any) => { const id = 'mem_' + Date.now(); const doc = { _id: id, ...data }; memDb[name].push(doc); return { id, get: async () => ({ id, data: () => doc }) }; },
+    doc: (id: string) => ({
+      get: async () => { const d = memDb[name].find((x: any) => x._id === id); return { exists: !!d, data: () => d }; },
+      update: async (data: any) => { const d = memDb[name].find((x: any) => x._id === id); if (d) Object.assign(d, data); },
+      delete: async () => { memDb[name] = memDb[name].filter((x: any) => x._id !== id); },
+    }),
+  });
+  db = {
+    collection: (name: string) => makeMemCollection(name),
+    batch: () => ({ delete: () => {}, commit: async () => {} }),
+  } as any;
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -327,6 +360,135 @@ ${safeResume}
     } catch (error) {
       console.error("Extraction error:", error);
       res.status(500).json({ error: "Failed to extract text from file" });
+    }
+  });
+
+  // ---- Firestore Proxy Endpoints (side-step GFW) ----
+
+  function ownerFromReq(req: express.Request): string {
+    return (req.headers['x-client-id'] as string) || '';
+  }
+
+  // Jobs
+  app.get("/api/jobs", async (req, res) => {
+    try {
+      const ownerId = ownerFromReq(req);
+      if (!ownerId) return res.status(400).json({ error: "x-client-id header required" });
+      const snap = await db.collection('jobs').where('ownerId', '==', ownerId).get();
+      res.json(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    } catch (e: any) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  app.post("/api/jobs", async (req, res) => {
+    try {
+      const ownerId = ownerFromReq(req);
+      if (!ownerId) return res.status(400).json({ error: "x-client-id header required" });
+      const docRef = await db.collection('jobs').add({
+        ...req.body,
+        ownerId,
+        updatedAt: new Date().toISOString(),
+      });
+      const snap = await docRef.get();
+      res.json({ id: docRef.id, ...snap.data() });
+    } catch (e: any) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  app.patch("/api/jobs/:id", async (req, res) => {
+    try {
+      const ownerId = ownerFromReq(req);
+      if (!ownerId) return res.status(400).json({ error: "x-client-id header required" });
+      const ref = db.collection('jobs').doc(req.params.id);
+      const doc = await ref.get();
+      if (!doc.exists) return res.status(404).json({ error: "Not found" });
+      if (doc.data()?.ownerId !== ownerId) return res.status(403).json({ error: "Forbidden" });
+      await ref.update({ ...req.body, updatedAt: new Date().toISOString() });
+      const updated = await ref.get();
+      res.json({ id: ref.id, ...updated.data() });
+    } catch (e: any) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  // Results
+  app.get("/api/results", async (req, res) => {
+    try {
+      const ownerId = ownerFromReq(req);
+      if (!ownerId) return res.status(400).json({ error: "x-client-id header required" });
+      let q: FirebaseFirestore.Query = db.collection('analysisResults').where('ownerId', '==', ownerId);
+      if (req.query.jobId) q = q.where('jobId', '==', req.query.jobId as string);
+      const snap = await q.get();
+      res.json(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    } catch (e: any) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  app.post("/api/results", async (req, res) => {
+    try {
+      const ownerId = ownerFromReq(req);
+      if (!ownerId) return res.status(400).json({ error: "x-client-id header required" });
+      const docRef = await db.collection('analysisResults').add({
+        ...req.body,
+        ownerId,
+        createdAt: new Date().toISOString(),
+      });
+      const snap = await docRef.get();
+      res.json({ id: docRef.id, ...snap.data() });
+    } catch (e: any) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  app.patch("/api/results/:id", async (req, res) => {
+    try {
+      const ownerId = ownerFromReq(req);
+      if (!ownerId) return res.status(400).json({ error: "x-client-id header required" });
+      const ref = db.collection('analysisResults').doc(req.params.id);
+      const doc = await ref.get();
+      if (!doc.exists) return res.status(404).json({ error: "Not found" });
+      if (doc.data()?.ownerId !== ownerId) return res.status(403).json({ error: "Forbidden" });
+      await ref.update(req.body);
+      const updated = await ref.get();
+      res.json({ id: ref.id, ...updated.data() });
+    } catch (e: any) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  app.delete("/api/results", async (req, res) => {
+    try {
+      const ownerId = ownerFromReq(req);
+      const jobId = req.query.jobId as string;
+      if (!ownerId || !jobId) return res.status(400).json({ error: "x-client-id and jobId required" });
+      const snap = await db.collection('analysisResults')
+        .where('ownerId', '==', ownerId)
+        .where('jobId', '==', jobId)
+        .get();
+      const batch = db.batch();
+      snap.docs.forEach(d => batch.delete(d.ref));
+      await batch.commit();
+      res.json({ deleted: snap.size });
+    } catch (e: any) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  app.delete("/api/results/:id", async (req, res) => {
+    try {
+      const ownerId = ownerFromReq(req);
+      if (!ownerId) return res.status(400).json({ error: "x-client-id header required" });
+      const ref = db.collection('analysisResults').doc(req.params.id);
+      const doc = await ref.get();
+      if (!doc.exists) return res.status(404).json({ error: "Not found" });
+      if (doc.data()?.ownerId !== ownerId) return res.status(403).json({ error: "Forbidden" });
+      await ref.delete();
+      res.json({ deleted: true });
+    } catch (e: any) {
+      res.status(500).json({ error: e.message });
     }
   });
 

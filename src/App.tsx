@@ -1,7 +1,6 @@
 import React from 'react';
 import { Toaster } from 'sonner';
-import { db, handleFirestoreError, OperationType } from './lib/firebase';
-import { updateDoc, doc, query, collection, where, getDocs, writeBatch } from 'firebase/firestore';
+import { api, handleFirestoreError, OperationType } from './lib/firebase';
 
 // Sub-components & Pages
 import { Sidebar } from './components/Sidebar';
@@ -162,16 +161,6 @@ export default function App() {
               language={language}
               isShareMode={isShareMode}
               t={t}
-              handleFirestoreError={handleFirestoreError}
-              db={db}
-              updateDoc={updateDoc}
-              doc={doc}
-              query={query}
-              collection={collection}
-              where={where}
-              getDocs={getDocs}
-              writeBatch={writeBatch}
-              OperationType={OperationType}
             />
           )}
 
