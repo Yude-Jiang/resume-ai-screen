@@ -4,497 +4,283 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ST Resume AI Screener — User Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --st-dark: #03234b;
-    --st-light: #3cb4e6;
-    --st-yellow: #ffd200;
-    --st-success: #28a745;
-    --slate-50: #f8fafc;
-    --slate-100: #f1f5f9;
-    --slate-200: #e2e8f0;
-    --slate-400: #94a3b8;
-    --slate-500: #64748b;
-    --slate-600: #475569;
-    --slate-700: #334155;
-    --slate-900: #0f172a;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-    color: var(--slate-700);
-    line-height: 1.7;
-    background: var(--slate-50);
-    font-size: 15px;
-  }
+:root{--std:#03234b;--stl:#3cb4e6;--sty:#ffd200;--s100:#f1f5f9;--s200:#e2e8f0;--s400:#94a3b8;--s500:#64748b;--s600:#475569;--r8:8px;--r12:12px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:"DM Sans","Segoe UI",system-ui,sans-serif;color:var(--s600);line-height:1.65;background:var(--s100);font-size:14px;-webkit-font-smoothing:antialiased;}
+[lang="en"] .zh{display:none}
+[lang="zh"] .en{display:none}
+html:not([lang]) .zh{display:none}
 
-  /* ── Hero ── */
-  .hero {
-    background: linear-gradient(135deg, var(--st-dark) 0%, #001a35 100%);
-    color: white;
-    padding: 72px 24px 56px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::after {
-    content: '';
-    position: absolute;
-    top: -50%; right: -20%;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(60,180,230,0.15) 0%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
-  }
-  .hero h1 { font-size: 42px; font-weight: 700; letter-spacing: -0.5px; position: relative; z-index: 1; }
-  .hero .sub { font-size: 16px; opacity: 0.7; margin-top: 12px; position: relative; z-index: 1; max-width: 560px; margin-inline: auto; }
-  .hero .badge-row { margin-top: 28px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
-  .hero .badge {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.12);
-    padding: 6px 18px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--st-light);
-  }
-  .hero .cta-row { margin-top: 32px; position: relative; z-index: 1; }
-  .hero .url-box {
-    display: inline-block;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.15);
-    padding: 10px 24px;
-    border-radius: 12px;
-    font-family: "Consolas", "Menlo", monospace;
-    font-size: 14px;
-    color: var(--st-yellow);
-    letter-spacing: 0.5px;
-  }
+.lt{position:fixed;top:14px;right:18px;z-index:200;display:flex;gap:3px;background:rgba(3,35,75,.92);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:3px}
+.lt button{background:transparent;border:none;color:rgba(255,255,255,.5);padding:4px 11px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500;font-family:inherit;transition:all .15s}
+.lt button:hover{color:#fff}
+.lt button.on{background:var(--sty);color:var(--std)}
 
-  /* ── Container ── */
-  .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+.hero{background:var(--std);color:#fff;padding:48px 24px 40px;position:relative;overflow:hidden}
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(60,180,230,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(60,180,230,.05) 1px,transparent 1px);background-size:40px 40px}
+.hg1{position:absolute;top:-100px;right:-60px;width:400px;height:400px;background:radial-gradient(circle,rgba(60,180,230,.2) 0%,transparent 65%);pointer-events:none}
+.hg2{position:absolute;bottom:-60px;left:-40px;width:260px;height:260px;background:radial-gradient(circle,rgba(255,210,0,.1) 0%,transparent 65%);pointer-events:none}
+.hi{max-width:800px;margin:0 auto;position:relative;z-index:1}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:3px 12px 3px 9px;font-size:11px;font-weight:500;color:var(--stl);letter-spacing:.04em;margin-bottom:14px}
+.edot{width:5px;height:5px;border-radius:50%;background:var(--sty)}
+.hero h1{font-size:32px;font-weight:600;letter-spacing:-.5px;line-height:1.2;margin-bottom:8px}
+.hero h1 em{font-style:normal;color:var(--stl)}
+.sub{font-size:13px;opacity:.6;max-width:500px;margin-bottom:18px;font-weight:300;line-height:1.6}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.badge{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 9px;border-radius:5px;font-size:11px;font-weight:500;color:rgba(255,255,255,.65);font-family:"DM Mono",monospace}
+.url{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);padding:6px 13px;border-radius:var(--r8);font-family:"DM Mono",monospace;font-size:12px;color:var(--sty)}
+.new{display:inline-block;background:var(--sty);color:var(--std);border-radius:3px;padding:0 5px;font-size:10px;font-weight:600;margin-left:4px;vertical-align:middle}
 
-  /* ── Section ── */
-  section { padding: 56px 0; }
-  section + section { border-top: 1px solid var(--slate-200); }
-  h2 {
-    font-size: 24px; font-weight: 700; color: var(--st-dark);
-    margin-bottom: 8px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  h2 .num {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 32px; height: 32px; border-radius: 10px;
-    background: var(--st-yellow); color: var(--st-dark);
-    font-size: 15px; font-weight: 700; flex-shrink: 0;
-  }
-  h3 {
-    font-size: 17px; font-weight: 600; color: var(--st-dark);
-    margin: 28px 0 10px;
-  }
-  p { margin-bottom: 14px; color: var(--slate-600); }
-  .lead { font-size: 16px; color: var(--slate-500); margin-bottom: 28px; }
+.stats{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-bottom:1px solid var(--s200)}
+@media(max-width:580px){.stats{grid-template-columns:repeat(2,1fr)}}
+.sc{padding:14px 22px;border-right:1px solid var(--s200)}
+.sc:last-child{border-right:none}
+.sn{font-size:20px;font-weight:600;color:var(--std);letter-spacing:-.3px;line-height:1}
+.sn span{color:var(--stl)}
+.sl{font-size:11px;color:var(--s400);margin-top:2px}
 
-  /* ── Feature Grid ── */
-  .feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 16px;
-    margin-top: 24px;
-  }
-  .feature-card {
-    background: white;
-    border: 1px solid var(--slate-200);
-    border-radius: 16px;
-    padding: 24px;
-    transition: box-shadow 0.2s;
-  }
-  .feature-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
-  .feature-card .icon {
-    width: 40px; height: 40px; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; margin-bottom: 14px;
-    background: rgba(60,180,230,0.1);
-    color: var(--st-light);
-  }
-  .feature-card h4 { font-size: 15px; font-weight: 600; color: var(--st-dark); margin-bottom: 6px; }
-  .feature-card p { font-size: 13px; color: var(--slate-500); line-height: 1.6; margin: 0; }
+.C{max-width:800px;margin:0 auto;padding:0 24px}
+.sec{padding:36px 0}
+.sec+.sec{border-top:1px solid var(--s200)}
+.wbg{background:#fff}
 
-  /* ── Step ── */
-  .step {
-    background: white;
-    border: 1px solid var(--slate-200);
-    border-radius: 20px;
-    padding: 32px;
-    margin-bottom: 20px;
-  }
-  .step-header {
-    display: flex; align-items: center; gap: 14px;
-    margin-bottom: 16px;
-  }
-  .step-num {
-    width: 44px; height: 44px; border-radius: 14px;
-    background: var(--st-dark); color: white;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; font-weight: 700; flex-shrink: 0;
-  }
-  .step h3 { margin: 0; font-size: 18px; }
-  .step ul { padding-left: 20px; margin-bottom: 14px; }
-  .step li { margin-bottom: 6px; color: var(--slate-600); font-size: 14px; }
-  .step .tip {
-    background: #fffbe6; border-left: 3px solid var(--st-yellow);
-    padding: 12px 16px; border-radius: 0 8px 8px 0;
-    font-size: 13px; color: var(--slate-600);
-  }
+.slabel{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--stl);text-transform:uppercase;margin-bottom:6px}
+.slabel-line{width:14px;height:1.5px;background:var(--stl);border-radius:1px}
+h2{font-size:18px;font-weight:600;color:var(--std);letter-spacing:-.2px;margin-bottom:5px}
+.lead{font-size:13px;color:var(--s500);margin-bottom:18px;line-height:1.65;max-width:580px}
+p{margin-bottom:8px;color:var(--s600)}
 
-  /* ── Screenshot placeholder ── */
-  .screenshot {
-    background: linear-gradient(135deg, var(--slate-100) 0%, var(--slate-200) 100%);
-    border: 1px dashed var(--slate-400);
-    border-radius: 12px;
-    height: 180px;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--slate-400);
-    font-size: 13px;
-    margin: 16px 0;
-  }
+.fg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:4px}
+@media(max-width:680px){.fg{grid-template-columns:repeat(2,1fr)}}
+.fc{background:#fff;border:1px solid var(--s200);border-radius:var(--r12);padding:14px;transition:box-shadow .2s,transform .2s}
+.fc:hover{box-shadow:0 4px 14px rgba(0,0,0,.08);transform:translateY(-2px)}
+.fi{width:30px;height:30px;border-radius:7px;background:var(--std);display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.fi svg{width:14px;height:14px;stroke:var(--stl);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fc h4{font-size:12px;font-weight:600;color:var(--std);margin-bottom:3px}
+.fc p{font-size:11px;color:var(--s400);line-height:1.45;margin:0}
 
-  /* ── FAQ ── */
-  .faq-item {
-    background: white;
-    border: 1px solid var(--slate-200);
-    border-radius: 14px;
-    padding: 20px 24px;
-    margin-bottom: 12px;
-  }
-  .faq-item .q {
-    font-weight: 600; color: var(--st-dark);
-    margin-bottom: 6px; font-size: 15px;
-  }
-  .faq-item .a { color: var(--slate-500); font-size: 14px; }
+.st{width:100%;border-collapse:collapse;font-size:13px;margin:14px 0}
+.st th{background:var(--std);color:rgba(255,255,255,.8);padding:8px 13px;text-align:left;font-weight:500;font-size:11px;letter-spacing:.03em}
+.st th:first-child{border-radius:var(--r8) 0 0 0}
+.st th:last-child{border-radius:0 var(--r8) 0 0}
+.st td{padding:8px 13px;border-bottom:1px solid var(--s100);color:var(--s600);background:#fff}
+.st tr:last-child td{border-bottom:none}
+.st tr:last-child td:first-child{border-radius:0 0 0 var(--r8)}
+.st tr:last-child td:last-child{border-radius:0 0 var(--r8) 0}
+.wb{display:inline-block;background:rgba(255,210,0,.15);color:#7a5c00;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:600;font-family:"DM Mono",monospace}
+.tnote{font-size:11px;color:var(--s400);margin-top:5px}
 
-  /* ── Footer ── */
-  footer {
-    background: var(--st-dark);
-    color: rgba(255,255,255,0.5);
-    text-align: center;
-    padding: 32px 24px;
-    font-size: 12px;
-    line-height: 2;
-  }
-  footer strong { color: rgba(255,255,255,0.7); }
+.steps{display:flex;flex-direction:column;gap:8px}
+.step{background:#fff;border:1px solid var(--s200);border-radius:var(--r12);padding:18px 22px}
+.sh{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.snum{width:32px;height:32px;border-radius:8px;background:var(--std);color:var(--sty);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;font-family:"DM Mono",monospace}
+.stb{padding-top:2px}
+.step h3{font-size:13px;font-weight:600;color:var(--std);margin-bottom:1px}
+.ssub{font-size:11px;color:var(--s400)}
+.step ul{list-style:none;padding:0;margin-bottom:8px}
+.step li{display:flex;gap:7px;align-items:flex-start;padding:4px 0;font-size:13px;color:var(--s600);border-bottom:1px solid var(--s100)}
+.step li:last-child{border-bottom:none}
+.step li::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--stl);flex-shrink:0;margin-top:7px}
+.step b{font-weight:600;color:var(--std)}
+.tip{background:#fffbeb;border:1px solid rgba(255,210,0,.3);border-radius:var(--r8);padding:8px 11px;font-size:12px;color:var(--s600);display:flex;gap:7px;align-items:flex-start;margin-top:4px}
+.newtip{background:rgba(60,180,230,.08);border:1px solid rgba(60,180,230,.25);border-radius:var(--r8);padding:8px 11px;font-size:12px;color:var(--std);display:flex;gap:7px;align-items:flex-start;margin-top:4px}
 
-  /* ── Table ── */
-  .info-table {
-    width: 100%; border-collapse: collapse;
-    margin: 20px 0; font-size: 14px;
-  }
-  .info-table th, .info-table td {
-    padding: 12px 16px; text-align: left;
-    border-bottom: 1px solid var(--slate-200);
-  }
-  .info-table th { background: var(--slate-100); font-weight: 600; color: var(--st-dark); }
+.ss{background:linear-gradient(145deg,var(--s100),#eaecf4);border:1px dashed var(--s200);border-radius:var(--r8);height:160px;display:flex;align-items:center;justify-content:center;color:var(--s400);font-size:12px;margin:10px 0 2px;gap:5px}
 
-  /* ── Responsive ── */
-  @media (max-width: 640px) {
-    .hero h1 { font-size: 28px; }
-    .hero { padding: 48px 16px 36px; }
-    section { padding: 40px 0; }
-    h2 { font-size: 20px; }
-    .step { padding: 20px; }
-  }
+.faq{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.fi2{background:#fff;border:1px solid var(--s200);border-radius:var(--r12);overflow:hidden}
+.fq{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;cursor:pointer;gap:10px;user-select:none}
+.fq-text{font-size:13px;font-weight:500;color:var(--std)}
+.fq-icon{width:18px;height:18px;border-radius:50%;background:var(--sty);color:var(--std);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;transition:transform .2s}
+.fi2.open .fq-icon{transform:rotate(45deg)}
+.fa{font-size:13px;color:var(--s500);line-height:1.6;border-top:1px solid var(--s100);padding:10px 16px;display:none}
+.fi2.open .fa{display:block}
 
-  /* ── Language toggle ── */
-  .lang-toggle {
-    position: absolute; top: 16px; right: 24px;
-    z-index: 2;
-  }
-  .lang-toggle button {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.6);
-    padding: 6px 14px; border-radius: 8px;
-    cursor: pointer; font-size: 13px; font-weight: 500;
-    transition: all 0.2s;
-  }
-  .lang-toggle button:hover { background: rgba(255,255,255,0.15); color: white; }
-  .lang-toggle button.active { background: var(--st-yellow); color: var(--st-dark); border-color: var(--st-yellow); }
+footer{background:var(--std);color:rgba(255,255,255,.35);text-align:center;padding:24px;font-size:11px;line-height:2}
+.fb{font-size:13px;font-weight:500;color:rgba(255,255,255,.65);margin-bottom:2px}
+.fdot{display:inline-block;width:2px;height:2px;border-radius:50%;background:rgba(255,255,255,.2);vertical-align:middle;margin:0 7px}
 
-  [lang="en"] .zh { display: none; }
-  [lang="zh"] .en { display: none; }
+@media(max-width:580px){
+  .hero h1{font-size:24px} .hero{padding:40px 16px 32px}
+  .sec{padding:28px 0} h2{font-size:16px}
+  .step{padding:14px 16px}
+  .lt{top:10px;right:12px}
+}
 
-  /* Default: show EN content until JS runs */
-  html:not([lang]) .zh { display: none; }
-</style>
-</head>
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.hi>*{animation:fadeUp .4s ease both}
+.hi>*:nth-child(1){animation-delay:.05s}.hi>*:nth-child(2){animation-delay:.1s}
+.hi>*:nth-child(3){animation-delay:.15s}.hi>*:nth-child(4){animation-delay:.2s}
+.hi>*:nth-child(5){animation-delay:.25s}
+</style></head>
 <body lang="zh">
 
-<!-- Language Toggle -->
-<div class="lang-toggle">
-  <button class="zh active" onclick="setLang('zh')">中文</button>
+<div class="lt">
+  <button class="zh on" onclick="setLang('zh')">中文</button>
   <button class="en" onclick="setLang('en')">EN</button>
 </div>
 
-<!-- ═══════════════ HERO ═══════════════ -->
 <header class="hero">
-  <h1>ST Resume AI Screener</h1>
-  <p class="sub">
-    <span class="zh">AI 驱动的简历智能筛选平台 — 批量上传、自动评分、人机协同决策</span>
-    <span class="en">AI-Powered Resume Screening — Batch Upload, Auto-Scoring, Human-AI Collaborative Decision</span>
-  </p>
-  <div class="badge-row">
-    <span class="badge">Gemini 2.5 Flash</span>
-    <span class="badge">DeepSeek</span>
-    <span class="badge">PDF / DOCX / TXT</span>
-    <span class="badge">中英双语</span>
-    <span class="badge">Cloud Run</span>
-  </div>
-  <div class="cta-row">
-    <span class="url-box">https://resume-ai-screen-*.a.run.app</span>
+  <div class="hgrid"></div><div class="hg1"></div><div class="hg2"></div>
+  <div class="hi">
+    <div class="eyebrow"><div class="edot"></div><span class="zh">意法半导体内部工具 · 2026.05</span><span class="en">STMicroelectronics Internal · May 2026</span></div>
+    <h1>ST Resume <em>AI</em> Screener</h1>
+    <p class="sub"><span class="zh">AI 驱动的简历智能筛选平台 — 雷达图对比 · 面试官分享 · 中英双语</span><span class="en">AI-Powered Resume Screening — Radar Comparison · Interviewer Share · Bilingual</span></p>
+    <div class="badges">
+      <span class="badge">Gemini 2.5 Flash</span><span class="badge">DeepSeek</span>
+      <span class="badge">雷达图</span><span class="badge">多人对比</span>
+      <span class="badge">面试官分享</span><span class="badge">中英双语</span>
+    </div>
+    <div class="url">🔗 https://resume-ai-screen-gpxvwe55oq-de.a.run.app</div>
   </div>
 </header>
 
-<!-- ═══════════════ OVERVIEW ═══════════════ -->
-<section>
-  <div class="container">
-    <h2><span class="num">▸</span> <span class="zh">产品概述</span><span class="en">Product Overview</span></h2>
-    <p class="lead">
-      <span class="zh">ST Resume AI Screener 是意法半导体内部 HR 团队专属的 AI 简历筛选工具。通过大语言模型（Gemini / DeepSeek）对候选人的简历进行多维度自动评分，帮助 HR 快速定位高质量候选人，将筛选效率提升 80% 以上。</span>
-      <span class="en">ST Resume AI Screener is an AI-powered resume screening tool built for STMicroelectronics HR teams. It leverages LLMs (Gemini / DeepSeek) to automatically score resumes across multiple dimensions, helping HR quickly identify top candidates and improve screening efficiency by over 80%.</span>
-    </p>
+<div class="stats">
+  <div class="sc"><div class="sn">50<span>+</span></div><div class="sl"><span class="zh">单次最大简历数</span><span class="en">Max resumes / batch</span></div></div>
+  <div class="sc"><div class="sn">5 <span class="zh">维度</span><span class="en">dims</span></div><div class="sl"><span class="zh">AI 雷达图评分</span><span class="en">Radar scoring</span></div></div>
+  <div class="sc"><div class="sn">3 <span class="zh">人</span><span class="en">max</span></div><div class="sl"><span class="zh">同时对比候选人</span><span class="en">Side-by-side compare</span></div></div>
+  <div class="sc"><div class="sn">∞<span class="zh"> 分享</span><span class="en"> share</span></div><div class="sl"><span class="zh">令牌分享面试官</span><span class="en">Token-based sharing</span></div></div>
+</div>
 
-    <h3><span class="zh">核心特点</span><span class="en">Key Features</span></h3>
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="icon">🤖</div>
-        <h4><span class="zh">AI 自动评分</span><span class="en">AI Auto-Scoring</span></h4>
-        <p><span class="zh">5 维度评估（教育、经验、技能、语言、认证），0-100 分综合匹配度</span><span class="en">5-dimension evaluation (Education, Experience, Skills, Language, Certifications) with 0-100 match score</span></p>
-      </div>
-      <div class="feature-card">
-        <div class="icon">📤</div>
-        <h4><span class="zh">批量上传</span><span class="en">Batch Upload</span></h4>
-        <p><span class="zh">单次最多 50 份 PDF / DOCX / TXT 简历，并发处理</span><span class="en">Up to 50 resumes at once (PDF/DOCX/TXT), processed concurrently</span></p>
-      </div>
-      <div class="feature-card">
-        <div class="icon">🎯</div>
-        <h4><span class="zh">JD 智能解析</span><span class="en">JD Auto-Config</span></h4>
-        <p><span class="zh">粘贴或上传 JD，AI 自动提取职位名称、建议权重和硬性门槛</span><span class="en">Paste or upload a JD — AI auto-extracts job title, suggested weights, and hard thresholds</span></p>
-      </div>
-      <div class="feature-card">
-        <div class="icon">👁️</div>
-        <h4><span class="zh">盲筛模式</span><span class="en">Blind Screening</span></h4>
-        <p><span class="zh">一键隐藏姓名、性别等敏感信息，确保公平评估</span><span class="en">One-click hide name, gender, and other sensitive fields for bias-free evaluation</span></p>
-      </div>
-      <div class="feature-card">
-        <div class="icon">✏️</div>
-        <h4><span class="zh">HR 人工调分</span><span class="en">HR Score Override</span></h4>
-        <p><span class="zh">支持 HR 根据实际情况调整 AI 评分，记录调整原因</span><span class="en">Override AI scores with documented reasons for adjustments</span></p>
-      </div>
-      <div class="feature-card">
-        <div class="icon">📊</div>
-        <h4><span class="zh">人才库</span><span class="en">Talent Library</span></h4>
-        <p><span class="zh">跨职位汇总所有已筛选候选人，支持搜索和过滤</span><span class="en">Cross-job candidate archive with search and filter across all positions</span></p>
-      </div>
-      <div class="feature-card">
-        <div class="icon">💬</div>
-        <h4><span class="zh">AI 聊天助手</span><span class="en">AI Chat Assistant</span></h4>
-        <p><span class="zh">针对具体候选人提问，AI 给出匹配分析和招聘建议</span><span class="en">Ask questions about specific candidates — AI provides analysis and hiring advice</span></p>
-      </div>
-      <div class="feature-card">
-        <div class="icon">🌐</div>
-        <h4><span class="zh">中英双语</span><span class="en">Bilingual</span></h4>
-        <p><span class="zh">界面和 AI 分析结果均支持中文 / English 切换</span><span class="en">UI and AI analysis results switch between Chinese and English</span></p>
-      </div>
+<section class="sec wbg">
+  <div class="C">
+    <div class="slabel"><div class="slabel-line"></div><span class="zh">产品概述</span><span class="en">Overview</span></div>
+    <h2><span class="zh">为 ST HR 团队打造的智能筛选工具</span><span class="en">Built for ST HR Teams</span></h2>
+    <p class="lead"><span class="zh">通过 Gemini / DeepSeek 大模型对候选人简历进行 5 维度雷达图自动评分，支持最多 3 人叠加对比、一键生成令牌分享给面试官。服务端代理架构，大陆无需 VPN 即可直接访问。</span><span class="en">LLM-powered 5-dimension radar scoring with up to 3-candidate overlay comparison. One-click token sharing for interviewers. Server-proxy architecture — accessible from mainland China without VPN.</span></p>
+    <div class="fg">
+      <div class="fc"><div class="fi"><svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16,14 18,22 12,17 6,22 8,14 2,9 9,9"/></svg></div><h4><span class="zh">AI 雷达图评分</span><span class="en">Radar Chart</span></h4><p><span class="zh">5 维可视化，强弱一目了然</span><span class="en">5-dim visual radar</span></p></div>
+      <div class="fc"><div class="fi"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h4><span class="zh">多人叠加对比</span><span class="en">Overlay Compare</span></h4><p><span class="zh">选 2-3 人雷达叠加 + AI 对比分析</span><span class="en">Overlay radar + AI analysis</span></p></div>
+      <div class="fc"><div class="fi"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16,6 12,2 8,6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></div><h4><span class="zh">面试官分享</span><span class="en">Share</span></h4><p><span class="zh">令牌生成，一键复制链接，可随时撤销</span><span class="en">Token-based, revocable</span></p></div>
+      <div class="fc"><div class="fi"><svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></div><h4><span class="zh">盲筛模式</span><span class="en">Blind Mode</span></h4><p><span class="zh">隐藏敏感字段，公平评估</span><span class="en">Hide sensitive fields</span></p></div>
+      <div class="fc"><div class="fi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h4><span class="zh">中英双语</span><span class="en">Bilingual</span></h4><p><span class="zh">UI 与 AI 分析结果同步切换</span><span class="en">UI & results switch instantly</span></p></div>
+      <div class="fc"><div class="fi"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg></div><h4><span class="zh">批量上传</span><span class="en">Batch</span></h4><p><span class="zh">最多 50 份，4 并发处理</span><span class="en">Up to 50, 4 concurrent</span></p></div>
+      <div class="fc"><div class="fi"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><h4><span class="zh">HR 人工调分</span><span class="en">Override</span></h4><p><span class="zh">覆盖 AI 分，记录原因</span><span class="en">Override with reason</span></p></div>
+      <div class="fc"><div class="fi"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><h4><span class="zh">人才库搜索</span><span class="en">Search</span></h4><p><span class="zh">跨职位候选人存档</span><span class="en">Cross-job archive</span></p></div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ SCORING ═══════════════ -->
-<section>
-  <div class="container">
-    <h2><span class="num">▸</span> <span class="zh">评分体系</span><span class="en">Scoring System</span></h2>
-    <table class="info-table">
-      <thead>
-        <tr>
-          <th><span class="zh">维度</span><span class="en">Dimension</span></th>
-          <th><span class="zh">默认权重</span><span class="en">Default Weight</span></th>
-          <th><span class="zh">说明</span><span class="en">Description</span></th>
-        </tr>
-      </thead>
+<section class="sec">
+  <div class="C">
+    <div class="slabel"><div class="slabel-line"></div><span class="zh">评分体系</span><span class="en">Scoring System</span></div>
+    <h2><span class="zh">5 维度雷达图评分</span><span class="en">5-Dimension Radar Scoring</span></h2>
+    <p class="lead"><span class="zh">五个维度以雷达图直观展示，权重可在侧边栏自定义（总和须 100%）。AI 配置 JD 后自动建议最优分布。对比模式下最多 3 人雷达叠加，AI 自动生成对比分析。</span><span class="en">Five dimensions displayed on a radar chart. Weights are customizable in the sidebar (must sum to 100%). Comparing mode overlays up to 3 candidates with AI-generated comparative analysis.</span></p>
+    <table class="st">
+      <thead><tr><th><span class="zh">维度</span><span class="en">Dimension</span></th><th><span class="zh">默认</span><span class="en">Default</span></th><th><span class="zh">说明</span><span class="en">Description</span></th></tr></thead>
       <tbody>
-        <tr><td><span class="zh">教育背景</span><span class="en">Education</span></td><td>20%</td><td><span class="zh">学历与岗位要求的匹配度</span><span class="en">Match between degree level and job requirement</span></td></tr>
-        <tr><td><span class="zh">工作经验</span><span class="en">Experience</span></td><td>30%</td><td><span class="zh">工作年限和相关行业经验</span><span class="en">Years of experience and industry relevance</span></td></tr>
-        <tr><td><span class="zh">技能匹配</span><span class="en">Skills</span></td><td>35%</td><td><span class="zh">技能标签与 JD 要求的重叠度</span><span class="en">Overlap between resume skills and JD requirements</span></td></tr>
-        <tr><td><span class="zh">语言能力</span><span class="en">Language</span></td><td>10%</td><td><span class="zh">外语水平和沟通能力</span><span class="en">Foreign language proficiency</span></td></tr>
-        <tr><td><span class="zh">认证资质</span><span class="en">Certifications</span></td><td>5%</td><td><span class="zh">专业证书和行业资质</span><span class="en">Professional certifications</span></td></tr>
+        <tr><td><b><span class="zh">教育背景</span><span class="en">Education</span></b></td><td><span class="wb">20%</span></td><td><span class="zh">学历与岗位要求的匹配度</span><span class="en">Degree level match</span></td></tr>
+        <tr><td><b><span class="zh">工作经验</span><span class="en">Experience</span></b></td><td><span class="wb">30%</span></td><td><span class="zh">工作年限和相关行业经验</span><span class="en">Years & industry relevance</span></td></tr>
+        <tr><td><b><span class="zh">技能匹配</span><span class="en">Skills</span></b></td><td><span class="wb">35%</span></td><td><span class="zh">技能标签与 JD 要求的重叠度</span><span class="en">Skill overlap with JD</span></td></tr>
+        <tr><td><b><span class="zh">语言能力</span><span class="en">Language</span></b></td><td><span class="wb">10%</span></td><td><span class="zh">外语水平和沟通能力</span><span class="en">Foreign language proficiency</span></td></tr>
+        <tr><td><b><span class="zh">认证资质</span><span class="en">Certifications</span></b></td><td><span class="wb">5%</span></td><td><span class="zh">专业证书和行业资质</span><span class="en">Professional certifications</span></td></tr>
       </tbody>
     </table>
-    <p style="font-size: 13px; color: var(--slate-400); margin-top: 8px;">
-      <span class="zh">权重可在侧边栏 Scoring Weights 中自定义调整，总和必须为 100%。</span>
-      <span class="en">Weights are customizable in the sidebar under Scoring Weights — must sum to 100%.</span>
-    </p>
   </div>
 </section>
 
-<!-- ═══════════════ STEP-BY-STEP ═══════════════ -->
-<section>
-  <div class="container">
-    <h2><span class="num">▸</span> <span class="zh">操作指南</span><span class="en">How to Use</span></h2>
+<section class="sec wbg">
+  <div class="C">
+    <div class="slabel"><div class="slabel-line"></div><span class="zh">操作指南</span><span class="en">How to Use</span></div>
+    <h2><span class="zh">完整操作流程</span><span class="en">Complete Workflow</span></h2>
+    <div class="steps">
 
-    <!-- Step 1 -->
-    <div class="step">
-      <div class="step-header">
-        <div class="step-num">1</div>
-        <h3><span class="zh">设置职位描述 (JD)</span><span class="en">Set Up Job Description</span></h3>
+      <div class="step">
+        <div class="sh"><div class="snum">01</div><div class="stb"><h3><span class="zh">设置职位描述 (JD)</span><span class="en">Set Up JD</span></h3></div></div>
+        <ul>
+          <li><span class="zh">左侧面板粘贴 JD 文本，或上传 JD 文件（PDF / DOCX / TXT）</span><span class="en">Paste JD text or upload a JD file</span></li>
+          <li><span class="zh">点击 <b>Auto-configure from JD</b>，AI 自动提取职位名称、建议权重和硬性门槛</span><span class="en">Click Auto-configure — AI extracts job title, weights, and thresholds</span></li>
+          <li><span class="zh">侧边栏展开 <b>Scoring Weights</b> 微调滑块（默认展开，总和须 100%）</span><span class="en">Fine-tune weight sliders in sidebar (must sum to 100%)</span></li>
+        </ul>
+        <div class="ss">📸 <span class="zh">截图：左侧 JD 面板（空态带引导图示）+ 右侧上传区</span><span class="en">Screenshot: JD panel (with empty-state guide) + upload zone</span></div>
       </div>
-      <ul>
-        <li><span class="zh">在左侧面板粘贴 JD 文本，或点击右下角按钮上传 JD 文件（PDF / DOCX / TXT）</span><span class="en">Paste JD text in the left panel, or click the bottom-right button to upload a JD file (PDF/DOCX/TXT)</span></li>
-        <li><span class="zh">点击 <b>Auto-configure from JD</b> 按钮，AI 会自动解析职位名称、建议评分权重、设置硬性门槛</span><span class="en">Click <b>Auto-configure from JD</b> — AI will extract job title, suggest weights, and set thresholds</span></li>
-        <li><span class="zh">手动调整权重滑块（侧边栏可展开）和最低学历/经验要求</span><span class="en">Manually fine-tune weight sliders (expandable in sidebar) and minimum education/experience</span></li>
-      </ul>
-      <div class="screenshot">📸 <span class="zh">截图：JD 配置面板</span><span class="en">Screenshot: JD Configuration Panel</span></div>
-      <div class="tip">
-        💡 <b><span class="zh">提示</span><span class="en">Tip</span>:</b>
-        <span class="zh">JD 越详细，AI 的权重建议越精准。建议至少包含 3-8 个必备技能标签。</span>
-        <span class="en">The more detailed your JD, the more accurate the AI's weight suggestions. Include at least 3-8 required skills.</span>
-      </div>
-    </div>
 
-    <!-- Step 2 -->
-    <div class="step">
-      <div class="step-header">
-        <div class="step-num">2</div>
-        <h3><span class="zh">上传简历</span><span class="en">Upload Resumes</span></h3>
+      <div class="step">
+        <div class="sh"><div class="snum">02</div><div class="stb"><h3><span class="zh">上传简历 & 开始筛选</span><span class="en">Upload & Screen</span></h3></div></div>
+        <ul>
+          <li><span class="zh">右侧虚线区域拖拽或点击上传（PDF / DOCX / TXT，最多 50 份）</span><span class="en">Drag or click to upload resumes in the right panel</span></li>
+          <li><span class="zh">点击底部黄色 <b>Screen Candidates →</b> 按钮，4 并发处理，50 份约 1-2 分钟</span><span class="en">Click Screen Candidates — 4 concurrent, ~1-2 min for 50</span></li>
+        </ul>
+        <div class="ss">📸 <span class="zh">截图：上传区域 + 文件列表 + CTA 按钮</span><span class="en">Screenshot: Upload zone with file list and CTA button</span></div>
       </div>
-      <ul>
-        <li><span class="zh">在右侧面板的虚线区域点击或拖拽上传简历（支持 PDF / DOCX / TXT，单次最多 50 份）</span><span class="en">Click or drag files into the dashed upload zone (PDF/DOCX/TXT, max 50 files)</span></li>
-        <li><span class="zh">已上传的文件会以卡片形式显示在下方，可单独移除或一键清空</span><span class="en">Uploaded files appear as cards — remove individually or clear all</span></li>
-      </ul>
-      <div class="screenshot">📸 <span class="zh">截图：简历上传区域</span><span class="en">Screenshot: Resume Upload Zone</span></div>
-    </div>
 
-    <!-- Step 3 -->
-    <div class="step">
-      <div class="step-header">
-        <div class="step-num">3</div>
-        <h3><span class="zh">开始筛选</span><span class="en">Start Screening</span></h3>
+      <div class="step">
+        <div class="sh"><div class="snum">03</div><div class="stb"><h3><span class="zh">查看雷达图 & AI 推荐</span><span class="en">Radar & AI Rec</span></h3><span class="new">NEW</span></div></div>
+        <ul>
+          <li><span class="zh">点击候选人卡片展开——<b>左侧雷达图</b>展示 5 维得分，<b>右侧 AI 推荐意见</b>各占 50% 宽度</span><span class="en">Expand a card — radar chart (L) + AI recommendation (R) at 5:5 ratio</span></li>
+          <li><span class="zh">下方展示核心亮点与不足风险；底部 PDF 原文预览（仅 PDF 格式内联显示）</span><span class="en">Below: highlights, gaps, and PDF preview (inline for PDFs only)</span></li>
+        </ul>
+        <div class="ss" style="height:200px">📸 <span class="zh">截图：展开的候选人卡片 — 雷达图 (左) + AI 推荐 (右) + 亮点/不足 (下)</span><span class="en">Screenshot: Expanded card — radar (L) + AI rec (R) + highlights/gaps</span></div>
       </div>
-      <ul>
-        <li><span class="zh">点击底部黄色的 <b>Screen Candidates →</b> 按钮</span><span class="en">Click the yellow <b>Screen Candidates →</b> button at the bottom</span></li>
-        <li><span class="zh">系统将并发分析所有简历，顶部进度条显示处理进度</span><span class="en">The system processes all resumes concurrently — progress bar shows status</span></li>
-        <li><span class="zh">每份简历约需 3-10 秒，请保持页面打开</span><span class="en">Each resume takes ~3-10 seconds — keep the browser tab active</span></li>
-      </ul>
-      <div class="tip">
-        ⚡ <b><span class="zh">性能说明</span><span class="en">Performance Note</span>:</b>
-        <span class="zh">系统以 4 个并发同时处理简历。50 份简历预计耗时 1-2 分钟。</span>
-        <span class="en">The system processes 4 resumes in parallel. 50 resumes take approximately 1-2 minutes.</span>
-      </div>
-    </div>
 
-    <!-- Step 4 -->
-    <div class="step">
-      <div class="step-header">
-        <div class="step-num">4</div>
-        <h3><span class="zh">查看结果</span><span class="en">Review Results</span></h3>
+      <div class="step">
+        <div class="sh"><div class="snum">04</div><div class="stb"><h3><span class="zh">多人雷达对比</span><span class="en">Multi-Candidate Compare</span></h3><span class="new">NEW</span></div></div>
+        <ul>
+          <li><span class="zh">点击顶部 <b>Compare</b> 按钮进入对比模式，勾选 2-3 位候选人</span><span class="en">Click <b>Compare</b> button, select 2-3 candidates</span></li>
+          <li><span class="zh">页面顶部自动生成<b>雷达叠加图</b>（左）+ <b>AI 对比分析</b>（右），三色多边形交叉重叠清晰可见</span><span class="en">Auto-generated overlay radar (L) + AI comparison text (R) with 3-color polygon overlap</span></li>
+          <li><span class="zh">对比分析按【综合对比】【各候选人分析】【推荐排序】三段式呈现</span><span class="en">AI analysis structured as [Summary] [Per Candidate] [Ranking]</span></li>
+        </ul>
+        <div class="tip">💡 <span><b><span class="zh">提示：</span><span class="en">Tip: </span></b><span class="zh">对比分析只生成一次，不会因轮询刷新。更改选中候选人才会重新生成。</span><span class="en">Comparison analysis generates once — only re-triggers when selection changes.</span></span></div>
       </div>
-      <ul>
-        <li><span class="zh">筛选完成后自动跳转到结果页，候选人按分数降序排列</span><span class="en">Automatically navigates to Results page — candidates sorted by score (highest first)</span></li>
-        <li><span class="zh">点击任意候选人卡片展开详情：各维度柱状图、核心亮点、不足与风险、AI 推荐意见</span><span class="en">Click any card to expand: score chart, highlights, gaps, AI recommendation</span></li>
-        <li><span class="zh">底部面板显示简历原文 PDF 预览</span><span class="en">Bottom panel shows original resume PDF preview</span></li>
-        <li><span class="zh">使用顶部过滤器按分数段或匹配状态筛选</span><span class="en">Use filters to narrow by score range or match status</span></li>
-      </ul>
-      <div class="screenshot">📸 <span class="zh">截图：筛选结果页面</span><span class="en">Screenshot: Results Page</span></div>
-    </div>
 
-    <!-- Step 5 -->
-    <div class="step">
-      <div class="step-header">
-        <div class="step-num">5</div>
-        <h3><span class="zh">人工复核与调分</span><span class="en">HR Review & Score Override</span></h3>
+      <div class="step">
+        <div class="sh"><div class="snum">05</div><div class="stb"><h3><span class="zh">分享给面试官</span><span class="en">Share to Interviewer</span></h3><span class="new">NEW</span></div></div>
+        <ul>
+          <li><span class="zh">点击结果页右上角 <b>Share</b> 按钮，自动生成唯一分享令牌并<b>复制链接到剪贴板</b></span><span class="en">Click <b>Share</b> in the top-right — generates a unique token and copies the link</span></li>
+          <li><span class="zh">面试官打开链接看到：<b>岗位 JD</b>（可折叠）+ 所有候选人评分排名 + 详情展开（只读）</span><span class="en">Interviewer sees: job JD (collapsible) + ranked candidates + expand details (read-only)</span></li>
+          <li><span class="zh">每个岗位可生成多个令牌分给不同面试官，<b>可随时单独撤销</b></span><span class="en">Multiple tokens per job — revoke individually anytime</span></li>
+        </ul>
+        <div class="newtip">🆕 <span><b><span class="zh">本次新增！</span><span class="en">New! </span></b><span class="zh">分享页支持中英切换，面试官无需登录即可查看全部筛选结果和原始 JD。</span><span class="en">Share page supports language toggle — no login required for interviewers.</span></span></div>
       </div>
-      <ul>
-        <li><span class="zh">展开候选人卡片，滚动到底部 <b>Adjust Score</b> 区域</span><span class="en">Expand a candidate card and scroll to the <b>Adjust Score</b> section</span></li>
-        <li><span class="zh">输入调整后的分数和原因（如"经验不足"、"资历过深"），点击保存</span><span class="en">Enter adjusted score and reason (e.g. "Under-qualified", "Over-qualified"), then save</span></li>
-        <li><span class="zh">调整后的分数会标记为 VERIFIED，覆盖 AI 原始评分</span><span class="en">Overridden scores are marked VERIFIED and supersede AI scores</span></li>
-      </ul>
-    </div>
 
-    <!-- Step 6 -->
-    <div class="step">
-      <div class="step-header">
-        <div class="step-num">6</div>
-        <h3><span class="zh">使用人才库</span><span class="en">Using the Talent Library</span></h3>
+      <div class="step">
+        <div class="sh"><div class="snum">06</div><div class="stb"><h3><span class="zh">HR 复核 · 仪表盘 · 人才库</span><span class="en">Review · Dashboard · Library</span></h3></div></div>
+        <ul>
+          <li><span class="zh"><b>人工调分</b>：展开卡片底部 Adjust Score，输入分数和原因，保存后标记 VERIFIED</span><span class="en"><b>Override</b>: Adjust score at the bottom of expanded card — saved as VERIFIED</span></li>
+          <li><span class="zh"><b>仪表盘</b>：4 列指标卡片 + 筛选漏斗，全局数据一目了然</span><span class="en"><b>Dashboard</b>: 4-column metrics + funnel — at-a-glance overview</span></li>
+          <li><span class="zh"><b>人才库</b>：跨职位候选人搜索、过滤（Strong / Pending / Rejected），点击跳转详情</span><span class="en"><b>Talent Library</b>: Cross-job search & filter, click to view details</span></li>
+          <li><span class="zh">侧边栏岗位旁 🗑️ 按钮或仪表盘卡片均可<b>删除岗位及关联结果</b></span><span class="en">Delete jobs and results via sidebar 🗑️ or dashboard cards</span></li>
+        </ul>
       </div>
-      <ul>
-        <li><span class="zh">点击侧边栏 <b>Talent Library</b> 查看所有历史筛选候选人</span><span class="en">Click <b>Talent Library</b> in the sidebar to browse all screened candidates across jobs</span></li>
-        <li><span class="zh">支持按姓名、技能搜索，按分数段过滤（Strong / Pending / Rejected）</span><span class="en">Search by name or skill; filter by score tier (Strong / Pending / Rejected)</span></li>
-        <li><span class="zh">点击候选人可快速跳转到对应结果详情页</span><span class="en">Click any candidate to jump to their detail view</span></li>
-      </ul>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ DASHBOARD ═══════════════ -->
-<section>
-  <div class="container">
-    <h2><span class="num">▸</span> <span class="zh">仪表盘</span><span class="en">Dashboard</span></h2>
-    <p>
-      <span class="zh">首页仪表盘提供全局数据概览：累计处理简历数、节省工时、平均匹配分、各岗位进度。</span>
-      <span class="en">The dashboard provides an overview: total resumes processed, hours saved, average match score, and per-job progress.</span>
-    </p>
-    <div class="screenshot">📸 <span class="zh">截图：仪表盘页面</span><span class="en">Screenshot: Dashboard</span></div>
+<section class="sec wbg">
+  <div class="C">
+    <div class="slabel"><div class="slabel-line"></div><span class="zh">仪表盘</span><span class="en">Dashboard</span></div>
+    <h2><span class="zh">全局数据概览</span><span class="en">Analytics Overview</span></h2>
+    <p class="lead"><span class="zh">4 列指标卡片（累计简历 · 节省工时 · 平均分 · 活跃岗位）+ 筛选漏斗行，下方按岗位卡片展示各职位进度。</span><span class="en">4-column metric cards (total resumes · hours saved · avg score · active jobs) + funnel row, with per-job progress cards below.</span></p>
+    <div class="ss" style="height:180px">📸 <span class="zh">截图：Dashboard 4 列指标 + 漏斗 + 岗位卡片</span><span class="en">Screenshot: Dashboard with metrics, funnel, and job cards</span></div>
   </div>
 </section>
 
-<!-- ═══════════════ FAQ ═══════════════ -->
-<section>
-  <div class="container">
-    <h2><span class="num">▸</span> <span class="zh">常见问题</span><span class="en">FAQ</span></h2>
-
-    <div class="faq-item">
-      <div class="q"><span class="zh">Q: 支持哪些文件格式？</span><span class="en">Q: What file formats are supported?</span></div>
-      <div class="a"><span class="zh">A: PDF、DOCX、DOC 和 TXT 文件。推荐使用 PDF 格式以获得最佳解析效果。</span><span class="en">A: PDF, DOCX, DOC, and TXT. PDF is recommended for best parsing results.</span></div>
-    </div>
-    <div class="faq-item">
-      <div class="q"><span class="zh">Q: AI 评分的准确度如何？</span><span class="en">Q: How accurate is the AI scoring?</span></div>
-      <div class="a"><span class="zh">A: AI 评分作为初筛参考，建议 HR 对 Top 候选人进行人工复核。系统支持 HR 手动调分并记录理由。</span><span class="en">A: AI scoring serves as an initial screening reference. HR review of top candidates is recommended. The system supports manual score override with documented reasons.</span></div>
-    </div>
-    <div class="faq-item">
-      <div class="q"><span class="zh">Q: 我的数据安全吗？</span><span class="en">Q: Is my data secure?</span></div>
-      <div class="a"><span class="zh">A: 所有数据存储在 Google Cloud Firestore（asia-east1 区域），AI 调用通过服务端代理，API Key 不会暴露到浏览器。</span><span class="en">A: All data is stored in Google Cloud Firestore (asia-east1 region). AI calls are proxied through the server — API keys never reach the browser.</span></div>
-    </div>
-    <div class="faq-item">
-      <div class="q"><span class="zh">Q: 如何切换中英文？</span><span class="en">Q: How do I switch between Chinese and English?</span></div>
-      <div class="a"><span class="zh">A: 侧边栏顶部 ST Logo 右侧有语言切换按钮（中文 / EN）。AI 分析结果的语言也会同步切换。</span><span class="en">A: Use the language toggle button next to the ST logo in the sidebar (中文 / EN). AI analysis results will also switch language.</span></div>
-    </div>
-    <div class="faq-item">
-      <div class="q"><span class="zh">Q: 权重必须设为 100% 吗？</span><span class="en">Q: Must weights sum to 100%?</span></div>
-      <div class="a"><span class="zh">A: 是的。侧边栏会实时显示当前总和，不满足 100% 时会红色警告。</span><span class="en">A: Yes. The sidebar shows real-time total — a red warning appears if not 100%.</span></div>
-    </div>
-    <div class="faq-item">
-      <div class="q"><span class="zh">Q: 遇到问题怎么办？</span><span class="en">Q: What if I encounter issues?</span></div>
-      <div class="a"><span class="zh">A: 联系 Yude.jiang@st.com 获取技术支持。</span><span class="en">A: Contact Yude.jiang@st.com for technical support.</span></div>
+<section class="sec">
+  <div class="C">
+    <div class="slabel"><div class="slabel-line"></div><span class="zh">常见问题</span><span class="en">FAQ</span></div>
+    <h2><span class="zh">常见问题解答</span><span class="en">Frequently Asked Questions</span></h2>
+    <div class="faq">
+      <div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">支持哪些文件格式？</span><span class="en">What file formats are supported?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">PDF、DOCX、DOC 和 TXT。PDF 推荐以获得最佳解析效果，DOCX 不提供内联预览（可下载）。</span><span class="en">PDF, DOCX, DOC, and TXT. PDF recommended for best parsing. DOCX not previewed inline (download only).</span></div></div>
+      <div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">雷达图和对比功能如何使用？</span><span class="en">How to use radar & compare?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">展开候选人卡片即可看到 5 维雷达图。点击结果页右上角 <b>Compare</b> 进入对比模式，勾选 2-3 人自动生成叠加雷达图和 AI 对比分析。</span><span class="en">Expand any card to see the 5-dim radar. Click <b>Compare</b> in the top-right, select 2-3 candidates for overlay radar and AI analysis.</span></div></div>
+      <div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">如何分享给面试官？</span><span class="en">How to share with interviewers?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">在结果页点击 <b>Share</b> 按钮，链接自动复制。面试官打开后看到 JD + 评分排名（只读）。可在服务端 API 随时撤销任意令牌。</span><span class="en">Click <b>Share</b> on the results page — link auto-copies. Interviewers see JD + scores (read-only). Tokens can be revoked anytime via API.</span></div></div>
+      <div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">AI 对比分析使用什么模型？</span><span class="en">Which model for comparison analysis?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">优先调用 Gemini 2.5 Flash，如失败则自动降级到 DeepSeek-chat。对比分析只生成一次不会反复刷新。</span><span class="en">Gemini 2.5 Flash first, with automatic fallback to DeepSeek-chat. Analysis generates once — no repeated refreshes.</span></div></div>
+      <div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">大陆能否直接访问？</span><span class="en">Accessible from mainland China?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">可以。系统采用服务端代理架构，所有数据读写通过 Cloud Run（asia-east1 台湾）转发到 Firestore，前端不直连 Google 服务。</span><span class="en">Yes. Server-proxy architecture — all data goes through Cloud Run (asia-east1) to Firestore. No direct Google connections from the browser.</span></div></div>
+      <div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">如何切换中英文？</span><span class="en">How to switch languages?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">页面右上角 中文/EN 按钮。切换后 UI 和 AI 分析结果同步更改。</span><span class="en">Use the 中文/EN toggle in the top-right. UI and AI results switch instantly.</span></div></div>
+      <div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">遇到问题？</span><span class="en">Issues?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">联系 <strong>Yude.jiang@st.com</strong></span><span class="en">Contact <strong>Yude.jiang@st.com</strong></span></div></div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ FOOTER ═══════════════ -->
 <footer>
-  <div style="margin-bottom:8px; font-size: 14px; color: rgba(255,255,255,0.7);">
-    <strong>ST Resume AI Screener</strong> — Internal Tool
-  </div>
-  <span class="zh">意法半导体内部工具 · 创建人: Yude.jiang@st.com · 2026</span>
-  <span class="en">STMicroelectronics Internal Tool · Created by: Yude.jiang@st.com · 2026</span>
+  <div class="fb">ST Resume AI Screener</div>
+  <div><span class="zh">意法半导体内部工具</span><span class="en">STMicroelectronics Internal Tool</span><span class="fdot"></span>Yude.jiang@st.com<span class="fdot"></span>2026.05</div>
 </footer>
 
 <script>
-function setLang(lang) {
-  document.body.setAttribute('lang', lang);
-  document.querySelectorAll('.lang-toggle button').forEach(b => {
-    b.classList.toggle('active', b.classList.contains(lang));
-  });
-}
-// Default to Chinese
+function setLang(l){document.body.setAttribute('lang',l);document.querySelectorAll('.lt button').forEach(b=>b.classList.toggle('on',b.classList.contains(l)))}
+function toggle(btn){btn.closest('.fi2').classList.toggle('open')}
 setLang('zh');
 </script>
 </body>
