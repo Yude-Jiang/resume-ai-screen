@@ -194,7 +194,7 @@ footer{background:var(--std);color:rgba(255,255,255,.35);text-align:center;paddi
           <li><span class="zh">点击 <b>Auto-configure from JD</b>，AI 自动提取职位名称、建议权重和硬性门槛</span><span class="en">Click Auto-configure — AI extracts job title, weights, and thresholds</span></li>
           <li><span class="zh">侧边栏展开 <b>Scoring Weights</b> 微调滑块（默认展开，总和须 100%）</span><span class="en">Fine-tune weight sliders in sidebar (must sum to 100%)</span></li>
         </ul>
-        <div class="ss">📸 <span class="zh">截图：左侧 JD 面板（空态带引导图示）+ 右侧上传区</span><span class="en">Screenshot: JD panel (with empty-state guide) + upload zone</span></div>
+        <div class="ss"><span class="zh">截图：左侧 JD 面板（空态带引导图示）+ 右侧上传区</span><span class="en">Screenshot: JD panel (with empty-state guide) + upload zone</span></div>
       </div>
 
       <div class="step">
@@ -203,7 +203,7 @@ footer{background:var(--std);color:rgba(255,255,255,.35);text-align:center;paddi
           <li><span class="zh">右侧虚线区域拖拽或点击上传（PDF / DOCX / TXT，最多 50 份）</span><span class="en">Drag or click to upload resumes in the right panel</span></li>
           <li><span class="zh">点击底部黄色 <b>Screen Candidates →</b> 按钮，4 并发处理，50 份约 1-2 分钟</span><span class="en">Click Screen Candidates — 4 concurrent, ~1-2 min for 50</span></li>
         </ul>
-        <div class="ss">📸 <span class="zh">截图：上传区域 + 文件列表 + CTA 按钮</span><span class="en">Screenshot: Upload zone with file list and CTA button</span></div>
+        <div class="ss"><span class="zh">截图：上传区域 + 文件列表 + CTA 按钮</span><span class="en">Screenshot: Upload zone with file list and CTA button</span></div>
       </div>
 
       <div class="step">
@@ -266,7 +266,6 @@ footer{background:var(--std);color:rgba(255,255,255,.35);text-align:center;paddi
       <div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">雷达图和对比功能如何使用？</span><span class="en">How to use radar & compare?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">展开候选人卡片即可看到 5 维雷达图。点击结果页右上角 <b>Compare</b> 进入对比模式，勾选 2-3 人自动生成叠加雷达图和 AI 对比分析。</span><span class="en">Expand any card to see the 5-dim radar. Click <b>Compare</b> in the top-right, select 2-3 candidates for overlay radar and AI analysis.</span></div></div>
       <div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">如何分享给面试官？</span><span class="en">How to share with interviewers?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">在结果页点击 <b>Share</b> 按钮，链接自动复制。面试官打开后看到 JD + 评分排名（只读）。可在服务端 API 随时撤销任意令牌。</span><span class="en">Click <b>Share</b> on the results page — link auto-copies. Interviewers see JD + scores (read-only). Tokens can be revoked anytime via API.</span></div></div>
       <div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">AI 对比分析使用什么模型？</span><span class="en">Which model for comparison analysis?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">优先调用 Gemini 2.5 Flash，如失败则自动降级到 DeepSeek-chat。对比分析只生成一次不会反复刷新。</span><span class="en">Gemini 2.5 Flash first, with automatic fallback to DeepSeek-chat. Analysis generates once — no repeated refreshes.</span></div></div>
-      <div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">大陆能否直接访问？</span><span class="en">Accessible from mainland China?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">可以。系统采用服务端代理架构，所有数据读写通过 Cloud Run（asia-east1 台湾）转发到 Firestore，前端不直连 Google 服务。</span><span class="en">Yes. Server-proxy architecture — all data goes through Cloud Run (asia-east1) to Firestore. No direct Google connections from the browser.</span></div></div>
       <div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">如何切换中英文？</span><span class="en">How to switch languages?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">页面右上角 中文/EN 按钮。切换后 UI 和 AI 分析结果同步更改。</span><span class="en">Use the 中文/EN toggle in the top-right. UI and AI results switch instantly.</span></div></div>
       <div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">遇到问题？</span><span class="en">Issues?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">联系 <strong>Yude.jiang@st.com</strong></span><span class="en">Contact <strong>Yude.jiang@st.com</strong></span></div></div>
     </div>
