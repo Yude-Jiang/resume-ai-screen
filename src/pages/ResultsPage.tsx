@@ -119,39 +119,22 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
               )}
             </div>
 
-            <div className="flex items-center gap-4">
-              {!isShareMode && activeJobId && (
-                <button onClick={async () => {
-                  const job = jobs.find(j => j.id === activeJobId);
-                  if (job) {
-                    try {
-                      await api.updateJob(activeJobId, { isPublic: !(job as any).isPublic });
-                      if (!(job as any).isPublic) {
-                        navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}?jobId=${activeJobId}&mode=share`);
-                      }
-                    } catch (e) { /* ignore */ }
-                  }
-                }} className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-sm font-bold transition-all shadow-sm ${(jobs.find(j => j.id === activeJobId) as any)?.isPublic ? 'bg-st-yellow text-st-dark' : 'bg-white text-slate-400 border border-slate-200'}`}>
-                  {(jobs.find(j => j.id === activeJobId) as any)?.isPublic ? 'SHARED' : 'SHARE TO INTERVIEWER'}
-                </button>
-              )}
+            <div className="flex items-center gap-3">
               {!isShareMode && (
                 <button onClick={async () => {
                   if (activeJobId && confirm(t.clearAll + "?")) {
-                    try {
-                      await api.deleteResultsByJob(activeJobId);
-                    } catch (e) { /* ignore */ }
+                    try { await api.deleteResultsByJob(activeJobId); } catch (e) { /* ignore */ }
                   }
-                }} className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-rose-500 bg-rose-50 hover:bg-rose-100 transition-all border border-rose-100 shadow-sm">
+                }} className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium text-rose-500 bg-rose-50 hover:bg-rose-100 transition-all border border-rose-100">
                   <XCircle className="w-3 h-3" /> {t.clearAll}
                 </button>
               )}
               {!isShareMode && (
                 <button
                   onClick={() => { setCompareMode(!compareMode); setSelectedCompare(new Set()); }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${compareMode ? 'bg-st-dark text-st-yellow shadow-lg' : 'bg-white text-slate-400 border border-slate-200'}`}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${compareMode ? 'bg-st-dark text-st-yellow shadow-lg' : 'bg-white text-slate-400 border border-slate-200'}`}
                 >
-                  <GitCompare className="w-4 h-4" /> {t.compare}
+                  <GitCompare className="w-3.5 h-3.5" /> {t.compare}
                 </button>
               )}
             </div>
