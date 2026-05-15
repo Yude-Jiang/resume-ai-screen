@@ -169,7 +169,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                 <div className="flex items-center gap-3 mb-3">
                   <div className="text-xs font-medium text-st-dark bg-st-yellow px-3 py-1 rounded-full">{t.documentPreview}</div>
                 </div>
-                <div className="w-full h-[500px] bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-200">
+                <div className={`w-full h-[500px] bg-white rounded-2xl shadow-sm border border-slate-200 relative ${blindMode ? 'overflow-hidden' : 'overflow-hidden'}`}>
                   {res.file_data ? (
                     <>
                       <PdfViewer url={res.file_data} searchTerm={searchTerm} blindMode={blindMode} />
