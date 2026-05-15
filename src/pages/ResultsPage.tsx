@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { XCircle, BarChart3, GitCompare, X, Loader2 } from 'lucide-react';
 import { AnalysisResult, Job } from '../types';
 import { ResultCard } from '../components/ResultCard';
@@ -35,14 +35,21 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
   const [compareAnalysis, setCompareAnalysis] = useState<string | null>(null);
   const [compareLoading, setCompareLoading] = useState(false);
 
-  // Fetch AI comparison when 2-3 candidates selected
+  // Fetch AI comparison when 2-3 candidates selected (debounced via ref to avoid poll re-triggers)
   const activeJob = useMemo(() => jobs.find(j => j.id === activeJobId), [jobs, activeJobId]);
+  const lastCompareKey = useRef<string>('');
   useEffect(() => {
+    const key = [...selectedCompare].sort().join('|') + '|' + (activeJob?.jd?.slice(0, 200) || '');
+    if (!key || key === lastCompareKey.current) return;
+    lastCompareKey.current = key;
+
     if (selectedCompare.size < 2 || !activeJob?.jd) {
       setCompareAnalysis(null);
       return;
     }
     const selectedResults = results.filter(r => selectedCompare.has(r.file_name));
+    if (selectedResults.length < 2) return;
+
     setCompareLoading(true);
     compareCandidates(
       activeJob.jd,
@@ -54,7 +61,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
       })),
       language as 'en' | 'zh'
     ).then(setCompareAnalysis).catch(() => setCompareAnalysis(null)).finally(() => setCompareLoading(false));
-  }, [selectedCompare, activeJob, results, language]);
+  }, [selectedCompare, activeJob, language]);
 
   const allFitStatuses = useMemo(() => {
     const set = new Set<string>();
