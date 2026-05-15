@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { XCircle, BarChart3, GitCompare, X, Loader2 } from 'lucide-react';
+import { XCircle, BarChart3, GitCompare, X, Loader2, Share2 } from 'lucide-react';
 import { AnalysisResult, Job } from '../types';
 import { ResultCard } from '../components/ResultCard';
 import { ScoreChart } from '../components/ScoreChart';
@@ -127,6 +127,17 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
                   }
                 }} className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium text-rose-500 bg-rose-50 hover:bg-rose-100 transition-all border border-rose-100">
                   <XCircle className="w-3 h-3" /> {t.clearAll}
+                </button>
+              )}
+              {!isShareMode && activeJobId && (
+                <button onClick={async () => {
+                  try {
+                    const data = await api.createShare(activeJobId);
+                    await navigator.clipboard.writeText(data.url);
+                    alert(language === 'zh' ? `分享链接已复制！\n${data.url}` : `Share link copied!\n${data.url}`);
+                  } catch (e) { /* ignore */ }
+                }} className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium bg-white text-slate-400 border border-slate-200 hover:bg-st-dark hover:text-st-yellow transition-all">
+                  <Share2 className="w-3.5 h-3.5" /> {t.shareToInterviewer || 'Share'}
                 </button>
               )}
               {!isShareMode && (

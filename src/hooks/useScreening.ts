@@ -46,13 +46,21 @@ export function useScreening() {
   // Init
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const sharedJobId = urlParams.get('jobId');
-    const mode = urlParams.get('mode');
+    const shareToken = urlParams.get('share');
 
-    if (sharedJobId && mode === 'share') {
+    if (shareToken) {
       setIsShareMode(true);
-      setActiveJobId(sharedJobId);
       setActiveTab('results');
+      // Load shared data (public endpoint, no auth)
+      api.getShared(shareToken).then((data: any) => {
+        setResults(data.results || []);
+        setAllResults(data.results || []);
+        if (data.job) {
+          setJd(data.job.jd || '');
+          setJobTitle(data.job.title || '');
+          if (data.job.thresholds) setThresholds(data.job.thresholds);
+        }
+      }).catch(() => {});
     }
 
     setAuthReady(true);

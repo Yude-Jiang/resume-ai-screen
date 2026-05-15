@@ -515,6 +515,69 @@ ${safeResume}
     }
   });
 
+  // ---- Share endpoints (public, no auth required) ----
+
+  app.post("/api/jobs/:id/share", async (req, res) => {
+    try {
+      const ownerId = ownerFromReq(req);
+      if (!ownerId) return res.status(400).json({ error: "x-client-id header required" });
+      const jobRef = db.collection('jobs').doc(req.params.id);
+      const jobDoc = await jobRef.get();
+      if (!jobDoc.exists) return res.status(404).json({ error: "Not found" });
+      if (jobDoc.data()?.ownerId !== ownerId) return res.status(403).json({ error: "Forbidden" });
+
+      const token = crypto.randomUUID().replace(/-/g, '').slice(0, 10);
+      await db.collection('shares').doc(token).set({
+        jobId: req.params.id,
+        ownerId,
+        createdAt: new Date().toISOString(),
+        revoked: false,
+      });
+
+      res.json({ token, url: `${req.protocol}://${req.get('host')}/?share=${token}` });
+    } catch (e: any) { res.status(500).json({ error: e.message }); }
+  });
+
+  app.delete("/api/jobs/:id/share/:token", async (req, res) => {
+    try {
+      const ownerId = ownerFromReq(req);
+      if (!ownerId) return res.status(400).json({ error: "x-client-id header required" });
+      const shareRef = db.collection('shares').doc(req.params.token);
+      const shareDoc = await shareRef.get();
+      if (!shareDoc.exists) return res.status(404).json({ error: "Not found" });
+      if (shareDoc.data()?.ownerId !== ownerId) return res.status(403).json({ error: "Forbidden" });
+      await shareRef.update({ revoked: true });
+      res.json({ revoked: true });
+    } catch (e: any) { res.status(500).json({ error: e.message }); }
+  });
+
+  // Public: get shared data via token
+  app.get("/api/share/:token", async (req, res) => {
+    try {
+      const shareDoc = await db.collection('shares').doc(req.params.token).get();
+      if (!shareDoc.exists) return res.status(404).json({ error: "Invalid share link" });
+      const share = shareDoc.data()!;
+      if (share.revoked) return res.status(410).json({ error: "Share link revoked" });
+
+      const jobDoc = await db.collection('jobs').doc(share.jobId).get();
+      if (!jobDoc.exists) return res.status(404).json({ error: "Job not found" });
+      const jobData = jobDoc.data()!;
+
+      const resultsSnap = await db.collection('analysisResults')
+        .where('jobId', '==', share.jobId)
+        .where('ownerId', '==', share.ownerId)
+        .get();
+
+      const results = resultsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      results.sort((a: any, b: any) => (b.hr_override_score ?? b.overall_score) - (a.hr_override_score ?? a.overall_score));
+
+      res.json({
+        job: { id: jobDoc.id, title: jobData.title, jd: jobData.jd, thresholds: jobData.thresholds },
+        results,
+      });
+    } catch (e: any) { res.status(500).json({ error: e.message }); }
+  });
+
   // ---- Error Middleware ----
   app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     console.error("[Server] Unhandled error:", err.message);

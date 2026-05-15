@@ -64,4 +64,9 @@ export const api = {
   updateResult: (id: string, data: Record<string, unknown>) => apiFetch('PATCH', `/api/results/${id}`, data),
   deleteResult: (id: string) => apiFetch('DELETE', `/api/results/${id}`),
   deleteResultsByJob: (jobId: string) => apiFetch('DELETE', `/api/results?jobId=${encodeURIComponent(jobId)}`),
+
+  // Share
+  createShare: (jobId: string) => apiFetch('POST', `/api/jobs/${encodeURIComponent(jobId)}/share`),
+  revokeShare: (jobId: string, token: string) => apiFetch('DELETE', `/api/jobs/${encodeURIComponent(jobId)}/share/${token}`),
+  getShared: (token: string) => fetch(`/api/share/${token}`).then(r => r.ok ? r.json() : r.json().then(e => { throw new Error(e.error); })),
 };
