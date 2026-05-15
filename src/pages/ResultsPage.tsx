@@ -67,19 +67,19 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
               {results.length > 0 && (
                 <div className="flex items-center gap-3 ml-8">
                   <select value={scoreFilter} onChange={e => setScoreFilter(e.target.value as any)} className="bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs font-bold text-slate-600 focus:outline-none focus:ring-2 focus:ring-st-light/20">
-                    <option value="all">{language === 'zh' ? '全部评分' : 'All Scores'}</option>
-                    <option value="high">{language === 'zh' ? '优选 (≥80)' : 'High (≥80)'}</option>
-                    <option value="medium">{language === 'zh' ? '备选 (60-79)' : 'Medium (60-79)'}</option>
-                    <option value="low">{language === 'zh' ? '暂不考虑 (<60)' : 'Low (<60)'}</option>
+                    <option value="all">{t.allScores}</option>
+                    <option value="high">{t.highScore}</option>
+                    <option value="medium">{t.mediumScore}</option>
+                    <option value="low">{t.lowScore}</option>
                   </select>
                   {allFitStatuses.length > 0 && (
                     <select value={fitFilter} onChange={e => setFitFilter(e.target.value)} className="bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs font-bold text-slate-600 focus:outline-none focus:ring-2 focus:ring-st-light/20">
-                      <option value="all">{language === 'zh' ? '全部推荐' : 'All Recommendations'}</option>
+                      <option value="all">{t.allRecommendations}</option>
                       {allFitStatuses.map(fs => <option key={fs} value={fs}>{fs}</option>)}
                     </select>
                   )}
                   {(scoreFilter !== 'all' || fitFilter !== 'all') && (
-                    <span className="text-xs font-bold text-st-light">{filteredResults.length}/{results.length} {language === 'zh' ? '人' : 'shown'}</span>
+                    <span className="text-xs font-bold text-st-light">{filteredResults.length}/{results.length} {t.shown}</span>
                   )}
                 </div>
               )}

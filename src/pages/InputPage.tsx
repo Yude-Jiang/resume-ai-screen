@@ -67,7 +67,7 @@ export const InputPage: React.FC<InputPageProps> = ({
                 className="hidden"
               />
               <div className="w-2 h-2 rounded-full bg-st-light animate-pulse ml-2" />
-              <span className="text-sm font-medium text-st-dark tracking-widest">AI READY</span>
+              <span className="text-sm font-medium text-st-dark tracking-widest">{t.aiReady || 'AI READY'}</span>
             </div>
           </div>
           <div className="relative group">
@@ -123,12 +123,12 @@ export const InputPage: React.FC<InputPageProps> = ({
            </div>
 
            <div className="space-y-3">
-              <label className="text-sm font-medium text-slate-400">Job Title</label>
+              <label className="text-sm font-medium text-slate-400">{t.jobTitleLabel}</label>
               <input
                 type="text"
                 value={jobTitle}
                 onChange={(e) => setJobTitle(e.target.value)}
-                placeholder="e.g. Senior Frontend Engineer"
+                placeholder={t.jobTitlePlaceholder}
                 className="w-full bg-white border border-slate-200 rounded-xl p-3 text-sm font-medium text-st-dark focus:outline-none focus:ring-2 focus:ring-st-light/20 transition-all"
               />
            </div>
@@ -244,14 +244,14 @@ export const InputPage: React.FC<InputPageProps> = ({
         <div className="mb-10 flex items-center justify-between">
            <div>
               <h2 className="text-lg font-semibold text-st-dark">{t.resumeUpload}</h2>
-              <p className="text-slate-400 font-medium mt-1 text-sm">Batch parsing up to 50 files</p>
+              <p className="text-slate-400 font-medium mt-1 text-sm">{t.batchParsing}</p>
            </div>
            {files.length > 0 && (
               <button 
                 onClick={() => setFiles([])}
                 className="text-sm font-medium text-rose-500 hover:text-rose-600 transition-colors bg-rose-50 px-4 py-2 rounded-full shadow-sm"
               >
-                 CLEAR {files.length} FILES
+                 {t.clearFiles} {files.length}
               </button>
            )}
         </div>
@@ -295,7 +295,7 @@ export const InputPage: React.FC<InputPageProps> = ({
                        </div>
                        <div className="min-w-0">
                          <div className="text-sm font-medium text-st-dark truncate">{f.name}</div>
-                         <div className="text-xs text-slate-400 font-medium">PDF DOCUMENT</div>
+                         <div className="text-xs text-slate-400 font-medium">{t.fileTypeLabel}</div>
                        </div>
                      </div>
                    ))}
