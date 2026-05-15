@@ -413,6 +413,29 @@ ${safeResume}
     }
   });
 
+  app.delete("/api/jobs/:id", async (req, res) => {
+    try {
+      const ownerId = ownerFromReq(req);
+      if (!ownerId) return res.status(400).json({ error: "x-client-id header required" });
+      const ref = db.collection('jobs').doc(req.params.id);
+      const doc = await ref.get();
+      if (!doc.exists) return res.status(404).json({ error: "Not found" });
+      if (doc.data()?.ownerId !== ownerId) return res.status(403).json({ error: "Forbidden" });
+      // Also delete associated results
+      const resultsSnap = await db.collection('analysisResults')
+        .where('jobId', '==', req.params.id)
+        .where('ownerId', '==', ownerId)
+        .get();
+      const batch = db.batch();
+      resultsSnap.docs.forEach(d => batch.delete(d.ref));
+      batch.delete(ref);
+      await batch.commit();
+      res.json({ deleted: true, resultsDeleted: resultsSnap.size });
+    } catch (e: any) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
   // Results
   app.get("/api/results", async (req, res) => {
     try {

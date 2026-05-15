@@ -9,7 +9,8 @@ import {
   FileText,
   ChevronDown,
   X,
-  Users
+  Users,
+  Trash2
 } from 'lucide-react';
 import { Language } from '../translations';
 import { ScoringWeights, Job, WeightItem } from '../types';
@@ -25,6 +26,7 @@ interface SidebarProps {
   weights: ScoringWeights;
   handleWeightChange: (weights: ScoringWeights) => void;
   createNewJob: (title: string, dept: string) => Promise<void>;
+  deleteJob: (id: string) => void;
   addWeightItem: () => void;
   removeWeightItem: (id: string) => void;
   isShareMode: boolean;
@@ -33,7 +35,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({
   language, setLanguage, activeTab, setActiveTab, jobs, activeJobId, setActiveJobId,
-  weights, handleWeightChange, createNewJob, addWeightItem, removeWeightItem, isShareMode, t
+  weights, handleWeightChange, createNewJob, deleteJob, addWeightItem,removeWeightItem, isShareMode, t
 }) => {
   const [showJobMenu, setShowJobMenu] = useState(false);
   const [showWeights, setShowWeights] = useState(true);
@@ -65,7 +67,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     t[weightLabelMap[w.id] as keyof typeof t] || w.label;
 
   return (
-    <aside className="w-full md:w-64 bg-st-dark text-white shrink-0 flex flex-col shadow-xl z-10 overflow-hidden relative">
+    <aside className="w-full md:w-64 bg-st-dark text-white shrink-0 flex flex-col shadow-xl z-10 h-screen relative">
       <div className="p-6 mb-4">
         <div className="flex justify-between items-start">
           <img
@@ -224,8 +226,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     }}
                     className={`w-full text-left p-3 rounded-lg text-sm font-medium transition-all border ${activeJobId === job.id ? 'bg-st-light/20 border-st-light text-white shadow-inner' : 'border-transparent text-white/40 hover:bg-white/5 hover:text-white'}`}
                   >
-                    <div className="truncate">{job.title}</div>
-                    <div className="text-sm opacity-40 font-medium">{job.dept}</div>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="truncate">{job.title}</div>
+                        <div className="text-sm opacity-40 font-medium">{job.dept}</div>
+                      </div>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); if (confirm('Delete this job and all its results?')) deleteJob(job.id); }}
+                        className="opacity-0 group-hover:opacity-100 text-rose-400 hover:text-rose-300 transition-all p-1"
+                        title="Delete job"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </button>
                 ))}
               </div>

@@ -56,7 +56,7 @@ export default function App() {
     weights, thresholds, isConfiguring, jobTitle, t, stats, funnelData, currentFile, allResults, jobsWithStats,
     setLanguage, setActiveTab, setJd, setFiles, setExpandedResult, setBlindMode, setSearchTerm,
     setEditingScore, setWeights, setThresholds, setJobTitle, setActiveJobId,
-    handleWeightChange, handleScoreOverride, handleAiConfig, createNewJob, runAnalysis,
+    handleWeightChange, handleScoreOverride, handleAiConfig, createNewJob, deleteJob, runAnalysis,
     addWeightItem, removeWeightItem, handleJdFileUpload
   } = useScreening();
 
@@ -77,7 +77,7 @@ export default function App() {
       <div className="min-h-screen flex flex-col md:flex-row bg-slate-50 overflow-hidden font-sans">
         <Toaster position="top-right" richColors />
         
-        <Sidebar 
+        <Sidebar
           language={language}
           setLanguage={setLanguage}
           activeTab={activeTab}
@@ -88,6 +88,7 @@ export default function App() {
           weights={weights}
           handleWeightChange={handleWeightChange}
           createNewJob={createNewJob}
+          deleteJob={deleteJob}
           addWeightItem={addWeightItem}
           removeWeightItem={removeWeightItem}
           isShareMode={isShareMode}
@@ -116,6 +117,7 @@ export default function App() {
               jobs={jobsWithStats}
               setActiveJobId={setActiveJobId}
               setActiveTab={setActiveTab}
+              deleteJob={deleteJob}
               t={t}
             />
           )}

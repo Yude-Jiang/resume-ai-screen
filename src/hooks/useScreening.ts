@@ -195,6 +195,13 @@ export function useScreening() {
     }
   };
 
+  const deleteJob = async (jobId: string) => {
+    try {
+      await api.deleteJob(jobId);
+      if (activeJobId === jobId) setActiveJobId(null);
+    } catch (e) { handleFirestoreError(e, OperationType.DELETE, `jobs/${jobId}`); }
+  };
+
   const createNewJob = async (title: string, dept: string) => {
     try {
       const newJob = await api.createJob({
@@ -378,7 +385,7 @@ export function useScreening() {
     setActiveJobId, setActiveTab, setJd, setFiles, setIsAnalyzing,
     setProgress, setResults, setExpandedResult, setLanguage, setBlindMode, setSearchTerm,
     setEditingScore, setWeights, setThresholds, setJobTitle,
-    handleWeightChange, handleScoreOverride, handleAiConfig, createNewJob, runAnalysis,
+    handleWeightChange, handleScoreOverride, handleAiConfig, createNewJob, deleteJob, runAnalysis,
     stats, funnelData, addWeightItem, removeWeightItem, handleJdFileUpload
   };
 }

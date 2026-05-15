@@ -54,6 +54,7 @@ export const api = {
   getJobs: () => apiFetch('GET', '/api/jobs'),
   createJob: (data: Record<string, unknown>) => apiFetch('POST', '/api/jobs', data),
   updateJob: (id: string, data: Record<string, unknown>) => apiFetch('PATCH', `/api/jobs/${id}`, data),
+  deleteJob: (id: string) => apiFetch('DELETE', `/api/jobs/${id}`),
 
   getResults: (jobId?: string) => {
     const qs = jobId ? `?jobId=${encodeURIComponent(jobId)}` : '';

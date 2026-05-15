@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileSearch, Clock, Target, Zap, Eye, Briefcase, Plus } from 'lucide-react';
+import { FileSearch, Clock, Target, Zap, Eye, Briefcase, Plus, Trash2 } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface DashboardPageProps {
@@ -10,11 +10,12 @@ interface DashboardPageProps {
   jobs: any[];
   setActiveJobId: (id: string) => void;
   setActiveTab: (tab: 'dashboard' | 'input' | 'results') => void;
+  deleteJob: (id: string) => void;
   t: any;
 }
 
 export const DashboardPage: React.FC<DashboardPageProps> = ({
-  stats, totalSystemStats, funnelData, results, jobs, setActiveJobId, setActiveTab, t
+  stats, totalSystemStats, funnelData, results, jobs, setActiveJobId, setActiveTab, deleteJob, t
 }) => {
   return (
     <div className="p-8 space-y-6 animate-in fade-in duration-700 h-full overflow-y-auto st-scrollbar pb-20">
@@ -141,6 +142,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   className="p-2.5 bg-slate-50 hover:bg-st-light hover:text-white rounded-xl text-st-light transition-all"
                 >
                   <Plus className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => { if (confirm('Delete this job and all its results?')) deleteJob(job.id); }}
+                  className="p-2.5 bg-slate-50 hover:bg-rose-100 hover:text-rose-500 rounded-xl text-slate-400 transition-all"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
             </motion.div>
