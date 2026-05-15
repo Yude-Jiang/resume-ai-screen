@@ -261,15 +261,33 @@ footer{background:var(--std);color:rgba(255,255,255,.35);text-align:center;paddi
 <div class="slabel"><div class="slabel-line"></div><span class="zh">常见问题</span><span class="en">FAQ</span></div>
 <h2><span class="zh">常见问题解答</span><span class="en">Frequently Asked Questions</span></h2>
 <div class="faq">
-<div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">支持哪些文件格式？</span><span class="en">What file formats?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">PDF、DOCX、DOC 和 TXT。PDF 推荐以获得最佳解析效果，DOCX 不提供内联预览（可下载）。</span><span class="en">PDF, DOCX, DOC, and TXT. PDF recommended. DOCX not previewed inline (download available).</span></div></div>
-<div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">雷达图和对比功能如何使用？</span><span class="en">Radar & compare?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">展开候选人卡片即看到多维度雷达图。点击 <b>Compare</b> 进入对比模式，勾选 2-3 人自动生成叠加雷达图与 AI 对比分析。</span><span class="en">Expand card for radar chart. Click Compare, select 2-3 for overlay + AI analysis.</span></div></div>
-<div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">如何分享给面试官？</span><span class="en">Share to interviewer?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">结果页点击 <b>Share</b>，链接自动复制。面试官打开后看到 JD + 评分排名（只读）。可随时撤销任意令牌。</span><span class="en">Click Share on results page — link auto-copies. Interviewer sees JD + scores (read-only). Tokens revocable anytime.</span></div></div>
-<div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">维度可以自定义吗？</span><span class="en">Customizable dimensions?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">可以。侧边栏 <b>+</b> 按钮添加新维度，点击标签重命名，权重总和须 100%。</span><span class="en">Yes. Use + to add dimensions, click labels to rename. Weights must sum to 100%.</span></div></div>
-<div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">盲筛模式会闪屏吗？</span><span class="en">Blind mode flash?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">不会。采用 CSS filter: blur() 而非文本替换，GPU 加速 500ms 平滑过渡，雷达图与 AI 分析始终清晰。</span><span class="en">No. Uses CSS blur (GPU-accelerated) with 500ms transition — no DOM flash. Radar and AI analysis remain clear.</span></div></div>
-<div class="fi2"><div class="fq" onclick="toggle(this)"><span class="fq-text"><span class="zh">遇到问题？</span><span class="en">Issues?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">联系 <strong>Yude.jiang@st.com</strong></span><span class="en">Contact <strong>Yude.jiang@st.com</strong></span></div></div>
+<div class="fi2"><div class="fq" onclick="toggleFAQ(this)"><span class="fq-text"><span class="zh">支持哪些文件格式？</span><span class="en">What file formats?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">PDF、DOCX、DOC 和 TXT。PDF 推荐以获得最佳解析效果，DOCX 不提供内联预览（可下载）。</span><span class="en">PDF, DOCX, DOC, and TXT. PDF recommended. DOCX not previewed inline (download available).</span></div></div>
+<div class="fi2"><div class="fq" onclick="toggleFAQ(this)"><span class="fq-text"><span class="zh">雷达图和对比功能如何使用？</span><span class="en">Radar & compare?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">展开候选人卡片即看到多维度雷达图。点击 <b>Compare</b> 进入对比模式，勾选 2-3 人自动生成叠加雷达图与 AI 对比分析。</span><span class="en">Expand card for radar chart. Click Compare, select 2-3 for overlay + AI analysis.</span></div></div>
+<div class="fi2"><div class="fq" onclick="toggleFAQ(this)"><span class="fq-text"><span class="zh">如何分享给面试官？</span><span class="en">Share to interviewer?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">结果页点击 <b>Share</b>，链接自动复制。面试官打开后看到 JD + 评分排名（只读）。可随时撤销任意令牌。</span><span class="en">Click Share on results page — link auto-copies. Interviewer sees JD + scores (read-only). Tokens revocable anytime.</span></div></div>
+<div class="fi2"><div class="fq" onclick="toggleFAQ(this)"><span class="fq-text"><span class="zh">维度可以自定义吗？</span><span class="en">Customizable dimensions?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">可以。侧边栏 <b>+</b> 按钮添加新维度，点击标签重命名，权重总和须 100%。</span><span class="en">Yes. Use + to add dimensions, click labels to rename. Weights must sum to 100%.</span></div></div>
+<div class="fi2"><div class="fq" onclick="toggleFAQ(this)"><span class="fq-text"><span class="zh">遇到问题？</span><span class="en">Issues?</span></span><div class="fq-icon">+</div></div><div class="fa"><span class="zh">联系 <strong>Yude.jiang@st.com</strong></span><span class="en">Contact <strong>Yude.jiang@st.com</strong></span></div></div>
 </div></div></section>
 
 <footer><div class="fb">ST Resume AI Screener</div><div><span class="zh">意法半导体内部工具</span><span class="en">STMicroelectronics Internal Tool</span><span class="fdot"></span>Yude.jiang@st.com<span class="fdot"></span>May 2026</div></footer>
 
-<script>function setLang(l){document.body.setAttribute('lang',l);document.querySelectorAll('.lt button').forEach(b=>b.classList.toggle('on',b.classList.contains(l)))}function toggle(btn){btn.closest('.fi2').classList.toggle('open')}setLang('zh')</script>
+<script>
+(function(){
+  var btns = document.querySelectorAll('.lt button');
+  function setLang(l){
+    document.body.setAttribute('lang', l);
+    btns.forEach(function(b){
+      if(b.classList.contains(l)) b.classList.add('on');
+      else b.classList.remove('on');
+    });
+  }
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){
+      var lang = b.classList.contains('zh') ? 'zh' : 'en';
+      setLang(lang);
+    });
+  });
+  setLang('zh');
+})();
+function toggleFAQ(btn){ btn.closest('.fi2').classList.toggle('open'); }
+</script>
 </body></html>
