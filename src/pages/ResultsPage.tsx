@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { XCircle, BarChart3 } from 'lucide-react';
+import { XCircle, BarChart3, GitCompare, X } from 'lucide-react';
 import { AnalysisResult, Job } from '../types';
 import { ResultCard } from '../components/ResultCard';
+import { ScoreChart } from '../components/ScoreChart';
 import { api } from '../lib/firebase';
 
 interface ResultsPageProps {
@@ -28,6 +29,8 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
 }) => {
   const [scoreFilter, setScoreFilter] = useState<'all' | 'high' | 'medium' | 'low'>('all');
   const [fitFilter, setFitFilter] = useState<string>('all');
+  const [compareMode, setCompareMode] = useState(false);
+  const [selectedCompare, setSelectedCompare] = useState<Set<string>>(new Set());
 
   const allFitStatuses = useMemo(() => {
     const set = new Set<string>();
@@ -112,8 +115,46 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
                   <XCircle className="w-3 h-3" /> {t.clearAll}
                 </button>
               )}
+              {!isShareMode && (
+                <button
+                  onClick={() => { setCompareMode(!compareMode); setSelectedCompare(new Set()); }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${compareMode ? 'bg-st-dark text-st-yellow shadow-lg' : 'bg-white text-slate-400 border border-slate-200'}`}
+                >
+                  <GitCompare className="w-4 h-4" /> {t.compare}
+                </button>
+              )}
             </div>
           </div>
+
+          {/* Comparison Radar */}
+          {compareMode && selectedCompare.size >= 2 && (
+            <div className="bg-white rounded-2xl border border-st-light/20 p-6 shadow-lg">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-sm font-semibold text-st-dark">
+                  {t.comparing}: {selectedCompare.size} {t.candidate || 'candidates'}
+                </h4>
+                <button onClick={() => setSelectedCompare(new Set())} className="text-xs font-medium text-slate-400 hover:text-rose-500 flex items-center gap-1">
+                  <X className="w-3 h-3" /> {t.clearCompare}
+                </button>
+              </div>
+              <ScoreChart
+                weights={weights}
+                detailedScores={results.find(r => selectedCompare.has(r.file_name))?.detailed_scores || {}}
+                t={t}
+                compareScores={
+                  Array.from(selectedCompare)
+                    .slice(1) // skip first — it's the primary
+                    .map(fn => {
+                      const r = results.find(r2 => r2.file_name === fn);
+                      return {
+                        name: r?.candidate_name || fn,
+                        scores: r?.detailed_scores || {},
+                      };
+                    })
+                }
+              />
+            </div>
+          )}
 
           {/* Result Cards */}
           <div className="space-y-4">
@@ -124,6 +165,16 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
                 blindMode={blindMode} searchTerm={searchTerm} setSearchTerm={setSearchTerm}
                 isShareMode={isShareMode} editingScore={editingScore} setEditingScore={setEditingScore}
                 handleScoreOverride={handleScoreOverride} t={t} language={language}
+                compareMode={compareMode}
+                isCompared={selectedCompare.has(res.file_name)}
+                onToggleCompare={() => {
+                  setSelectedCompare(prev => {
+                    const next = new Set(prev);
+                    if (next.has(res.file_name)) { next.delete(res.file_name); }
+                    else if (next.size < 3) { next.add(res.file_name); }
+                    return next;
+                  });
+                }}
               />
             ))}
           </div>

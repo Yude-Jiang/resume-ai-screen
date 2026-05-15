@@ -18,11 +18,15 @@ interface ResultCardProps {
   handleScoreOverride: (fileName: string, score: number, tags: string[]) => void;
   t: any;
   language: string;
+  compareMode?: boolean;
+  isCompared?: boolean;
+  onToggleCompare?: () => void;
 }
 
 export const ResultCard: React.FC<ResultCardProps> = ({
   res, idx, weights, blindMode, searchTerm, setSearchTerm,
   isShareMode, editingScore, setEditingScore, handleScoreOverride, t, language,
+  compareMode, isCompared, onToggleCompare,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const score = res.hr_override_score ?? res.overall_score;
@@ -30,7 +34,17 @@ export const ResultCard: React.FC<ResultCardProps> = ({
   return (
     <div className={`bg-white rounded-2xl border border-slate-200 overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 ${expanded ? 'ring-2 ring-st-light/10 shadow-xl' : 'shadow-sm'}`}>
       {/* Header row */}
-      <div className="p-4 flex items-center gap-4 cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => { setExpanded(!expanded); setSearchTerm(''); }}>
+      <div className="p-4 flex items-center gap-4 cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => { if (!compareMode) { setExpanded(!expanded); setSearchTerm(''); } }}>
+        {compareMode && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onToggleCompare?.(); }}
+          className={`w-7 h-7 rounded-lg border-2 flex items-center justify-center shrink-0 transition-all ${
+            isCompared ? 'bg-st-dark border-st-dark text-white' : 'border-slate-200 text-transparent hover:border-st-light'
+          }`}
+        >
+          {isCompared && <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+        </button>
+        )}
         <div className={`w-16 h-16 rounded-xl flex flex-col items-center justify-center shadow-lg relative overflow-hidden shrink-0 border-2 ${
           score >= 80 ? 'bg-st-success/10 border-st-success text-st-success' : score >= 60 ? 'bg-st-yellow/10 border-st-yellow text-st-yellow' : 'bg-rose-50 border-rose-500 text-rose-500'
         }`}>

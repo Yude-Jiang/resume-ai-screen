@@ -182,6 +182,11 @@ export const translations = {
     riskLow: "Low Risk",
     riskMedium: "Medium Risk",
     riskHigh: "High Risk",
+    compare: "Compare",
+    compareMode: "Compare Mode",
+    selectToCompare: "Select 2-3 to compare",
+    clearCompare: "Clear selection",
+    comparing: "Comparing",
   },
   zh: {
     aiScreening: "AI 简历筛选",
@@ -364,5 +369,10 @@ export const translations = {
     riskLow: "低风险",
     riskMedium: "中风险",
     riskHigh: "高风险",
+    compare: "对比",
+    compareMode: "对比模式",
+    selectToCompare: "选择 2-3 人进行雷达图对比",
+    clearCompare: "清除选择",
+    comparing: "对比中",
   }
 };
