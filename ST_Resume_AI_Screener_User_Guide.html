@@ -5,7 +5,7 @@
 :root{--std:#03234b;--stl:#3cb4e6;--sty:#ffd200;--s100:#f1f5f9;--s200:#e2e8f0;--s400:#94a3b8;--s500:#64748b;--s600:#475569;--r8:8px;--r12:12px}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"DM Sans","Segoe UI",system-ui,sans-serif;color:var(--s600);line-height:1.65;background:var(--s100);font-size:14px;-webkit-font-smoothing:antialiased}
-[lang="en"] .zh{display:none}[lang="zh"] .en{display:none}html:not([lang]) .zh{display:none}
+.lang-en .zh{display:none}.lang-zh .en{display:none}
 .lt{position:fixed;top:14px;right:18px;z-index:200;display:flex;gap:3px;background:rgba(3,35,75,.92);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:3px}
 .lt button{background:transparent;border:none;color:rgba(255,255,255,.5);padding:4px 11px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500;font-family:inherit;transition:all .15s}
 .lt button:hover{color:#fff}.lt button.on{background:var(--sty);color:var(--std)}
@@ -88,7 +88,7 @@ footer{background:var(--std);color:rgba(255,255,255,.35);text-align:center;paddi
   .lt{display:none}.wbg{background:#fff}.st th{background:var(--std);color:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .wb,.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
-</style></head><body lang="zh">
+</style></head><body class="lang-zh">
 
 <div class="lt"><button class="zh on">中文</button><button class="en">EN</button></div>
 
@@ -274,7 +274,7 @@ footer{background:var(--std);color:rgba(255,255,255,.35);text-align:center;paddi
 (function(){
   var btns = document.querySelectorAll('.lt button');
   function setLang(l){
-    document.body.setAttribute('lang', l);
+    document.body.className = 'lang-' + l;
     btns.forEach(function(b){
       if(b.classList.contains(l)) b.classList.add('on');
       else b.classList.remove('on');
