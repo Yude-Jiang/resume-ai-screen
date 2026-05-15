@@ -154,7 +154,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
               {totalWeight !== 100 && (
                 <div className="bg-rose-500/20 border border-rose-500/30 p-2 rounded text-xs text-rose-300 font-medium text-center">
-                  Must sum to 100%
+                  {t.mustBe100}
                 </div>
               )}
 
@@ -233,7 +233,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="pt-2">
                 <input 
                   type="text" 
-                  placeholder="Job Title" 
+                  placeholder={t.jobTitleLabel}
                   value={newJobTitle}
                   onChange={e => setNewJobTitle(e.target.value)}
                   className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-st-light transition-all mb-2 font-medium"
@@ -241,14 +241,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <button 
                   onClick={async () => {
                     if (newJobTitle) {
-                      await createNewJob(newJobTitle, 'HR Dept');
+                      await createNewJob(newJobTitle, t.hrDept);
                       setNewJobTitle('');
                     }
                   }}
                   className="w-full bg-st-yellow text-st-dark py-2.5 rounded-lg text-sm font-semibold hover:bg-white transition-all shadow-lg active:scale-95"
                 >
                   <Plus className="w-3.5 h-3.5 inline mr-1" />
-                  NEW PROJECT
+                  {t.jobCreate.toUpperCase()}
                 </button>
               </div>
             </div>

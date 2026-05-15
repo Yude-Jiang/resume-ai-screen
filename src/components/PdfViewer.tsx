@@ -34,7 +34,7 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ url, blindMode }) => {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center gap-3 bg-slate-50 text-slate-400">
         <span className="text-sm font-medium">Preview not available</span>
-        <a href={url} download="resume.docx" className="text-xs font-medium text-st-light hover:underline">Click to download file</a>
+        <a href={url} download className="text-xs font-medium text-st-light hover:underline">Click to download</a>
       </div>
     );
   }

@@ -46,7 +46,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
             </h3>
             {res.hr_override_score !== undefined && (
               <div className="px-2 py-1 bg-st-dark text-st-yellow text-xs font-medium rounded-full border border-st-yellow/20 flex items-center gap-1 shadow-lg">
-                <Target className="w-3 h-3" /> VERIFIED
+                <Target className="w-3 h-3" /> {t.verified || 'VERIFIED'}
               </div>
             )}
           </div>
@@ -153,7 +153,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
               {/* PDF Preview — full-width bottom panel */}
               <div className="border-t border-slate-200 bg-slate-100 p-4">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="text-xs font-medium text-st-dark bg-st-yellow px-3 py-1 rounded-full">Document Preview</div>
+                  <div className="text-xs font-medium text-st-dark bg-st-yellow px-3 py-1 rounded-full">{t.documentPreview}</div>
                 </div>
                 <div className="w-full h-[500px] bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-200">
                   {res.file_data ? (
@@ -169,7 +169,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                     </>
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center bg-slate-50 text-slate-300 p-12 text-center">
-                      <span className="text-sm font-medium text-slate-400">No preview available</span>
+                      <span className="text-sm font-medium text-slate-400">{t.noPreview}</span>
                     </div>
                   )}
                 </div>

@@ -57,7 +57,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all">
           <div className="flex items-center gap-2 mb-2">
             <Briefcase className="w-4 h-4 text-st-light" />
-            <span className="text-xs font-medium text-slate-400">Active Jobs</span>
+            <span className="text-xs font-medium text-slate-400">{t.activeJobsMetric}</span>
           </div>
           <span className="text-2xl font-semibold text-st-dark tabular-nums">{totalSystemStats.jobs}</span>
         </div>
@@ -109,14 +109,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                     job.status === 'closed' ? 'bg-slate-100 text-slate-400' :
                     'bg-slate-100 text-slate-400'
                   }`}>
-                    {job.status === 'running' ? 'Active' : job.status === 'closed' ? 'Closed' : 'Paused'}
+                    {job.status === 'running' ? t.activeStatus : job.status === 'closed' ? t.closedStatus : t.pausedStatus}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3 border-y border-slate-50 py-4 mb-4">
                   <div className="text-center">
                     <div className="text-lg font-semibold text-st-dark tabular-nums">{job.stats?.total || 0}</div>
-                    <div className="text-xs font-medium text-slate-400">{t.totalHandled.split(' ')[1] || 'Resumes'}</div>
+                    <div className="text-xs font-medium text-slate-400">{t.totalHandled.split(' ')[1] || t.units}</div>
                   </div>
                   <div className="text-center border-x border-slate-50">
                     <div className="text-lg font-semibold text-st-dark tabular-nums">{job.stats?.evaluating || 0}</div>

@@ -14,12 +14,15 @@ interface HeaderProps {
   t: any;
 }
 
-const PAGE_TITLES: Record<string, string> = {
-  input: 'New Screening',
-  results: 'Screening Results',
-  dashboard: 'Dashboard',
-  'talent-library': 'Talent Library',
-};
+function pageTitle(activeTab: string, t: any): string {
+  const map: Record<string, string> = {
+    input: t.inputData,
+    results: t.screeningResults,
+    dashboard: t.dashboard,
+    'talent-library': t.talentLibrary,
+  };
+  return map[activeTab] || activeTab;
+}
 
 export const Header: React.FC<HeaderProps> = ({
   isShareMode, activeTab, setActiveTab, language, blindMode, setBlindMode,
@@ -35,12 +38,12 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="w-8 h-8 bg-st-dark rounded-lg flex items-center justify-center">
             <Zap className="w-5 h-5 text-st-yellow fill-st-yellow" />
           </div>
-          <span className="text-sm font-medium text-slate-400">Shared Results</span>
+          <span className="text-sm font-medium text-slate-400">{t.sharedResults}</span>
         </div>
       ) : (
         <div className="flex items-center gap-3">
           <span className="text-sm font-semibold text-st-dark">
-            {PAGE_TITLES[activeTab] || activeTab}
+            {pageTitle(activeTab, t)}
           </span>
           {activeJob && (
             <>

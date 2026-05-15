@@ -38,7 +38,7 @@ const TalentLibraryPage: React.FC<TalentLibraryPageProps> = ({
   results, 
   onSelect 
 }) => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'high' | 'pending' | 'rejected'>('all');
@@ -64,8 +64,8 @@ const TalentLibraryPage: React.FC<TalentLibraryPageProps> = ({
       {/* Header & Stats Bar */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold text-st-dark">Talent Pool</h2>
-          <p className="text-slate-400 text-xs font-medium">Managing {results.length} processed candidates across all positions</p>
+          <h2 className="text-lg font-semibold text-st-dark">{t.talentPoolTitle}</h2>
+          <p className="text-slate-400 text-xs font-medium">{t.talentPoolDesc?.replace('{count}', String(results.length)) || `Managing ${results.length} candidates`}</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -85,7 +85,7 @@ const TalentLibraryPage: React.FC<TalentLibraryPageProps> = ({
           </div>
           <button className="flex items-center gap-3 px-8 py-4 bg-white border border-slate-200 rounded-[1.5rem] text-xs font-medium text-slate-500 hover:bg-slate-50 transition-all shadow-sm">
             <Download className="w-4 h-4" />
-            Export Data
+            {t.export}
           </button>
         </div>
       </div>
@@ -96,7 +96,7 @@ const TalentLibraryPage: React.FC<TalentLibraryPageProps> = ({
           <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-st-light transition-colors" />
           <input 
             type="text" 
-            placeholder="Search by name, skills, or experience..."
+            placeholder={t.searchPlaceholder}
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             className="w-full pl-16 pr-8 py-5 bg-white border border-slate-200 rounded-[1.5rem] focus:ring-4 focus:ring-st-light/10 font-bold text-st-dark placeholder:text-slate-300 shadow-sm transition-all"
@@ -111,7 +111,7 @@ const TalentLibraryPage: React.FC<TalentLibraryPageProps> = ({
                  statusFilter === f ? 'bg-st-dark text-white shadow-lg' : 'text-slate-400 hover:text-st-dark hover:bg-slate-50'
                }`}
             >
-              {f === 'all' ? 'All' : f === 'high' ? 'Strong' : f}
+              {f === 'all' ? (lang === 'zh' ? '全部' : 'All') : f === 'high' ? (lang === 'zh' ? '强匹配' : 'Strong') : f}
             </button>
           ))}
         </div>
@@ -198,10 +198,10 @@ const TalentLibraryPage: React.FC<TalentLibraryPageProps> = ({
             <table className="w-full text-left">
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
-                  <th className="px-8 py-5 text-xs font-medium text-slate-400">Candidate Info</th>
-                  <th className="px-8 py-5 text-xs font-medium text-slate-400">Education & Exp</th>
-                  <th className="px-8 py-5 text-xs font-medium text-slate-400">Key Skills</th>
-                  <th className="px-8 py-5 text-xs font-medium text-slate-400">AI Score</th>
+                  <th className="px-8 py-5 text-xs font-medium text-slate-400">{t.candidateInfo}</th>
+                  <th className="px-8 py-5 text-xs font-medium text-slate-400">{t.educationExp}</th>
+                  <th className="px-8 py-5 text-xs font-medium text-slate-400">{t.keySkills}</th>
+                  <th className="px-8 py-5 text-xs font-medium text-slate-400">{t.aiScore}</th>
                   <th className="px-8 py-5"></th>
                 </tr>
               </thead>
@@ -271,7 +271,7 @@ const TalentLibraryPage: React.FC<TalentLibraryPageProps> = ({
           <div className="w-24 h-24 bg-slate-50 rounded-[2.5rem] flex items-center justify-center shadow-inner">
              <Search className="w-10 h-10 opacity-20" />
           </div>
-          <p className="font-medium text-xs">No candidates found matching your criteria</p>
+          <p className="font-medium text-xs">{t.noCandidates}</p>
         </div>
       )}
     </div>

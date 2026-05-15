@@ -28,11 +28,11 @@ export function useScreening() {
   const [jobTitle, setJobTitle] = useState('');
 
   const [weights, setWeights] = useState<ScoringWeights>([
-    { id: 'edu', label: 'Education Match', value: 20 },
-    { id: 'exp', label: 'Experience Years', value: 30 },
-    { id: 'skill', label: 'Skill Overlap', value: 35 },
-    { id: 'lang', label: 'Language Ability', value: 10 },
-    { id: 'cert', label: 'Certifications', value: 5 },
+    { id: 'edu', label: translations[language].education, value: 20 },
+    { id: 'exp', label: translations[language].experience, value: 30 },
+    { id: 'skill', label: translations[language].skills, value: 35 },
+    { id: 'lang', label: translations[language].language, value: 10 },
+    { id: 'cert', label: translations[language].certs, value: 5 },
   ]);
 
   const [thresholds, setThresholds] = useState<HardThresholds>({
@@ -335,9 +335,9 @@ export function useScreening() {
     setIsAnalyzing(false);
     setCurrentFile(null);
     if (failCount === 0) {
-      toast.success(t.analysisComplete || "Analysis complete!");
+      toast.success(t.analysisComplete);
     } else {
-      toast.warning(`${successCount} success, ${failCount} failed.`);
+      toast.warning(language === 'zh' ? `${successCount} 成功, ${failCount} 失败` : `${successCount} success, ${failCount} failed`);
     }
     setActiveTab('results');
   };
