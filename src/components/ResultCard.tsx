@@ -92,15 +92,15 @@ export const ResultCard: React.FC<ResultCardProps> = ({
               <div className="w-full flex flex-col bg-white st-scrollbar overflow-y-auto">
                 <div className="p-5 space-y-5">
                   {/* Row 1: Score Chart (L) + AI Recommendation (R) */}
-                  <div className="grid grid-cols-1 md:grid-cols-5 gap-5">
-                    <section className="md:col-span-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <section>
                       <div className="flex items-center justify-between mb-3">
                         <h4 className="text-xs font-medium text-slate-400 tracking-wide">{t.scoreBreakdownVis}</h4>
                         <div className="px-2.5 py-0.5 bg-st-success/10 text-st-success text-xs font-medium rounded-full border border-st-success/20">{t.highMatch}</div>
                       </div>
                       <ScoreChart weights={weights} detailedScores={res.detailed_scores} t={t} />
                     </section>
-                    <section className="md:col-span-2 bg-slate-50 rounded-2xl p-5 border border-slate-100 flex flex-col justify-center">
+                    <section className="bg-slate-50 rounded-2xl p-5 border border-slate-100 flex flex-col justify-center">
                       <div className="flex items-center gap-2 mb-3">
                         <div className="w-8 h-8 rounded-lg bg-st-dark flex items-center justify-center shrink-0"><Zap className="w-4 h-4 text-st-yellow fill-st-yellow" /></div>
                         <h4 className="text-xs font-medium text-st-light tracking-wide">{t.recommLetter}</h4>

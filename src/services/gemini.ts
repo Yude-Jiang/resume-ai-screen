@@ -101,3 +101,42 @@ export async function evaluateCandidateByText(jd: string, candidateJson: string)
   `;
   return analyzeText(prompt);
 }
+
+export async function compareCandidates(
+  jd: string,
+  candidates: { name: string; scores: Record<string, number>; highlights: string[]; gaps: string[] }[],
+  language: 'en' | 'zh' = 'en'
+): Promise<string> {
+  const isZh = language === 'zh';
+  const prompt = isZh
+    ? `你是资深HR。对比以下候选人并给出分析。
+
+JD 要求:
+${jd}
+
+候选人对比:
+${candidates.map((c, i) => `
+${i + 1}. ${c.name}
+  分数: ${Object.entries(c.scores).map(([k, v]) => `${k}:${v}`).join(', ')}
+  亮点: ${c.highlights.join('; ')}
+  不足: ${c.gaps.join('; ')}
+`).join('\n')}
+
+请用中文给出简要对比分析（3-4句），包括各自的优势劣势和最终推荐。`
+    : `You are a senior HR expert. Compare these candidates and provide analysis.
+
+Job Requirements:
+${jd}
+
+Candidate Comparison:
+${candidates.map((c, i) => `
+${i + 1}. ${c.name}
+  Scores: ${Object.entries(c.scores).map(([k, v]) => `${k}:${v}`).join(', ')}
+  Highlights: ${c.highlights.join('; ')}
+  Gaps: ${c.gaps.join('; ')}
+`).join('\n')}
+
+Give a brief 3-4 sentence comparative analysis: strengths, weaknesses, and final recommendation.`;
+
+  return analyzeText(prompt);
+}

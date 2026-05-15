@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
-import { XCircle, BarChart3, GitCompare, X } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { XCircle, BarChart3, GitCompare, X, Loader2 } from 'lucide-react';
 import { AnalysisResult, Job } from '../types';
 import { ResultCard } from '../components/ResultCard';
 import { ScoreChart } from '../components/ScoreChart';
+import { compareCandidates } from '../services/gemini';
 import { api } from '../lib/firebase';
 
 interface ResultsPageProps {
@@ -31,6 +32,29 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
   const [fitFilter, setFitFilter] = useState<string>('all');
   const [compareMode, setCompareMode] = useState(false);
   const [selectedCompare, setSelectedCompare] = useState<Set<string>>(new Set());
+  const [compareAnalysis, setCompareAnalysis] = useState<string | null>(null);
+  const [compareLoading, setCompareLoading] = useState(false);
+
+  // Fetch AI comparison when 2-3 candidates selected
+  const activeJob = useMemo(() => jobs.find(j => j.id === activeJobId), [jobs, activeJobId]);
+  useEffect(() => {
+    if (selectedCompare.size < 2 || !activeJob?.jd) {
+      setCompareAnalysis(null);
+      return;
+    }
+    const selectedResults = results.filter(r => selectedCompare.has(r.file_name));
+    setCompareLoading(true);
+    compareCandidates(
+      activeJob.jd,
+      selectedResults.map(r => ({
+        name: r.candidate_name || r.file_name,
+        scores: r.detailed_scores,
+        highlights: r.summary.highlights.slice(0, 3),
+        gaps: r.summary.gaps.slice(0, 3),
+      })),
+      language as 'en' | 'zh'
+    ).then(setCompareAnalysis).catch(() => setCompareAnalysis(null)).finally(() => setCompareLoading(false));
+  }, [selectedCompare, activeJob, results, language]);
 
   const allFitStatuses = useMemo(() => {
     const set = new Set<string>();
@@ -137,22 +161,36 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
                   <X className="w-3 h-3" /> {t.clearCompare}
                 </button>
               </div>
-              <ScoreChart
-                weights={weights}
-                detailedScores={results.find(r => selectedCompare.has(r.file_name))?.detailed_scores || {}}
-                t={t}
-                compareScores={
-                  Array.from(selectedCompare)
-                    .slice(1) // skip first — it's the primary
-                    .map(fn => {
-                      const r = results.find(r2 => r2.file_name === fn);
-                      return {
-                        name: r?.candidate_name || fn,
-                        scores: r?.detailed_scores || {},
-                      };
-                    })
-                }
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <ScoreChart
+                  weights={weights}
+                  detailedScores={results.find(r => selectedCompare.has(r.file_name))?.detailed_scores || {}}
+                  t={t}
+                  compareScores={
+                    Array.from(selectedCompare)
+                      .slice(1)
+                      .map(fn => {
+                        const r = results.find(r2 => r2.file_name === fn);
+                        return { name: r?.candidate_name || fn, scores: r?.detailed_scores || {} };
+                      })
+                  }
+                />
+                <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
+                  <h4 className="text-xs font-medium text-st-light tracking-wide mb-3">
+                    {language === 'zh' ? 'AI 对比分析' : 'AI Comparison'}
+                  </h4>
+                  {compareLoading ? (
+                    <div className="flex items-center gap-2 text-sm text-slate-400">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      {language === 'zh' ? '生成中...' : 'Analyzing...'}
+                    </div>
+                  ) : compareAnalysis ? (
+                    <div className="text-sm font-normal text-st-dark leading-relaxed">{compareAnalysis}</div>
+                  ) : (
+                    <div className="text-sm text-slate-400">{language === 'zh' ? '选择候选人后自动生成' : 'Select candidates to generate'}</div>
+                  )}
+                </div>
+              </div>
             </div>
           )}
 
