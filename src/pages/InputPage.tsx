@@ -77,6 +77,21 @@ export const InputPage: React.FC<InputPageProps> = ({
               placeholder={t.jdPlaceholder}
               className="w-full h-80 p-6 bg-white border-2 border-slate-100 rounded-[2rem] text-base focus:outline-none focus:border-st-light/50 transition-all shadow-sm hover:shadow-md st-scrollbar font-medium text-slate-600 resize-none leading-relaxed"
             />
+            {/* Empty-state guide illustration */}
+            {!jd.trim() && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mb-4 opacity-60">
+                  <FileText className="w-8 h-8 text-slate-300" />
+                </div>
+                <div className="text-sm font-medium text-slate-300 text-center max-w-xs">
+                  <span className="text-st-light font-semibold">Paste</span> a Job Description here, or click{' '}
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-st-light/10 rounded-lg text-st-light text-xs font-semibold">
+                    <Settings className="w-3 h-3" /> Upload JD
+                  </span>{' '}
+                  below
+                </div>
+              </div>
+            )}
             <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-10 group-hover:opacity-100 transition-opacity">
                <FileText className="w-6 h-6 text-st-dark/20" />
             </div>

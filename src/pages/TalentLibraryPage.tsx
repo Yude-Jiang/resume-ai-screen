@@ -135,7 +135,7 @@ const TalentLibraryPage: React.FC<TalentLibraryPageProps> = ({
                   layout
                   whileHover={{ y: -8 }}
                   onClick={() => onSelect(result)}
-                  className="group bg-white rounded-[2.5rem] border border-slate-200 p-8 shadow-sm hover:shadow-2xl transition-all cursor-pointer flex flex-col justify-between h-[420px]"
+                  className="group bg-white rounded-[2.5rem] border border-slate-200 p-8 shadow-sm hover:shadow-2xl transition-all cursor-pointer flex flex-col justify-between min-h-[320px]"
                 >
                   <div className="space-y-6">
                     <div className="flex justify-between items-start">
