@@ -116,27 +116,49 @@ ${jd}
 
 候选人对比:
 ${candidates.map((c, i) => `
-${i + 1}. ${c.name}
-  分数: ${Object.entries(c.scores).map(([k, v]) => `${k}:${v}`).join(', ')}
+${i + 1}. ${c.name} | 分数: ${Object.entries(c.scores).map(([k, v]) => `${k}:${v}`).join(', ')}
   亮点: ${c.highlights.join('; ')}
   不足: ${c.gaps.join('; ')}
 `).join('\n')}
 
-请用中文给出简要对比分析（3-4句），包括各自的优势劣势和最终推荐。`
-    : `You are a senior HR expert. Compare these candidates and provide analysis.
+请用纯文本格式回复（不要用markdown符号），结构如下：
+【综合对比】
+（1-2句话，宏观对比）
+
+【各候选人分析】
+• ${candidates.map(c => c.name).join('：\n• ')}：
+
+【推荐排序】
+1.
+2.
+3.
+
+简洁扼要，每条不超过一行。`
+    : `You are a senior HR expert. Compare these candidates.
 
 Job Requirements:
 ${jd}
 
 Candidate Comparison:
 ${candidates.map((c, i) => `
-${i + 1}. ${c.name}
-  Scores: ${Object.entries(c.scores).map(([k, v]) => `${k}:${v}`).join(', ')}
+${i + 1}. ${c.name} | Scores: ${Object.entries(c.scores).map(([k, v]) => `${k}:${v}`).join(', ')}
   Highlights: ${c.highlights.join('; ')}
   Gaps: ${c.gaps.join('; ')}
 `).join('\n')}
 
-Give a brief 3-4 sentence comparative analysis: strengths, weaknesses, and final recommendation.`;
+Reply in plain text with this structure (no markdown symbols):
+[Summary]
+(1-2 sentences, high-level comparison)
+
+[Per Candidate]
+• ${candidates.map(c => c.name).join(':\n• ')}:
+
+[Ranking]
+1.
+2.
+3.
+
+Keep each line concise — one line max per point.`;
 
   return analyzeText(prompt);
 }

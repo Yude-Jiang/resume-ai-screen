@@ -182,19 +182,31 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
                       })
                   }
                 />
-                <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
+                <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
                   <h4 className="text-xs font-medium text-st-light tracking-wide mb-3">
                     {language === 'zh' ? 'AI 对比分析' : 'AI Comparison'}
                   </h4>
                   {compareLoading ? (
-                    <div className="flex items-center gap-2 text-sm text-slate-400">
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                    <div className="flex items-center gap-2 text-xs text-slate-400">
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
                       {language === 'zh' ? '生成中...' : 'Analyzing...'}
                     </div>
                   ) : compareAnalysis ? (
-                    <div className="text-sm font-normal text-st-dark leading-relaxed">{compareAnalysis}</div>
+                    <div className="text-xs text-st-dark leading-relaxed space-y-2 max-h-[320px] overflow-y-auto st-scrollbar">
+                      {compareAnalysis.split('\n').filter(Boolean).map((line, i) => {
+                        // Section headers: 【...】 or [...]
+                        const isHeader = /^[【\[]/.test(line.trim());
+                        // Bullet or numbered
+                        const isBullet = /^[•\-—\d]+[\.\)]/.test(line.trim()) || line.trim().startsWith('•');
+                        return (
+                          <div key={i} className={`${isHeader ? 'text-[11px] font-semibold text-st-dark mt-2 first:mt-0' : isBullet ? 'pl-3 text-[11px] text-slate-600' : 'text-[11px] text-slate-600'}`}>
+                            {line}
+                          </div>
+                        );
+                      })}
+                    </div>
                   ) : (
-                    <div className="text-sm text-slate-400">{language === 'zh' ? '选择候选人后自动生成' : 'Select candidates to generate'}</div>
+                    <div className="text-xs text-slate-400">{language === 'zh' ? '选择候选人后自动生成' : 'Select candidates to generate'}</div>
                   )}
                 </div>
               </div>
