@@ -101,6 +101,7 @@ export default function App() {
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             language={language}
+            setLanguage={setLanguage}
             blindMode={blindMode}
             setBlindMode={setBlindMode}
             activeJobId={activeJobId}
@@ -163,6 +164,8 @@ export default function App() {
               language={language}
               isShareMode={isShareMode}
               t={t}
+              jd={jd}
+              jobTitle={jobTitle}
             />
           )}
 

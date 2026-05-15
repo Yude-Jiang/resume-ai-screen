@@ -7,6 +7,7 @@ interface HeaderProps {
   activeTab: string;
   setActiveTab: (t: 'dashboard' | 'input' | 'results' | 'talent-library') => void;
   language: Language;
+  setLanguage: (l: Language | ((prev: Language) => Language)) => void;
   blindMode: boolean;
   setBlindMode: (b: boolean) => void;
   activeJobId: string | null;
@@ -25,7 +26,7 @@ function pageTitle(activeTab: string, t: any): string {
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  isShareMode, activeTab, setActiveTab, language, blindMode, setBlindMode,
+  isShareMode, activeTab, setActiveTab, language, setLanguage, blindMode, setBlindMode,
   activeJobId, jobs, t
 }) => {
   const activeJob = jobs.find((j: any) => j.id === activeJobId);
@@ -56,6 +57,12 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Right: actions */}
       <div className="ml-auto flex items-center gap-3">
+        <button
+          onClick={() => setLanguage(l => l === 'en' ? 'zh' : 'en')}
+          className="text-xs font-medium border border-slate-200 px-2 py-1 rounded-lg hover:bg-slate-100 transition-colors text-slate-500"
+        >
+          {language === 'en' ? '中文' : 'EN'}
+        </button>
         {!isShareMode && (
           <button
             onClick={() => setBlindMode(!blindMode)}

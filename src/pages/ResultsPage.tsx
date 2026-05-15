@@ -22,11 +22,14 @@ interface ResultsPageProps {
   language: string;
   isShareMode: boolean;
   t: any;
+  jd?: string;
+  jobTitle?: string;
 }
 
 export const ResultsPage: React.FC<ResultsPageProps> = ({
   results, blindMode, searchTerm, setSearchTerm,
   editingScore, setEditingScore, handleScoreOverride, activeJobId, jobs, weights, language, isShareMode, t,
+  jd, jobTitle,
 }) => {
   const [scoreFilter, setScoreFilter] = useState<'all' | 'high' | 'medium' | 'low'>('all');
   const [fitFilter, setFitFilter] = useState<string>('all');
@@ -152,6 +155,14 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
           </div>
 
           {/* Comparison Radar */}
+          {/* Share JD */}
+          {isShareMode && jd && (
+            <details className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm" open>
+              <summary className="text-sm font-semibold text-st-dark cursor-pointer">{language === 'zh' ? '岗位描述' : 'Job Description'}{jobTitle ? ` — ${jobTitle}` : ''}</summary>
+              <pre className="mt-3 text-xs text-slate-600 whitespace-pre-wrap font-sans leading-relaxed max-h-48 overflow-y-auto st-scrollbar">{jd}</pre>
+            </details>
+          )}
+
           {compareMode && selectedCompare.size >= 2 && (
             <div className="bg-white rounded-2xl border border-st-light/20 p-6 shadow-lg">
               <div className="flex items-center justify-between mb-3">
