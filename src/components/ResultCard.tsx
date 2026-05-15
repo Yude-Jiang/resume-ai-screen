@@ -55,8 +55,8 @@ export const ResultCard: React.FC<ResultCardProps> = ({
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-2">
-            <h3 className="text-base font-semibold text-st-dark truncate">
-              {blindMode ? `${t.candidate} #${idx + 1}` : (res.summary.personal_info?.name || res.file_name.split('.')[0])}
+            <h3 className={`text-base font-semibold text-st-dark truncate transition-all duration-500 ${blindMode ? 'blur-sm select-none' : ''}`}>
+              {res.summary.personal_info?.name || res.file_name.split('.')[0]}
             </h3>
             {res.hr_override_score !== undefined && (
               <div className="px-2 py-1 bg-st-dark text-st-yellow text-xs font-medium rounded-full border border-st-yellow/20 flex items-center gap-1 shadow-lg">
@@ -65,8 +65,8 @@ export const ResultCard: React.FC<ResultCardProps> = ({
             )}
           </div>
           <div className="flex flex-wrap gap-2 items-center">
-            <span className="px-3 py-1 bg-slate-100 rounded-full text-xs font-medium text-slate-500 border border-slate-200">{res.summary.personal_info?.experience_years ?? 'N/A'} {t.years} {t.exp}</span>
-            <span className="px-3 py-1 bg-slate-100 rounded-full text-xs font-medium text-slate-500 border border-slate-200">{res.summary.personal_info?.education_level || 'N/A'}</span>
+            <span className={`px-3 py-1 bg-slate-100 rounded-full text-xs font-medium text-slate-500 border border-slate-200 transition-all duration-500 ${blindMode ? 'blur-sm select-none' : ''}`}>{res.summary.personal_info?.experience_years ?? 'N/A'} {t.years} {t.exp}</span>
+            <span className={`px-3 py-1 bg-slate-100 rounded-full text-xs font-medium text-slate-500 border border-slate-200 transition-all duration-500 ${blindMode ? 'blur-sm select-none' : ''}`}>{res.summary.personal_info?.education_level || 'N/A'}</span>
             {res.summary.key_skills.slice(0, 3).map((skill, si) => (
               <span key={si} className="text-xs font-medium text-st-light border border-st-light/20 bg-st-light/5 px-2 py-1 rounded-full">{skill}</span>
             ))}
