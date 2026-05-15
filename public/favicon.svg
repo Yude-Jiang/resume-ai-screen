@@ -1,21 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#03234B"/>
-      <stop offset="100%" stop-color="#0050A0"/>
-    </linearGradient>
-  </defs>
-  <rect width="32" height="32" rx="6" fill="url(#bg)"/>
-  <!-- Document -->
-  <rect x="8" y="5" width="11" height="15" rx="1.5" fill="#fff" opacity="0.95"/>
-  <line x1="10.5" y1="9" x2="16.5" y2="9" stroke="#03234B" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
-  <line x1="10.5" y1="12" x2="16.5" y2="12" stroke="#03234B" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
-  <line x1="10.5" y1="15" x2="14.5" y2="15" stroke="#03234B" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
-  <!-- Magnifying glass -->
-  <circle cx="23" cy="16" r="5" fill="none" stroke="#ffd200" stroke-width="2"/>
-  <line x1="26.5" y1="19.5" x2="30" y2="23" stroke="#ffd200" stroke-width="2.5" stroke-linecap="round"/>
-  <!-- AI sparkle -->
-  <circle cx="8" cy="24" r="1.5" fill="#ffd200"/>
-  <circle cx="5" cy="26" r="1" fill="#ffd200"/>
-  <circle cx="10" cy="27" r="0.8" fill="#ffd200"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- 
+    醒目的圆角背景，使用参考颜色天蓝 #3cb4e6
+  -->
+  <rect width="128" height="128" rx="26" fill="#3cb4e6"/>
+  
+  <!-- 
+    放大镜主体，使用参考颜色亮黄 #ffd200
+    加粗了线条以提高低分辨率下的辨识度
+  -->
+  <circle cx="61" cy="55" r="32" fill="none" stroke="#ffd200" stroke-width="12"/>
+  <line x1="83" y1="77" x2="108" y2="102" stroke="#ffd200" stroke-width="12" stroke-linecap="round"/>
+  
+  <!-- 
+    内部元素：简化为 2x2 的白色方块，代表简历数据
+  -->
+  <rect x="47" y="41" width="12" height="12" rx="2" fill="#ffffff"/>
+  <rect x="63" y="41" width="12" height="12" rx="2" fill="#ffffff"/>
+  <rect x="47" y="57" width="12" height="12" rx="2" fill="#ffffff"/>
+  <rect x="63" y="57" width="12" height="12" rx="2" fill="#ffffff"/>
+  
+  <!-- 
+    装饰性的亮黄 #ffd200 星星，代表 AI 的高亮/魔法
+  -->
+  <path d="M 106 36 L 109 44 L 117 47 L 109 50 L 106 58 L 103 50 L 95 47 L 103 44 Z" fill="#ffd200"/>
+  <path d="M 119 59 L 121 64 L 126 66 L 121 68 L 119 73 L 117 68 L 112 66 L 117 64 Z" fill="#ffd200"/>
 </svg>
