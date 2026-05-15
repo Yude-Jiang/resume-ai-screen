@@ -40,7 +40,7 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ url, blindMode }) => {
   }
 
   return (
-    <div className={`w-full h-full overflow-hidden bg-slate-200 ${blindMode ? 'blur-2xl' : ''}`}>
+    <div className={`w-full h-full overflow-hidden bg-slate-200 transition-all duration-500 ${blindMode ? 'blur-lg' : 'blur-0'}`}>
       <iframe
         src={blobUrl}
         className="w-full h-full border-none"

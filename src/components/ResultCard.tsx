@@ -174,7 +174,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
                     <>
                       <PdfViewer url={res.file_data} searchTerm={searchTerm} blindMode={blindMode} />
                       {blindMode && (
-                        <div className="absolute inset-0 bg-st-dark/80 backdrop-blur-2xl flex flex-col items-center justify-center p-12 text-center z-20">
+                        <div className="absolute inset-0 bg-st-dark/85 backdrop-blur-md flex flex-col items-center justify-center p-12 text-center z-20 transition-all duration-500">
                           <div className="w-20 h-20 bg-st-yellow rounded-3xl flex items-center justify-center shadow-2xl mb-8 border-4 border-white/20"><Target className="w-8 h-8 text-st-dark" /></div>
                           <h3 className="text-lg font-semibold text-white mb-4 tracking-tight">{t.blindMode} Active</h3>
                           <p className="text-st-light text-sm font-normal leading-relaxed max-w-xs">{t.blindModeDesc}</p>
