@@ -36,7 +36,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   weights, handleWeightChange, createNewJob, addWeightItem, removeWeightItem, isShareMode, t
 }) => {
   const [showJobMenu, setShowJobMenu] = useState(false);
-  const [showWeights, setShowWeights] = useState(false);
+  const [showWeights, setShowWeights] = useState(true);
   const [newJobTitle, setNewJobTitle] = useState('');
   const [editingWeightId, setEditingWeightId] = useState<string | null>(null);
 
